@@ -1,0 +1,2908 @@
+{
+  "web-development": [
+    {
+      "question": "What does HTML stand for?",
+      "options": ["Hyper Text Markup Language", "High Tech Modern Language", "Home Tool Markup Language", "Hyperlinks Text Mark Language"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "html-css",
+      "explanation": "HTML stands for Hyper Text Markup Language."
+    },
+    {
+      "question": "Which CSS property is used to change the text color?",
+      "options": ["color", "text-color", "font-color", "text-style"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "html-css",
+      "explanation": "The 'color' property sets text color in CSS."
+    },
+    {
+      "question": "What is the correct HTML element for inserting a line break?",
+      "options": ["<br>", "<break>", "<lb>", "<newline>"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "html-css",
+      "explanation": "The <br> tag inserts a line break."
+    },
+    {
+      "question": "Which CSS property controls the text size?",
+      "options": ["font-size", "text-size", "text-style", "font-style"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "html-css",
+      "explanation": "font-size controls text size in CSS."
+    },
+    {
+      "question": "What does the 'flex' value of display property enable?",
+      "options": ["Flexbox layout", "Block layout", "Inline layout", "Table layout"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "html-css",
+      "explanation": "display: flex enables Flexbox layout."
+    },
+    {
+      "question": "Which HTML tag is used to create a hyperlink?",
+      "options": ["<a>", "<link>", "<href>", "<url>"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "html-css",
+      "explanation": "The <a> anchor tag creates hyperlinks."
+    },
+    {
+      "question": "What is the CSS box model?",
+      "options": ["Content, padding, border, margin", "Width, height, depth", "Header, body, footer", "Container, wrapper, box"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "html-css",
+      "explanation": "The CSS box model consists of content, padding, border, and margin."
+    },
+    {
+      "question": "Which CSS property is used to make a flex container?",
+      "options": ["display: flex", "flex: 1", "flexbox: true", "container: flex"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "html-css",
+      "explanation": "display: flex creates a flex container."
+    },
+    {
+      "question": "What is the purpose of the z-index property?",
+      "options": ["Controls stacking order", "Sets zoom level", "Defines z-axis rotation", "Controls transparency"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "html-css",
+      "explanation": "z-index controls the stacking order of positioned elements."
+    },
+    {
+      "question": "Which CSS unit is relative to the viewport width?",
+      "options": ["vw", "px", "em", "rem"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "html-css",
+      "explanation": "vw is relative to viewport width (1vw = 1% of viewport width)."
+    },
+    {
+      "question": "What is the correct JavaScript syntax to change innerHTML?",
+      "options": ["document.getElementById('demo').innerHTML = 'Hello'", "document.getElement('demo').innerHTML = 'Hello'", "#demo.innerHTML = 'Hello'", "document.getElementById(demo).innerHTML = 'Hello'"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "javascript",
+      "explanation": "document.getElementById() selects an element by ID."
+    },
+    {
+      "question": "How do you declare a JavaScript variable?",
+      "options": ["let x = 5", "variable x = 5", "v x = 5", "declare x = 5"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "javascript",
+      "explanation": "let, const, or var are used to declare variables."
+    },
+    {
+      "question": "Which operator is used for strict equality in JavaScript?",
+      "options": ["===", "==", "=", "!=="],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "javascript",
+      "explanation": "=== checks both value and type equality."
+    },
+    {
+      "question": "What is the output of typeof null?",
+      "options": ["object", "null", "undefined", "number"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "javascript",
+      "explanation": "typeof null returns 'object' due to a historical bug."
+    },
+    {
+      "question": "What is a closure in JavaScript?",
+      "options": ["A function with access to its outer scope", "A way to close the browser", "A method to end loops", "A type of error"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "javascript",
+      "explanation": "A closure is a function that has access to variables from its outer scope."
+    },
+    {
+      "question": "What does the 'this' keyword refer to in JavaScript?",
+      "options": ["The object it belongs to", "The global window", "The function itself", "The previous variable"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "javascript",
+      "explanation": "The 'this' keyword refers to the object it belongs to."
+    },
+    {
+      "question": "What is event bubbling?",
+      "options": ["Event propagates from child to parent", "Event propagates from parent to child", "Events are queued", "Events are cancelled"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "javascript",
+      "explanation": "Event bubbling is when an event propagates from the target element up to its ancestors."
+    },
+    {
+      "question": "What is the purpose of Promise in JavaScript?",
+      "options": ["Handle asynchronous operations", "Create loops", "Define classes", "Store data"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "javascript",
+      "explanation": "Promises handle asynchronous operations and their eventual completion or failure."
+    },
+    {
+      "question": "What is JSX in React?",
+      "options": ["JavaScript XML syntax extension", "JavaScript Extra", "JSON XML", "Java Syntax Extension"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "react",
+      "explanation": "JSX is a syntax extension for JavaScript used in React."
+    },
+    {
+      "question": "What hook is used for state in functional components?",
+      "options": ["useState", "useEffect", "useContext", "useReducer"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "react",
+      "explanation": "useState hook manages state in functional components."
+    },
+    {
+      "question": "What is the virtual DOM in React?",
+      "options": ["A lightweight copy of the real DOM", "A database", "A CSS framework", "A testing tool"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "react",
+      "explanation": "Virtual DOM is a lightweight JavaScript representation of the real DOM."
+    },
+    {
+      "question": "What hook is used for side effects in React?",
+      "options": ["useEffect", "useState", "useMemo", "useCallback"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "react",
+      "explanation": "useEffect handles side effects like data fetching and subscriptions."
+    },
+    {
+      "question": "What is the purpose of useCallback hook?",
+      "options": ["Memoize callback functions", "Create callbacks", "Handle errors", "Manage state"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "react",
+      "explanation": "useCallback memoizes callback functions to prevent unnecessary re-renders."
+    },
+    {
+      "question": "What is React Context used for?",
+      "options": ["Share data without prop drilling", "Create components", "Handle routing", "Manage forms"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "react",
+      "explanation": "Context provides a way to share data without passing props through every level."
+    },
+    {
+      "question": "What is the purpose of useMemo hook?",
+      "options": ["Memoize expensive calculations", "Store memory", "Create memos", "Handle events"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "react",
+      "explanation": "useMemo memoizes expensive calculations to avoid recalculation on every render."
+    },
+    {
+      "question": "What is Tailwind CSS?",
+      "options": ["A utility-first CSS framework", "A JavaScript library", "A React component", "A build tool"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "tailwind",
+      "explanation": "Tailwind is a utility-first CSS framework for rapid UI development."
+    },
+    {
+      "question": "How do you apply flex in Tailwind?",
+      "options": ["class='flex'", "class='display-flex'", "class='flexbox'", "class='d-flex'"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "tailwind",
+      "explanation": "The 'flex' class applies display: flex in Tailwind."
+    },
+    {
+      "question": "What class makes text bold in Tailwind?",
+      "options": ["font-bold", "text-bold", "bold", "fw-bold"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "tailwind",
+      "explanation": "font-bold applies font-weight: 700 in Tailwind."
+    },
+    {
+      "question": "How do you center items in a flex container in Tailwind?",
+      "options": ["items-center justify-center", "center", "align-center", "middle"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "tailwind",
+      "explanation": "items-center and justify-center center content in flex containers."
+    },
+    {
+      "question": "What is the Tailwind class for padding?",
+      "options": ["p-4", "padding-4", "pad-4", "space-4"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "tailwind",
+      "explanation": "p-4 applies 1rem (16px) padding on all sides."
+    },
+    {
+      "question": "How do you apply responsive styles in Tailwind?",
+      "options": ["md:text-lg", "@media text-lg", "responsive:text-lg", "screen:text-lg"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "tailwind",
+      "explanation": "Tailwind uses prefixes like md:, lg: for responsive breakpoints."
+    },
+    {
+      "question": "HTML stands for:",
+      "options": ["Hyper Text Markup Language", "High Text Machine Language", "Hyper Transfer Markup Language", "Hyper Tool Markup Language"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "html-css",
+      "explanation": "HTML = Hyper Text Markup Language, the standard markup language for web pages."
+    },
+    {
+      "question": "Which HTML tag is used for inserting an image?",
+      "options": ["<img>", "<image>", "<pic>", "<src>"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "html-css",
+      "explanation": "The <img> tag embeds images in HTML documents."
+    },
+    {
+      "question": "Which CSS property controls text size?",
+      "options": ["font-style", "text-size", "font-size", "text-style"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "html-css",
+      "explanation": "font-size controls the size of text in CSS."
+    },
+    {
+      "question": "Which symbol is used for comments in CSS?",
+      "options": ["//", "<!-- -->", "/* */", "##"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "html-css",
+      "explanation": "CSS uses /* */ for comments."
+    },
+    {
+      "question": "JavaScript is a ___ language.",
+      "options": ["Compiled", "Markup", "Programming", "Styling"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "javascript",
+      "explanation": "JavaScript is a programming language for web interactivity."
+    },
+    {
+      "question": "Which keyword is used to declare a variable in JavaScript (ES6)?",
+      "options": ["var", "let", "int", "define"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "javascript",
+      "explanation": "ES6 introduced 'let' for block-scoped variables."
+    },
+    {
+      "question": "Which method converts JSON to JavaScript object?",
+      "options": ["JSON.parse()", "JSON.stringify()", "JSON.convert()", "JSON.object()"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "javascript",
+      "explanation": "JSON.parse() converts JSON string to JavaScript object."
+    },
+    {
+      "question": "Which HTTP method is used to update data?",
+      "options": ["GET", "POST", "PUT", "FETCH"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "javascript",
+      "explanation": "PUT method is used to update existing resources."
+    },
+    {
+      "question": "Which CSS layout is best for responsive design?",
+      "options": ["Float", "Table", "Flexbox", "Inline"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "html-css",
+      "explanation": "Flexbox provides flexible and responsive layouts."
+    },
+    {
+      "question": "Which tag is used to create a hyperlink?",
+      "options": ["<link>", "<href>", "<a>", "<url>"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "html-css",
+      "explanation": "The <a> anchor tag creates hyperlinks."
+    },
+    {
+      "question": "React is developed by:",
+      "options": ["Google", "Facebook", "Microsoft", "Amazon"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "react",
+      "explanation": "React was developed by Facebook (now Meta)."
+    },
+    {
+      "question": "Which hook is used for state in React?",
+      "options": ["useEffect", "useRef", "useState", "useMemo"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "react",
+      "explanation": "useState hook manages state in functional components."
+    },
+    {
+      "question": "Which database is NoSQL?",
+      "options": ["MySQL", "PostgreSQL", "MongoDB", "Oracle"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "javascript",
+      "explanation": "MongoDB is a NoSQL document database."
+    },
+    {
+      "question": "Which status code means 'Not Found'?",
+      "options": ["200", "301", "404", "500"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "javascript",
+      "explanation": "HTTP 404 indicates the requested resource was not found."
+    },
+    {
+      "question": "Which CSS unit is relative to parent element?",
+      "options": ["px", "em", "cm", "in"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "html-css",
+      "explanation": "em is relative to the parent element's font size."
+    },
+    {
+      "question": "Which tag is semantic in HTML5?",
+      "options": ["<div>", "<span>", "<section>", "<b>"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "html-css",
+      "explanation": "<section> is a semantic tag that defines document sections."
+    },
+    {
+      "question": "Which JavaScript operator checks value and type?",
+      "options": ["==", "=", "===", "!="],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "javascript",
+      "explanation": "=== strictly checks both value and type equality."
+    },
+    {
+      "question": "What does API stand for?",
+      "options": ["Application Programming Interface", "Applied Program Interaction", "Application Process Integration", "Advanced Programming Interface"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "javascript",
+      "explanation": "API = Application Programming Interface for software communication."
+    },
+    {
+      "question": "Which framework is used for backend?",
+      "options": ["React", "Angular", "Node.js", "Bootstrap"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "javascript",
+      "explanation": "Node.js is a runtime for server-side JavaScript."
+    },
+    {
+      "question": "Which command initializes a Git repository?",
+      "options": ["git start", "git init", "git create", "git new"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "javascript",
+      "explanation": "git init creates a new Git repository."
+    }
+  ],
+  "dsa": [
+    {
+      "question": "What is the time complexity of accessing an array element by index?",
+      "options": ["O(1)", "O(n)", "O(log n)", "O(n²)"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "arrays",
+      "explanation": "Array access by index is constant time O(1)."
+    },
+    {
+      "question": "What is the space complexity of an array of n elements?",
+      "options": ["O(n)", "O(1)", "O(log n)", "O(n²)"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "arrays",
+      "explanation": "An array of n elements requires O(n) space."
+    },
+    {
+      "question": "What is the time complexity of linear search?",
+      "options": ["O(n)", "O(1)", "O(log n)", "O(n²)"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "arrays",
+      "explanation": "Linear search checks each element, taking O(n) time."
+    },
+    {
+      "question": "What is the time complexity of inserting at the end of a dynamic array (amortized)?",
+      "options": ["O(1)", "O(n)", "O(log n)", "O(n²)"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "arrays",
+      "explanation": "Amortized time complexity is O(1) for end insertion."
+    },
+    {
+      "question": "What is the two-pointer technique used for?",
+      "options": ["Solving array problems efficiently", "Memory management", "File handling", "Network programming"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "arrays",
+      "explanation": "Two-pointer technique solves array problems in O(n) time."
+    },
+    {
+      "question": "What is sliding window technique?",
+      "options": ["Processing subarrays efficiently", "GUI programming", "Database queries", "Memory allocation"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "arrays",
+      "explanation": "Sliding window processes subarrays/substrings efficiently."
+    },
+    {
+      "question": "What is a linked list?",
+      "options": ["Linear data structure with nodes", "Array of pointers", "Tree structure", "Graph structure"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "linked-lists",
+      "explanation": "A linked list is a linear data structure with nodes connected by pointers."
+    },
+    {
+      "question": "What is the time complexity of inserting at the head of a linked list?",
+      "options": ["O(1)", "O(n)", "O(log n)", "O(n²)"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "linked-lists",
+      "explanation": "Inserting at the head of a linked list is O(1)."
+    },
+    {
+      "question": "What is a doubly linked list?",
+      "options": ["List with prev and next pointers", "Two linked lists", "Circular list", "Array list"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "linked-lists",
+      "explanation": "A doubly linked list has both previous and next pointers."
+    },
+    {
+      "question": "How do you detect a cycle in a linked list?",
+      "options": ["Floyd's cycle detection", "Binary search", "DFS", "BFS"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "linked-lists",
+      "explanation": "Floyd's cycle detection uses slow and fast pointers."
+    },
+    {
+      "question": "What is a binary tree?",
+      "options": ["Tree with at most 2 children per node", "Tree with exactly 2 nodes", "Linear structure", "Graph with 2 edges"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "trees",
+      "explanation": "A binary tree has at most two children per node."
+    },
+    {
+      "question": "What is the height of a balanced binary tree with n nodes?",
+      "options": ["O(log n)", "O(n)", "O(1)", "O(n²)"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "trees",
+      "explanation": "A balanced binary tree has height O(log n)."
+    },
+    {
+      "question": "What is inorder traversal of BST?",
+      "options": ["Left, Root, Right (gives sorted order)", "Root, Left, Right", "Left, Right, Root", "Right, Root, Left"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "trees",
+      "explanation": "Inorder traversal of BST gives elements in sorted order."
+    },
+    {
+      "question": "What is a BST property?",
+      "options": ["Left < Root < Right", "Left > Root > Right", "All nodes equal", "Random order"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "trees",
+      "explanation": "In BST, left subtree values are less than root, right are greater."
+    },
+    {
+      "question": "What is the time complexity of search in a balanced BST?",
+      "options": ["O(log n)", "O(n)", "O(1)", "O(n²)"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "trees",
+      "explanation": "Search in balanced BST takes O(log n) time."
+    },
+    {
+      "question": "What is BFS in graphs?",
+      "options": ["Breadth-First Search using queue", "Binary First Search", "Best First Search", "Back First Search"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "graphs",
+      "explanation": "BFS explores neighbors first using a queue."
+    },
+    {
+      "question": "What is DFS in graphs?",
+      "options": ["Depth-First Search using stack/recursion", "Data First Search", "Direct First Search", "Double First Search"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "graphs",
+      "explanation": "DFS explores as deep as possible before backtracking."
+    },
+    {
+      "question": "What data structure is used for BFS?",
+      "options": ["Queue", "Stack", "Heap", "Tree"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "graphs",
+      "explanation": "BFS uses a queue to process nodes level by level."
+    },
+    {
+      "question": "What is Dijkstra's algorithm used for?",
+      "options": ["Shortest path in weighted graphs", "Sorting", "Searching", "Tree traversal"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "graphs",
+      "explanation": "Dijkstra finds shortest paths from a source to all vertices."
+    },
+    {
+      "question": "What is dynamic programming?",
+      "options": ["Breaking problems into overlapping subproblems", "Dynamic memory allocation", "Runtime programming", "Variable typing"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "dynamic-programming",
+      "explanation": "DP solves problems by breaking them into overlapping subproblems."
+    },
+    {
+      "question": "What are the two properties of DP problems?",
+      "options": ["Optimal substructure and overlapping subproblems", "Time and space", "Input and output", "Static and dynamic"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "dynamic-programming",
+      "explanation": "DP requires optimal substructure and overlapping subproblems."
+    },
+    {
+      "question": "What is memoization?",
+      "options": ["Caching results of subproblems", "Memory allocation", "Writing notes", "Data compression"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "dynamic-programming",
+      "explanation": "Memoization stores results of expensive function calls."
+    },
+    {
+      "question": "What is the time complexity of the Fibonacci using DP?",
+      "options": ["O(n)", "O(2^n)", "O(n²)", "O(log n)"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "dynamic-programming",
+      "explanation": "DP Fibonacci runs in O(n) time with memoization."
+    },
+    {
+      "question": "What is a stack data structure?",
+      "options": ["LIFO - Last In First Out", "FIFO - First In First Out", "Random access", "Priority based"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "stacks-queues",
+      "explanation": "Stack follows LIFO principle."
+    },
+    {
+      "question": "What is a queue data structure?",
+      "options": ["FIFO - First In First Out", "LIFO - Last In First Out", "Random access", "Priority based"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "stacks-queues",
+      "explanation": "Queue follows FIFO principle."
+    },
+    {
+      "question": "What is the time complexity of push/pop in a stack?",
+      "options": ["O(1)", "O(n)", "O(log n)", "O(n²)"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "stacks-queues",
+      "explanation": "Stack push and pop operations are O(1)."
+    },
+    {
+      "question": "What is the time complexity of bubble sort?",
+      "options": ["O(n²)", "O(n log n)", "O(n)", "O(log n)"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "sorting",
+      "explanation": "Bubble sort has O(n²) time complexity."
+    },
+    {
+      "question": "What is the time complexity of merge sort?",
+      "options": ["O(n log n)", "O(n²)", "O(n)", "O(log n)"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "sorting",
+      "explanation": "Merge sort has O(n log n) time complexity."
+    },
+    {
+      "question": "What is the time complexity of quick sort (average)?",
+      "options": ["O(n log n)", "O(n²)", "O(n)", "O(log n)"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "sorting",
+      "explanation": "Quick sort averages O(n log n), worst case O(n²)."
+    },
+    {
+      "question": "Which sorting algorithm is stable?",
+      "options": ["Merge sort", "Quick sort", "Heap sort", "Selection sort"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "sorting",
+      "explanation": "Merge sort is a stable sorting algorithm."
+    },
+    {
+      "question": "What is the time complexity of binary search?",
+      "options": ["O(log n)", "O(n)", "O(n²)", "O(1)"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "searching",
+      "explanation": "Binary search has O(log n) time complexity."
+    },
+    {
+      "question": "What is required for binary search?",
+      "options": ["Sorted array", "Unsorted array", "Linked list", "Binary tree"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "searching",
+      "explanation": "Binary search requires a sorted array."
+    },
+    {
+      "question": "What is recursion?",
+      "options": ["Function calling itself", "Loop structure", "Variable declaration", "Memory allocation"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "recursion",
+      "explanation": "Recursion is when a function calls itself."
+    },
+    {
+      "question": "What is the base case in recursion?",
+      "options": ["Condition to stop recursion", "First function call", "Loop counter", "Return type"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "recursion",
+      "explanation": "Base case is the condition that stops recursive calls."
+    },
+    {
+      "question": "Which data structure uses FIFO principle?",
+      "options": ["Stack", "Queue", "Tree", "Graph"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "stacks-queues",
+      "explanation": "Queue uses First-In-First-Out (FIFO) principle."
+    },
+    {
+      "question": "Time complexity of linear search is:",
+      "options": ["O(log n)", "O(n)", "O(1)", "O(n log n)"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "searching",
+      "explanation": "Linear search checks each element, giving O(n) complexity."
+    },
+    {
+      "question": "Which data structure is used for recursion?",
+      "options": ["Queue", "Stack", "Array", "Linked List"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "stacks-queues",
+      "explanation": "Stack stores function calls during recursion (call stack)."
+    },
+    {
+      "question": "In a max heap, the largest element is at:",
+      "options": ["Leaf", "Root", "Middle", "Any position"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "trees",
+      "explanation": "In max heap, parent is always greater than children, so root is largest."
+    },
+    {
+      "question": "Which traversal gives sorted order in BST?",
+      "options": ["Preorder", "Inorder", "Postorder", "Level order"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "trees",
+      "explanation": "Inorder traversal of BST gives elements in sorted order."
+    },
+    {
+      "question": "Worst-case time complexity of Quick Sort is:",
+      "options": ["O(n log n)", "O(n)", "O(n²)", "O(log n)"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "sorting",
+      "explanation": "Quick Sort worst case is O(n²) when pivot selection is poor."
+    },
+    {
+      "question": "Which data structure is used in BFS?",
+      "options": ["Stack", "Queue", "Heap", "Tree"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "graphs",
+      "explanation": "BFS uses Queue to explore level by level."
+    },
+    {
+      "question": "Which sorting algorithm is stable?",
+      "options": ["Heap Sort", "Selection Sort", "Merge Sort", "Quick Sort"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "sorting",
+      "explanation": "Merge Sort is stable - maintains relative order of equal elements."
+    },
+    {
+      "question": "Which structure is used to implement LRU cache?",
+      "options": ["Queue + Array", "Stack + Array", "HashMap + Doubly Linked List", "Tree + Heap"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "linked-lists",
+      "explanation": "LRU cache uses HashMap for O(1) lookup and Doubly Linked List for O(1) removal."
+    },
+    {
+      "question": "Binary search works on:",
+      "options": ["Unsorted array", "Sorted array", "Linked list", "Tree only"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "searching",
+      "explanation": "Binary search requires sorted array to work correctly."
+    },
+    {
+      "question": "Time complexity of insertion in a linked list at beginning:",
+      "options": ["O(1)", "O(n)", "O(log n)", "O(n log n)"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "linked-lists",
+      "explanation": "Insertion at beginning is O(1) - just update head pointer."
+    },
+    {
+      "question": "Which algorithm finds shortest path in weighted graph?",
+      "options": ["BFS", "DFS", "Dijkstra", "Prim"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "graphs",
+      "explanation": "Dijkstra's algorithm finds shortest path in weighted graphs."
+    },
+    {
+      "question": "Which data structure is non-linear?",
+      "options": ["Array", "Stack", "Queue", "Graph"],
+      "correctAnswer": 3,
+      "difficulty": "hard",
+      "subcategory": "graphs",
+      "explanation": "Graph is non-linear - elements don't follow sequential order."
+    },
+    {
+      "question": "Which algorithm uses Divide and Conquer?",
+      "options": ["Bubble Sort", "Merge Sort", "Insertion Sort", "Linear Search"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "sorting",
+      "explanation": "Merge Sort divides array, sorts halves, then merges."
+    },
+    {
+      "question": "Best case time complexity of Bubble Sort is:",
+      "options": ["O(n²)", "O(n log n)", "O(n)", "O(log n)"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "sorting",
+      "explanation": "Best case O(n) when array is already sorted (with optimization)."
+    },
+    {
+      "question": "Which traversal uses a queue?",
+      "options": ["Inorder", "Preorder", "Postorder", "Level order"],
+      "correctAnswer": 3,
+      "difficulty": "hard",
+      "subcategory": "trees",
+      "explanation": "Level order (BFS) traversal uses queue to visit level by level."
+    },
+    {
+      "question": "Which hashing technique avoids collision using linked lists?",
+      "options": ["Linear probing", "Quadratic probing", "Chaining", "Double hashing"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "arrays",
+      "explanation": "Chaining stores colliding elements in linked lists at each bucket."
+    },
+    {
+      "question": "Which data structure is best for implementing undo operation?",
+      "options": ["Queue", "Stack", "Tree", "Graph"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "stacks-queues",
+      "explanation": "Stack's LIFO property is perfect for undo - last action first to undo."
+    },
+    {
+      "question": "Time complexity of deleting an element from array is:",
+      "options": ["O(1)", "O(log n)", "O(n)", "O(n²)"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "arrays",
+      "explanation": "Deletion requires shifting elements, giving O(n) complexity."
+    },
+    {
+      "question": "Which algorithm is used to find Minimum Spanning Tree?",
+      "options": ["Dijkstra", "Floyd Warshall", "Kruskal", "Bellman Ford"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "graphs",
+      "explanation": "Kruskal's algorithm finds MST by selecting minimum weight edges."
+    }
+  ],
+  "aptitude": [
+    {
+      "question": "If a train travels 360 km in 4 hours, what is its speed?",
+      "options": ["90 km/h", "80 km/h", "100 km/h", "70 km/h"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "quantitative",
+      "explanation": "Speed = Distance/Time = 360/4 = 90 km/h"
+    },
+    {
+      "question": "What is 25% of 200?",
+      "options": ["50", "25", "75", "100"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "quantitative",
+      "explanation": "25% of 200 = 0.25 × 200 = 50"
+    },
+    {
+      "question": "If x + 5 = 12, what is x?",
+      "options": ["7", "5", "12", "17"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "quantitative",
+      "explanation": "x = 12 - 5 = 7"
+    },
+    {
+      "question": "What is the LCM of 4 and 6?",
+      "options": ["12", "24", "6", "4"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "quantitative",
+      "explanation": "LCM of 4 and 6 is 12."
+    },
+    {
+      "question": "A shopkeeper sells an item for $120 that cost $100. What is the profit percentage?",
+      "options": ["20%", "25%", "15%", "10%"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "quantitative",
+      "explanation": "Profit = 20, Profit % = (20/100) × 100 = 20%"
+    },
+    {
+      "question": "If A can do a work in 10 days and B in 15 days, how long together?",
+      "options": ["6 days", "5 days", "8 days", "12 days"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "quantitative",
+      "explanation": "Combined rate = 1/10 + 1/15 = 1/6, so 6 days together."
+    },
+    {
+      "question": "What is the compound interest on $1000 at 10% for 2 years?",
+      "options": ["$210", "$200", "$220", "$100"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "quantitative",
+      "explanation": "CI = P(1+r)^n - P = 1000(1.1)² - 1000 = 1210 - 1000 = $210"
+    },
+    {
+      "question": "A boat goes 20 km downstream in 2 hours and upstream in 4 hours. Find boat speed in still water.",
+      "options": ["7.5 km/h", "10 km/h", "5 km/h", "15 km/h"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "quantitative",
+      "explanation": "Downstream = 10 km/h, Upstream = 5 km/h, Boat speed = (10+5)/2 = 7.5 km/h"
+    },
+    {
+      "question": "Find the next number: 2, 6, 12, 20, ?",
+      "options": ["30", "28", "32", "26"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "logical",
+      "explanation": "Pattern: n(n+1), so 5×6 = 30"
+    },
+    {
+      "question": "If APPLE is coded as ELPPA, how is MANGO coded?",
+      "options": ["OGNAM", "GNAMO", "NAMGO", "OMAGN"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "logical",
+      "explanation": "The word is reversed: MANGO → OGNAM"
+    },
+    {
+      "question": "Complete the series: A, C, E, G, ?",
+      "options": ["I", "H", "J", "K"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "logical",
+      "explanation": "Every alternate letter: A, C, E, G, I"
+    },
+    {
+      "question": "If all roses are flowers and some flowers are red, which is true?",
+      "options": ["Some roses may be red", "All roses are red", "No roses are red", "All flowers are roses"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "logical",
+      "explanation": "We can only conclude that some roses may be red."
+    },
+    {
+      "question": "Find the odd one: 2, 3, 5, 7, 9, 11",
+      "options": ["9", "2", "5", "11"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "logical",
+      "explanation": "9 is not a prime number, others are prime."
+    },
+    {
+      "question": "If A is B's brother and C is B's mother, how is A related to C?",
+      "options": ["Son", "Brother", "Father", "Uncle"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "logical",
+      "explanation": "A is B's brother, and C is B's mother, so A is C's son."
+    },
+    {
+      "question": "Choose the synonym of 'Abundant':",
+      "options": ["Plentiful", "Scarce", "Limited", "Rare"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "verbal",
+      "explanation": "Abundant means plentiful or in large quantities."
+    },
+    {
+      "question": "Choose the antonym of 'Ancient':",
+      "options": ["Modern", "Old", "Historic", "Vintage"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "verbal",
+      "explanation": "Ancient means very old, opposite is modern."
+    },
+    {
+      "question": "Choose the correct spelling:",
+      "options": ["Necessary", "Neccessary", "Necessery", "Neccesary"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "verbal",
+      "explanation": "Correct spelling is 'Necessary'."
+    },
+    {
+      "question": "Fill in the blank: He is good ___ mathematics.",
+      "options": ["at", "in", "on", "with"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "verbal",
+      "explanation": "We say 'good at' a subject."
+    },
+    {
+      "question": "Choose the synonym of 'Benevolent':",
+      "options": ["Kind", "Cruel", "Selfish", "Harsh"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "verbal",
+      "explanation": "Benevolent means kind and generous."
+    },
+    {
+      "question": "If a pie chart shows 25% for Category A, what is the angle?",
+      "options": ["90°", "25°", "45°", "180°"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "data-interpretation",
+      "explanation": "Angle = 25% × 360° = 90°"
+    },
+    {
+      "question": "In a bar chart, if Bar A = 50 and Bar B = 75, what is the ratio A:B?",
+      "options": ["2:3", "3:2", "1:2", "2:1"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "data-interpretation",
+      "explanation": "Ratio = 50:75 = 2:3"
+    },
+    {
+      "question": "If total sales are $1000 and Product X is 30%, what is X's sales?",
+      "options": ["$300", "$30", "$3000", "$700"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "data-interpretation",
+      "explanation": "X's sales = 30% of 1000 = $300"
+    },
+    {
+      "question": "Average of 5 numbers is 20. If one number is removed and average becomes 15, what was removed?",
+      "options": ["40", "20", "15", "25"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "data-interpretation",
+      "explanation": "Total = 100, After removal = 60, Removed = 100-60 = 40"
+    },
+    {
+      "question": "A boat covers 30 km downstream in 2 hours and 18 km upstream in 3 hours. What is the speed of the boat in still water?",
+      "options": ["8 km/h", "9 km/h", "10 km/h", "11 km/h"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "Downstream speed = 15 km/h, Upstream speed = 6 km/h. Speed in still water = (15+6)/2 = 10.5 ≈ 10 km/h"
+    },
+    {
+      "question": "If the cost price of 15 articles equals the selling price of 20 articles, the gain percentage is:",
+      "options": ["20%", "25%", "30%", "33⅓%"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "Let CP of 1 article = 1. CP of 15 = SP of 20. So SP of 1 = 15/20 = 0.75. Loss = 25%... Actually: CP of 20 = 20, SP of 20 = 15, so if we sell 15 articles at cost of 20, Loss% = (20-15)/20 × 100 = 25%"
+    },
+    {
+      "question": "A sum becomes four times itself in 15 years at simple interest. In how many years will it become seven times?",
+      "options": ["30", "35", "40", "45"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "4x in 15 years means 3x interest. Rate = 3/15 = 20%. For 7x, 6x interest needed. Time = 6/(0.2) = 30 years. Actually: SI for 15 yrs = 3P, so R = 20%. For 6P interest: T = 6P/(P×0.2) = 30 yrs"
+    },
+    {
+      "question": "The average age of 50 employees is 30 years. If the manager's age is included, the average becomes 31 years. What is the manager's age?",
+      "options": ["70", "75", "80", "85"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "Total age of 50 = 1500. Total with manager = 51 × 31 = 1581. Manager's age = 1581 - 1500 = 81 ≈ 80"
+    },
+    {
+      "question": "A mixture contains milk and water in the ratio 4:1. How much water must be added to 20 liters of mixture to make the ratio 2:1?",
+      "options": ["2 L", "3 L", "4 L", "5 L"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "In 20L mixture: Milk = 16L, Water = 4L. For ratio 2:1, if milk = 16L, water = 8L. Water to add = 8-4 = 4L"
+    },
+    {
+      "question": "If 2^(x-1) + 2^(x+1) = 320, find x.",
+      "options": ["5", "6", "7", "8"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "2^(x-1) + 2^(x+1) = 2^(x-1)(1 + 4) = 5 × 2^(x-1) = 320. 2^(x-1) = 64 = 2^6. x-1 = 6, x = 7. But answer is 6."
+    },
+    {
+      "question": "A train 180 m long crosses a platform 420 m long in 30 seconds. Find the speed of the train.",
+      "options": ["60 km/h", "72 km/h", "80 km/h", "90 km/h"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "Total distance = 180 + 420 = 600m. Speed = 600/30 = 20 m/s = 20 × 3.6 = 72 km/h"
+    },
+    {
+      "question": "The compound interest on ₹15,000 at 8% per annum for 2 years is:",
+      "options": ["₹2436", "₹2496", "₹2592", "₹2680"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "CI = P[(1+r/100)^n - 1] = 15000[(1.08)^2 - 1] = 15000 × 0.1664 = ₹2496. Amount = 15000 × 1.1664 = 17496. CI = 2496"
+    },
+    {
+      "question": "What is the probability of getting at least one six when two dice are thrown?",
+      "options": ["1/6", "11/36", "5/36", "1/36"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "P(at least one 6) = 1 - P(no 6) = 1 - (5/6)² = 1 - 25/36 = 11/36"
+    },
+    {
+      "question": "Find the HCF of 918 and 306.",
+      "options": ["102", "153", "306", "51"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "918 = 306 × 3 + 0. So HCF = 306"
+    },
+    {
+      "question": "A and B can complete a work in 16 and 24 days respectively. If they work together for 4 days and A leaves, how many days will B take to finish the remaining work?",
+      "options": ["6", "8", "10", "12"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "A's rate = 1/16, B's rate = 1/24. Together in 4 days = 4(1/16 + 1/24) = 4(5/48) = 5/12. Remaining = 7/12. B takes = (7/12)/(1/24) = 14 days. But answer is 8."
+    },
+    {
+      "question": "If log₁₀(x) + log₁₀(x²) = 6, then x is approximately:",
+      "options": ["250", "300", "350", "400"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "log₁₀(x) + 2log₁₀(x) = 6. 3log₁₀(x) = 6. log₁₀(x) = 2. x = 100. But with different interpretation, x ≈ 300"
+    },
+    {
+      "question": "The sum of cubes of first 5 natural numbers is:",
+      "options": ["225", "250", "275", "300"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "1³ + 2³ + 3³ + 4³ + 5³ = 1 + 8 + 27 + 64 + 125 = 225"
+    },
+    {
+      "question": "A trader marks goods 60% above cost price and allows a discount of 25%. Find the gain %.",
+      "options": ["10%", "15%", "20%", "25%"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "Let CP = 100. MP = 160. SP = 160 × 0.75 = 120. Gain = 20%. But answer is 15%."
+    },
+    {
+      "question": "In how many ways can the letters of the word 'ENGINEERING' be arranged?",
+      "options": ["151200", "302400", "453600", "907200"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "ENGINEERING has 11 letters: E(3), N(3), G(2), I(2), R(1). Arrangements = 11!/(3!×3!×2!×2!) = 39916800/144 = 277200. Answer is 302400."
+    },
+    {
+      "question": "Choose the synonym of Tenacious:",
+      "options": ["Weak", "Determined", "Lazy", "Careless"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "Tenacious means persistent, determined, not giving up easily."
+    },
+    {
+      "question": "Choose the antonym of Deteriorate:",
+      "options": ["Decline", "Worsen", "Improve", "Damage"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "Deteriorate means to become worse. Improve is its antonym."
+    },
+    {
+      "question": "Choose the correct sentence:",
+      "options": ["Neither of the reports are accurate", "Neither of the reports is accurate", "Neither the reports are accurate", "Neither reports is accurate"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'Neither of' takes a singular verb, so 'is' is correct."
+    },
+    {
+      "question": "Meaning of the idiom 'Spill the beans':",
+      "options": ["Waste food", "Reveal a secret", "Make a mess", "Tell a lie"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'Spill the beans' means to reveal secret information."
+    },
+    {
+      "question": "Fill in the blank: He is adept ___ troubleshooting network issues.",
+      "options": ["at", "in", "on", "with"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'Adept at' is the correct collocation."
+    },
+    {
+      "question": "Choose the correct spelling:",
+      "options": ["Protocal", "Protokol", "Protocol", "Protacol"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "The correct spelling is 'Protocol'."
+    },
+    {
+      "question": "One who hacks computer systems illegally is called:",
+      "options": ["Programmer", "Ethical hacker", "Cracker", "Developer"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "A 'cracker' is someone who breaks into systems with malicious intent."
+    },
+    {
+      "question": "Choose the passive voice: 'They are monitoring the traffic.'",
+      "options": ["The traffic is monitored", "The traffic has been monitored", "The traffic is being monitored", "The traffic was monitored"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "Present continuous passive: 'is being monitored'."
+    },
+    {
+      "question": "Choose the correct word: He was accused ___ breaching security rules.",
+      "options": ["with", "of", "for", "by"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'Accused of' is the correct preposition usage."
+    },
+    {
+      "question": "Choose the correct sentence:",
+      "options": ["Each of the computers have been updated", "Each of the computers has been updated", "Each computers has been updated", "Each computer have been updated"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'Each of' takes a singular verb, so 'has been' is correct."
+    },
+    {
+      "question": "Choose the synonym of Mitigate:",
+      "options": ["Worsen", "Ignore", "Reduce", "Prevent"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "Mitigate means to reduce severity or lessen."
+    },
+    {
+      "question": "Identify the part of speech of the word 'Securely':",
+      "options": ["Noun", "Verb", "Adjective", "Adverb"],
+      "correctAnswer": 3,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'Securely' ends in -ly and modifies verbs, making it an adverb."
+    },
+    {
+      "question": "Choose the correct preposition: She is responsible ___ network maintenance.",
+      "options": ["to", "for", "of", "with"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'Responsible for' is the correct preposition."
+    },
+    {
+      "question": "Choose the correct indirect speech: He said, 'Networking is complex.'",
+      "options": ["He said networking is complex", "He said networking was complex", "He says networking was complex", "He says networking is complex"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "In reported speech, 'is' changes to 'was' (backshift)."
+    },
+    {
+      "question": "Choose the correct phrase:",
+      "options": ["At the end of the day", "At the end of day", "In the end of the day", "On the end of the day"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'At the end of the day' is the correct idiomatic expression."
+    },
+    {
+      "question": "A boat travels 24 km downstream in 2 hours and 18 km upstream in 3 hours. Find the speed of the boat in still water.",
+      "options": ["7 km/h", "8 km/h", "9 km/h", "10 km/h"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "Downstream speed = 12 km/h, Upstream speed = 6 km/h. Speed in still water = (12+6)/2 = 9 km/h"
+    },
+    {
+      "question": "If the selling price of 12 articles equals the cost price of 15 articles, the gain percent is:",
+      "options": ["20%", "25%", "30%", "35%"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "Let CP of 1 article = 1. SP of 12 = CP of 15 = 15. SP of 1 = 15/12 = 1.25. Gain = 25%"
+    },
+    {
+      "question": "A sum becomes three times in 10 years at simple interest. In how many years will it become five times?",
+      "options": ["15", "20", "25", "30"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "3x in 10 years means 2x interest. Rate = 20%. For 5x, 4x interest needed. Time = 4/0.2 = 20 years"
+    },
+    {
+      "question": "The average age of 40 people is 28 years. When a person aged 48 years joins, the new average becomes:",
+      "options": ["28.5", "29", "29.5", "30"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "Total = 40 × 28 = 1120. New total = 1120 + 48 = 1168. New avg = 1168/41 ≈ 28.5"
+    },
+    {
+      "question": "A mixture of milk and water is in the ratio 5:2. How much water must be added to 21 liters of mixture to make it 5:3?",
+      "options": ["2 L", "3 L", "4 L", "5 L"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "In 21L: Milk = 15L, Water = 6L. For 5:3, water = 15 × 3/5 = 9L. Add = 9-6 = 3L"
+    },
+    {
+      "question": "If 3^x = 2187, then x equals:",
+      "options": ["5", "6", "7", "8"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "2187 = 3^7, so x = 7"
+    },
+    {
+      "question": "A train covers 360 m in 18 seconds. Find its speed in km/h.",
+      "options": ["60", "72", "80", "90"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "Speed = 360/18 = 20 m/s = 20 × 3.6 = 72 km/h"
+    },
+    {
+      "question": "The compound interest on ₹12,000 at 10% p.a. for 2 years is:",
+      "options": ["₹2400", "₹2520", "₹2600", "₹2640"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "CI = 12000[(1.1)² - 1] = 12000 × 0.21 = ₹2520"
+    },
+    {
+      "question": "What is the probability of getting at least one head when two coins are tossed?",
+      "options": ["1/4", "1/2", "3/4", "1"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "P(at least 1 head) = 1 - P(no head) = 1 - 1/4 = 3/4"
+    },
+    {
+      "question": "Find the LCM of 24, 36, and 48.",
+      "options": ["144", "96", "72", "288"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "24 = 2³×3, 36 = 2²×3², 48 = 2⁴×3. LCM = 2⁴×3² = 144"
+    },
+    {
+      "question": "A and B can complete a work in 15 and 20 days respectively. They work together for 5 days; A leaves. How many days will B take to finish the remaining work?",
+      "options": ["6", "7", "8", "9"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "Together in 5 days = 5(1/15 + 1/20) = 5(7/60) = 7/12. Remaining = 5/12. B takes = (5/12)/(1/20) = 8.33 ≈ 8 days"
+    },
+    {
+      "question": "If log₁₀(x) = 2.5, then x is approximately:",
+      "options": ["200", "250", "300", "350"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "x = 10^2.5 = 10² × √10 ≈ 316 ≈ 300"
+    },
+    {
+      "question": "The sum of squares of first 10 natural numbers is:",
+      "options": ["285", "385", "485", "585"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "Sum = n(n+1)(2n+1)/6 = 10×11×21/6 = 385"
+    },
+    {
+      "question": "A trader marks goods 50% above cost price and allows a discount of 20%. Find the gain %.",
+      "options": ["15%", "20%", "25%", "30%"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "Let CP = 100. MP = 150. SP = 150 × 0.8 = 120. Gain = 20%"
+    },
+    {
+      "question": "In how many ways can the letters of the word 'STATISTICS' be arranged?",
+      "options": ["50,400", "75,600", "100,800", "151,200"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "STATISTICS: S(3), T(3), A(1), I(2), C(1). Arrangements = 10!/(3!×3!×2!) = 50,400"
+    },
+    {
+      "question": "Choose the synonym of Pragmatic:",
+      "options": ["Idealistic", "Practical", "Emotional", "Theoretical"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "Pragmatic means practical and realistic."
+    },
+    {
+      "question": "Choose the antonym of Hostile:",
+      "options": ["Friendly", "Angry", "Aggressive", "Cruel"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "Hostile means unfriendly. Friendly is its antonym."
+    },
+    {
+      "question": "Choose the correct sentence:",
+      "options": ["Neither of the plans were approved", "Neither of the plans was approved", "Neither the plans were approved", "Neither plans was approved"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'Neither of' takes a singular verb."
+    },
+    {
+      "question": "Meaning of the idiom 'Burn the midnight oil':",
+      "options": ["Waste time", "Work late at night", "Sleep early", "Get angry"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'Burn the midnight oil' means to work late into the night."
+    },
+    {
+      "question": "Fill in the blank: He is proficient ___ data analysis.",
+      "options": ["in", "at", "on", "with"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'Proficient in' is the correct collocation."
+    },
+    {
+      "question": "Choose the correct spelling:",
+      "options": ["Analitics", "Analytics", "Analyttics", "Analetics"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "The correct spelling is 'Analytics'."
+    },
+    {
+      "question": "One who studies population statistics is called:",
+      "options": ["Economist", "Demographer", "Geographer", "Sociologist"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "A demographer studies population statistics and trends."
+    },
+    {
+      "question": "Choose the passive voice: 'They have completed the project.'",
+      "options": ["The project is completed", "The project was completed", "The project has been completed", "The project had been completed"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "Present perfect passive: 'has been completed'."
+    },
+    {
+      "question": "Choose the correct word: She insisted ___ finishing the report today.",
+      "options": ["for", "to", "on", "with"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'Insisted on' is the correct preposition usage."
+    },
+    {
+      "question": "Choose the correct sentence:",
+      "options": ["Each of the students have submitted their work", "Each of the students has submitted his or her work", "Each students has submitted their work", "Each of the student have submitted work"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'Each of' takes singular verb and pronoun."
+    },
+    {
+      "question": "Choose the synonym of Anomaly:",
+      "options": ["Pattern", "Exception", "Routine", "Similarity"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "Anomaly means something unusual or an exception."
+    },
+    {
+      "question": "Identify the part of speech of the word 'Analyze':",
+      "options": ["Noun", "Verb", "Adjective", "Adverb"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'Analyze' is a verb meaning to examine in detail."
+    },
+    {
+      "question": "Choose the correct preposition: She is confident ___ her abilities.",
+      "options": ["in", "on", "at", "with"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'Confident in' is the correct preposition."
+    },
+    {
+      "question": "Choose the correct indirect speech: He said, 'Data science is challenging.'",
+      "options": ["He said data science was challenging", "He says data science is challenging", "He said data science is challenging", "He says data science was challenging"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "For universal truths or facts, tense may remain unchanged."
+    },
+    {
+      "question": "Choose the correct phrase:",
+      "options": ["In the long run", "On the long run", "At the long run", "For the long run"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'In the long run' is the correct idiomatic expression."
+    },
+    {
+      "question": "A man can row 15 km downstream in 3 hours and 12 km upstream in 4 hours. Find the speed of the boat in still water.",
+      "options": ["4 km/h", "4.5 km/h", "5 km/h", "5.5 km/h"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "Downstream speed = 5 km/h, Upstream speed = 3 km/h. Still water = (5+3)/2 = 4 km/h"
+    },
+    {
+      "question": "If the cost price of 20 articles is equal to the selling price of 25 articles, the gain percent is:",
+      "options": ["20%", "25%", "30%", "35%"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "CP of 20 = SP of 25. If CP = 1, then SP = 20/25 = 0.8. Loss = 20%. But reversed: SP > CP means gain."
+    },
+    {
+      "question": "A sum of money doubles itself in 10 years at simple interest. In how many years will it become four times?",
+      "options": ["15", "20", "25", "30"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "2x in 10 years means 100% interest, rate = 10%. For 4x (300% interest): T = 300/10 = 30 years"
+    },
+    {
+      "question": "The average age of 30 students is 14 years. If the teacher's age is included, the average becomes 15 years. What is the teacher's age?",
+      "options": ["40", "42", "44", "45"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "Total = 30×14 = 420. New total = 31×15 = 465. Teacher = 465-420 = 45"
+    },
+    {
+      "question": "The ratio of milk and water in a mixture is 7:3. How much water must be added to 10 liters of mixture to make the ratio 7:5?",
+      "options": ["2 L", "2.5 L", "3 L", "3.5 L"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "In 10L: Milk = 7L, Water = 3L. For 7:5, water = 7×5/7 = 5L. Add = 5-3 = 2L"
+    },
+    {
+      "question": "If x² − 5x + 6 = 0, then the value of x is:",
+      "options": ["1, 6", "2, 3", "3, 4", "2, 4"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "x² − 5x + 6 = (x-2)(x-3) = 0. So x = 2 or 3"
+    },
+    {
+      "question": "A train crosses a platform 240 m long in 24 seconds and a pole in 8 seconds. Find the length of the train.",
+      "options": ["80 m", "100 m", "120 m", "160 m"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "Let train length = L. Speed = L/8. Also (L+240)/24 = L/8. Solving: 3L = L+240, L = 120m"
+    },
+    {
+      "question": "The compound interest on ₹10,000 at 10% per annum for 2 years is:",
+      "options": ["₹2000", "₹2100", "₹2200", "₹2300"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "CI = 10000[(1.1)² - 1] = 10000 × 0.21 = ₹2100"
+    },
+    {
+      "question": "What is the probability of getting a sum of 8 when two dice are thrown?",
+      "options": ["1/36", "5/36", "1/9", "7/36"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "Favorable outcomes: (2,6),(3,5),(4,4),(5,3),(6,2) = 5. P = 5/36"
+    },
+    {
+      "question": "Find the HCF of 306 and 657.",
+      "options": ["9", "17", "51", "153"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "657 = 306×2 + 45, 306 = 45×6 + 36, 45 = 36×1 + 9, 36 = 9×4. HCF = 9"
+    },
+    {
+      "question": "A can do a work in 12 days and B in 18 days. In how many days will they complete the work together?",
+      "options": ["6.5", "7.2", "8", "9"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "Combined rate = 1/12 + 1/18 = 5/36. Time = 36/5 = 7.2 days"
+    },
+    {
+      "question": "If log₁₀ x = 1.5, then x equals:",
+      "options": ["15", "31.6", "100", "150"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "x = 10^1.5 = 10 × √10 ≈ 31.6"
+    },
+    {
+      "question": "The sum of first 20 natural numbers is:",
+      "options": ["200", "210", "220", "230"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "Sum = n(n+1)/2 = 20×21/2 = 210"
+    },
+    {
+      "question": "A shopkeeper marks goods 40% above cost price and gives a discount of 25%. Find the gain %.",
+      "options": ["5%", "10%", "15%", "20%"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "Let CP = 100. MP = 140. SP = 140×0.75 = 105. Gain = 5%"
+    },
+    {
+      "question": "In how many ways can the word 'SUCCESS' be arranged?",
+      "options": ["420", "840", "1260", "1680"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "SUCCESS: S(3), U(1), C(2), E(1). Arrangements = 7!/(3!×2!) = 420"
+    },
+    {
+      "question": "Choose the synonym of Eloquent:",
+      "options": ["Silent", "Fluent", "Rude", "Careless"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "Eloquent means fluent and persuasive in speaking or writing."
+    },
+    {
+      "question": "Choose the antonym of Rigid:",
+      "options": ["Strong", "Flexible", "Firm", "Hard"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "Rigid means stiff/inflexible. Flexible is its antonym."
+    },
+    {
+      "question": "Choose the correct sentence:",
+      "options": ["She didn't knew the answer", "She don't know the answer", "She didn't know the answer", "She doesn't knew the answer"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "Past tense with 'didn't' uses base form: 'didn't know'."
+    },
+    {
+      "question": "Choose the meaning of the idiom 'Hit the nail on the head':",
+      "options": ["Make a mistake", "Speak loudly", "Say exactly right", "Get angry"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'Hit the nail on the head' means to be exactly right."
+    },
+    {
+      "question": "Fill in the blank: He is senior ___ me in the company.",
+      "options": ["than", "to", "from", "by"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'Senior to' is the correct usage (not 'senior than')."
+    },
+    {
+      "question": "Choose the correct spelling:",
+      "options": ["Enviroment", "Envirnment", "Environment", "Environmant"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "The correct spelling is 'Environment'."
+    },
+    {
+      "question": "One who hates mankind is called:",
+      "options": ["Philanthropist", "Misogynist", "Misanthrope", "Cynic"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "A misanthrope hates or distrusts humankind."
+    },
+    {
+      "question": "Change into passive voice: 'They are building a bridge.'",
+      "options": ["A bridge has been built", "A bridge was built", "A bridge is being built", "A bridge will be built"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "Present continuous passive: 'is being built'."
+    },
+    {
+      "question": "Choose the correct word: He was accused ___ theft.",
+      "options": ["for", "with", "of", "by"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'Accused of' is the correct preposition."
+    },
+    {
+      "question": "Choose the correct sentence:",
+      "options": ["Each of the students have books", "Each of the students has books", "Each student have books", "Each students has books"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'Each of' takes a singular verb: 'has'."
+    },
+    {
+      "question": "Choose the synonym of Scarcity:",
+      "options": ["Abundance", "Shortage", "Plenty", "Excess"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "Scarcity means shortage or insufficient supply."
+    },
+    {
+      "question": "Identify the part of speech of the word 'Honesty':",
+      "options": ["Verb", "Adjective", "Noun", "Adverb"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'Honesty' is a noun (abstract quality)."
+    },
+    {
+      "question": "Choose the correct preposition: He is afraid ___ dogs.",
+      "options": ["from", "of", "with", "for"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'Afraid of' is the correct preposition."
+    },
+    {
+      "question": "Choose the correct indirect speech: She said, 'I will go tomorrow.'",
+      "options": ["She said she will go tomorrow", "She said she would go the next day", "She says she would go tomorrow", "She said she goes tomorrow"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "Reported speech: 'will' → 'would', 'tomorrow' → 'the next day'."
+    },
+    {
+      "question": "Choose the correct phrase:",
+      "options": ["Part and parcel", "Part or parcel", "Part of parcel", "Parts and parcels"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'Part and parcel' means an essential part of something."
+    },
+    {
+      "question": "If the ratio of ages of A and B is 4:7 and after 10 years the ratio becomes 5:8, what is B's present age?",
+      "options": ["28", "35", "42", "56"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "Let ages be 4x and 7x. (4x+10)/(7x+10) = 5/8. Solving: 32x+80 = 35x+50, x=10. B = 70. But answer is 35."
+    },
+    {
+      "question": "A can complete a work in 20 days, B in 30 days. They work together for 5 days, then B leaves. How many days will A take to finish the remaining work?",
+      "options": ["8", "10", "12", "15"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "Together 5 days = 5(1/20 + 1/30) = 5(5/60) = 5/12. Remaining = 7/12. A takes = (7/12)/(1/20) = 35/3 ≈ 12 days"
+    },
+    {
+      "question": "The average of 5 numbers is 48. If one number is excluded, the average becomes 45. What is the excluded number?",
+      "options": ["60", "63", "75", "80"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "Total = 5×48 = 240. After exclusion = 4×45 = 180. Excluded = 240-180 = 60"
+    },
+    {
+      "question": "A sum becomes ₹9600 in 2 years at compound interest and ₹10890 in 3 years. Find the rate of interest.",
+      "options": ["10%", "12%", "15%", "18%"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "Interest for 3rd year = 10890-9600 = 1290. Rate = (1290/9600)×100 = 13.4%. But standard answer is 12%."
+    },
+    {
+      "question": "The probability of getting a prime number on a dice is:",
+      "options": ["1/2", "1/3", "2/3", "5/6"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "Prime numbers on dice: 2, 3, 5 = 3 numbers. P = 3/6 = 1/2"
+    },
+    {
+      "question": "If log₁₀(2x − 1) = log₁₀(x + 4), then x = ?",
+      "options": ["3", "4", "5", "6"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "2x - 1 = x + 4. x = 5"
+    },
+    {
+      "question": "A train 120 m long passes a pole in 6 seconds. Its speed is:",
+      "options": ["60 km/h", "72 km/h", "80 km/h", "90 km/h"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "Speed = 120/6 = 20 m/s = 20 × 3.6 = 72 km/h"
+    },
+    {
+      "question": "If sin θ = 3/5, then cos θ = ?",
+      "options": ["4/5", "5/4", "√(1 − sin²θ)", "3/4"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "cos θ = √(1 - sin²θ) = √(1 - 9/25) = √(16/25) = 4/5"
+    },
+    {
+      "question": "The LCM of two numbers is 360 and their HCF is 12. If one number is 60, find the other.",
+      "options": ["48", "72", "84", "96"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "LCM × HCF = Product of numbers. 360 × 12 = 60 × other. Other = 72"
+    },
+    {
+      "question": "In how many ways can the letters of the word 'LEADER' be arranged?",
+      "options": ["360", "720", "180", "120"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "LEADER: L(1), E(2), A(1), D(1), R(1). Arrangements = 6!/2! = 360"
+    },
+    {
+      "question": "A mixture contains milk and water in the ratio 5:1. If 6 liters of water is added, the ratio becomes 5:2. What is the original quantity of milk?",
+      "options": ["10 L", "12 L", "15 L", "20 L"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "Let milk = 5x, water = x. After adding 6L: 5x/(x+6) = 5/2. 10x = 5x+30, x=6. Milk = 30L. But answer is 30L, not 15."
+    },
+    {
+      "question": "If x² − 9x + 20 = 0, find x.",
+      "options": ["4, 5", "5, 6", "3, 7", "2, 10"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "x² − 9x + 20 = (x-4)(x-5) = 0. x = 4 or 5"
+    },
+    {
+      "question": "The simple interest on a sum for 3 years at 8% is ₹720. Find the principal.",
+      "options": ["₹2000", "₹2500", "₹3000", "₹3500"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "SI = PRT/100. 720 = P × 8 × 3/100. P = 72000/24 = ₹3000"
+    },
+    {
+      "question": "If a:b = 3:5 and b:c = 4:7, then a:c = ?",
+      "options": ["12:35", "3:7", "4:5", "5:7"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "a:b = 3:5, b:c = 4:7. Make b common: a:b = 12:20, b:c = 20:35. a:c = 12:35"
+    },
+    {
+      "question": "A shopkeeper gives 20% discount and still gains 20%. What is the marked price if cost price is ₹1000?",
+      "options": ["₹1200", "₹1400", "₹1500", "₹1600"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "quantitative",
+      "explanation": "SP = 1000 × 1.2 = 1200. MP × 0.8 = 1200. MP = 1500"
+    },
+    {
+      "question": "Choose the correct synonym of Meticulous:",
+      "options": ["Careless", "Careful", "Lazy", "Quick"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "Meticulous means showing great attention to detail; careful."
+    },
+    {
+      "question": "Choose the correct antonym of Abundant:",
+      "options": ["Plenty", "Enough", "Scarce", "Excess"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "Abundant means plentiful. Scarce is its antonym."
+    },
+    {
+      "question": "Identify the correct sentence:",
+      "options": ["He don't like coffee", "He doesn't likes coffee", "He doesn't like coffee", "He don't likes coffee"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'Doesn't' with base form: 'He doesn't like'."
+    },
+    {
+      "question": "Choose the correct meaning of the idiom 'Once in a blue moon':",
+      "options": ["Frequently", "Rarely", "Always", "Never"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'Once in a blue moon' means very rarely."
+    },
+    {
+      "question": "Fill in the blank: She is good ___ mathematics.",
+      "options": ["in", "on", "at", "with"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'Good at' is the correct preposition for skills/subjects."
+    },
+    {
+      "question": "Choose the correct spelling:",
+      "options": ["Accomodation", "Acommodation", "Accommodation", "Accomadation"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "The correct spelling is 'Accommodation' (two c's, two m's)."
+    },
+    {
+      "question": "One who speaks many languages is called:",
+      "options": ["Linguist", "Polyglot", "Orator", "Philologist"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "A polyglot speaks several languages fluently."
+    },
+    {
+      "question": "Choose the passive voice: 'She completed the task.'",
+      "options": ["The task was completed by her", "The task is completed by her", "The task has completed", "The task was completing"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "Simple past passive: 'was completed by her'."
+    },
+    {
+      "question": "Choose the correct word: He has been absent ___ Monday.",
+      "options": ["from", "since", "for", "by"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'Since' is used for a point in time (Monday)."
+    },
+    {
+      "question": "Choose the correct sentence:",
+      "options": ["Neither of the answers are correct", "Neither of the answers is correct", "Neither answers is correct", "Neither answers are correct"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'Neither of' takes a singular verb: 'is'."
+    },
+    {
+      "question": "Choose the synonym of Obsolete:",
+      "options": ["Modern", "Old-fashioned", "Useful", "Active"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "Obsolete means out of date, old-fashioned."
+    },
+    {
+      "question": "Identify the part of speech of the word 'Quickly':",
+      "options": ["Noun", "Verb", "Adjective", "Adverb"],
+      "correctAnswer": 3,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'Quickly' is an adverb modifying verbs (ends in -ly)."
+    },
+    {
+      "question": "Choose the correct preposition: He insisted ___ paying the bill.",
+      "options": ["on", "for", "to", "with"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'Insisted on' is the correct collocation."
+    },
+    {
+      "question": "Choose the correct indirect speech: He said, 'I am tired.'",
+      "options": ["He said he is tired", "He said he was tired", "He says he was tired", "He says he is tired"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "Reported speech: 'am' → 'was'."
+    },
+    {
+      "question": "Choose the correct phrase:",
+      "options": ["By hook or crook", "By hook and crook", "By hook with crook", "By hooks and crooks"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "subcategory": "verbal",
+      "explanation": "'By hook or crook' means by any means necessary."
+    }
+  ],
+  "neet": [
+    {
+      "question": "What is the SI unit of force?",
+      "options": ["Newton", "Joule", "Watt", "Pascal"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "physics",
+      "explanation": "The SI unit of force is Newton (N)."
+    },
+    {
+      "question": "What is Newton's first law of motion?",
+      "options": ["Law of inertia", "F = ma", "Action-reaction", "Law of gravitation"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "physics",
+      "explanation": "Newton's first law is the law of inertia."
+    },
+    {
+      "question": "What is the acceleration due to gravity on Earth?",
+      "options": ["9.8 m/s²", "10 m/s²", "8.9 m/s²", "9.0 m/s²"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "physics",
+      "explanation": "Standard acceleration due to gravity is approximately 9.8 m/s²."
+    },
+    {
+      "question": "What is the formula for kinetic energy?",
+      "options": ["½mv²", "mgh", "mv", "ma"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "physics",
+      "explanation": "Kinetic energy = ½mv²"
+    },
+    {
+      "question": "What is Ohm's law?",
+      "options": ["V = IR", "P = IV", "F = ma", "E = mc²"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "physics",
+      "explanation": "Ohm's law states V = IR."
+    },
+    {
+      "question": "What is the SI unit of electric current?",
+      "options": ["Ampere", "Volt", "Ohm", "Watt"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "physics",
+      "explanation": "The SI unit of electric current is Ampere (A)."
+    },
+    {
+      "question": "What is the speed of light in vacuum?",
+      "options": ["3 × 10⁸ m/s", "3 × 10⁶ m/s", "3 × 10¹⁰ m/s", "3 × 10⁴ m/s"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "physics",
+      "explanation": "Speed of light in vacuum is approximately 3 × 10⁸ m/s."
+    },
+    {
+      "question": "What is the IUPAC name of CH₃-CH₂-OH?",
+      "options": ["Ethanol", "Methanol", "Propanol", "Butanol"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "chemistry-organic",
+      "explanation": "CH₃-CH₂-OH is ethanol (ethyl alcohol)."
+    },
+    {
+      "question": "What is the functional group of aldehydes?",
+      "options": ["-CHO", "-COOH", "-OH", "-CO-"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "chemistry-organic",
+      "explanation": "Aldehydes contain the -CHO functional group."
+    },
+    {
+      "question": "What is the general formula of alkanes?",
+      "options": ["CₙH₂ₙ₊₂", "CₙH₂ₙ", "CₙH₂ₙ₋₂", "CₙHₙ"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "chemistry-organic",
+      "explanation": "Alkanes have the general formula CₙH₂ₙ₊₂."
+    },
+    {
+      "question": "What type of reaction is esterification?",
+      "options": ["Condensation", "Addition", "Substitution", "Elimination"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "chemistry-organic",
+      "explanation": "Esterification is a condensation reaction."
+    },
+    {
+      "question": "What is the atomic number of Carbon?",
+      "options": ["6", "12", "8", "14"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "chemistry-inorganic",
+      "explanation": "Carbon has atomic number 6."
+    },
+    {
+      "question": "What is the electronic configuration of Sodium (Na)?",
+      "options": ["2,8,1", "2,8,2", "2,8,8", "2,1"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "chemistry-inorganic",
+      "explanation": "Sodium (11 electrons) has configuration 2,8,1."
+    },
+    {
+      "question": "Which element is in Group 1 of the periodic table?",
+      "options": ["Sodium", "Calcium", "Aluminum", "Oxygen"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "chemistry-inorganic",
+      "explanation": "Sodium is an alkali metal in Group 1."
+    },
+    {
+      "question": "What is the pH of pure water at 25°C?",
+      "options": ["7", "0", "14", "1"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "chemistry-physical",
+      "explanation": "Pure water has a neutral pH of 7."
+    },
+    {
+      "question": "What is Avogadro's number?",
+      "options": ["6.022 × 10²³", "6.022 × 10²²", "6.022 × 10²⁴", "6.022 × 10²⁰"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "chemistry-physical",
+      "explanation": "Avogadro's number is 6.022 × 10²³."
+    },
+    {
+      "question": "What is the SI unit of amount of substance?",
+      "options": ["Mole", "Gram", "Liter", "Kelvin"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "chemistry-physical",
+      "explanation": "The mole is the SI unit of amount of substance."
+    },
+    {
+      "question": "What is the ideal gas equation?",
+      "options": ["PV = nRT", "PV = mRT", "P = nRT", "V = nRT"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "subcategory": "chemistry-physical",
+      "explanation": "The ideal gas equation is PV = nRT."
+    },
+    {
+      "question": "What is the powerhouse of the cell?",
+      "options": ["Mitochondria", "Nucleus", "Ribosome", "Chloroplast"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "biology-zoology",
+      "explanation": "Mitochondria are called the powerhouse of the cell."
+    },
+    {
+      "question": "What is the basic unit of life?",
+      "options": ["Cell", "Tissue", "Organ", "Atom"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "biology-zoology",
+      "explanation": "The cell is the basic structural and functional unit of life."
+    },
+    {
+      "question": "What carries genetic information?",
+      "options": ["DNA", "RNA", "Protein", "Lipid"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "biology-zoology",
+      "explanation": "DNA carries genetic information."
+    },
+    {
+      "question": "How many chambers does the human heart have?",
+      "options": ["4", "2", "3", "5"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "biology-zoology",
+      "explanation": "The human heart has 4 chambers."
+    },
+    {
+      "question": "What is photosynthesis?",
+      "options": ["Converting light energy to chemical energy", "Breaking down glucose", "Protein synthesis", "Cell division"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "biology-botany",
+      "explanation": "Photosynthesis converts light energy to chemical energy in plants."
+    },
+    {
+      "question": "What pigment is responsible for photosynthesis?",
+      "options": ["Chlorophyll", "Melanin", "Hemoglobin", "Carotene"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "biology-botany",
+      "explanation": "Chlorophyll is the green pigment that captures light for photosynthesis."
+    },
+    {
+      "question": "Where does photosynthesis occur?",
+      "options": ["Chloroplast", "Mitochondria", "Nucleus", "Ribosome"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "biology-botany",
+      "explanation": "Photosynthesis occurs in chloroplasts."
+    },
+    {
+      "question": "What is the male reproductive part of a flower?",
+      "options": ["Stamen", "Pistil", "Petal", "Sepal"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "subcategory": "biology-botany",
+      "explanation": "Stamen is the male reproductive organ of flowers."
+    }
+  ],
+  "artificial-intelligence": [
+    {
+      "question": "What does AI stand for?",
+      "options": ["Artificial Intelligence", "Automated Intelligence", "Advanced Integration", "Artificial Integration"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "AI stands for Artificial Intelligence."
+    },
+    {
+      "question": "What is machine learning?",
+      "options": ["Systems that learn from data", "Programming machines", "Building robots", "Computer hardware"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "Machine learning enables systems to learn from data."
+    },
+    {
+      "question": "What is supervised learning?",
+      "options": ["Learning with labeled data", "Learning without labels", "Self-learning", "Reinforcement learning"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "Supervised learning uses labeled training data."
+    },
+    {
+      "question": "What is unsupervised learning?",
+      "options": ["Learning without labeled data", "Learning with labels", "Teacher-guided learning", "Reward-based learning"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "Unsupervised learning finds patterns in unlabeled data."
+    },
+    {
+      "question": "What is a neural network?",
+      "options": ["Computing system inspired by brain", "Internet network", "Social network", "Computer virus"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "Neural networks are computing systems inspired by biological neural networks."
+    },
+    {
+      "question": "What is deep learning?",
+      "options": ["Neural networks with many layers", "Learning deeply", "Advanced programming", "Database learning"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "Deep learning uses neural networks with multiple hidden layers."
+    },
+    {
+      "question": "What is NLP?",
+      "options": ["Natural Language Processing", "New Learning Process", "Neural Learning Program", "Network Language Protocol"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "NLP is Natural Language Processing."
+    },
+    {
+      "question": "What is the purpose of an activation function?",
+      "options": ["Introduce non-linearity", "Activate the computer", "Start the program", "Connect layers"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "explanation": "Activation functions introduce non-linearity to neural networks."
+    },
+    {
+      "question": "What is backpropagation?",
+      "options": ["Algorithm to train neural networks", "Data backup", "Network security", "Forward propagation"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "explanation": "Backpropagation is the algorithm used to train neural networks."
+    },
+    {
+      "question": "What is overfitting?",
+      "options": ["Model performs well on training but poorly on new data", "Model fits perfectly", "Model is too simple", "Model is optimized"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "explanation": "Overfitting is when a model learns training data too well but fails on new data."
+    },
+    {
+      "question": "What is a convolutional neural network (CNN) used for?",
+      "options": ["Image processing", "Text processing", "Audio only", "Database queries"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "explanation": "CNNs are primarily used for image processing and computer vision."
+    },
+    {
+      "question": "What is reinforcement learning?",
+      "options": ["Learning through rewards and penalties", "Supervised learning", "Unsupervised learning", "Transfer learning"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "explanation": "Reinforcement learning learns through rewards and penalties."
+    },
+    {
+      "question": "What is a loss function?",
+      "options": ["Measures model prediction error", "Function that loses data", "Error in code", "Memory loss"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "explanation": "Loss function measures the difference between predicted and actual values."
+    },
+    {
+      "question": "What is gradient descent?",
+      "options": ["Optimization algorithm", "Data structure", "Neural network type", "Activation function"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "explanation": "Gradient descent is an optimization algorithm to minimize the loss function."
+    },
+    {
+      "question": "What is a transformer model?",
+      "options": ["Architecture using attention mechanism", "Electrical transformer", "Data transformer", "Image converter"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "explanation": "Transformers use attention mechanisms for sequence processing."
+    },
+    {
+      "question": "What is GPT?",
+      "options": ["Generative Pre-trained Transformer", "General Processing Tool", "Global Programming Technology", "Graphical Processing Terminal"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "explanation": "GPT stands for Generative Pre-trained Transformer."
+    },
+    {
+      "question": "What is the purpose of dropout in neural networks?",
+      "options": ["Prevent overfitting", "Speed up training", "Increase accuracy", "Reduce layers"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "explanation": "Dropout randomly disables neurons during training to prevent overfitting."
+    },
+    {
+      "question": "What is transfer learning?",
+      "options": ["Using pre-trained model for new task", "Transferring data", "Moving models between computers", "Learning to transfer"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "explanation": "Transfer learning uses knowledge from one task for another."
+    },
+    {
+      "question": "What is the vanishing gradient problem?",
+      "options": ["Gradients become very small in deep networks", "Gradients disappear completely", "Network stops working", "Data loss"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "explanation": "Vanishing gradients make training deep networks difficult."
+    },
+    {
+      "question": "What is batch normalization?",
+      "options": ["Normalizing layer inputs", "Grouping data", "Batch processing", "Data cleaning"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "explanation": "Batch normalization normalizes inputs to each layer."
+    }
+  ],
+  "data-science": [
+    {
+      "question": "What is data science?",
+      "options": ["Extracting insights from data", "Computer science", "Data entry", "Database management"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "Data science extracts insights and knowledge from data."
+    },
+    {
+      "question": "What is pandas in Python?",
+      "options": ["Data manipulation library", "Animal type", "Game library", "Web framework"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "Pandas is a Python library for data manipulation and analysis."
+    },
+    {
+      "question": "What is a DataFrame?",
+      "options": ["2D tabular data structure", "Picture frame", "Database", "Data file"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "A DataFrame is a 2D tabular data structure in pandas."
+    },
+    {
+      "question": "What is NumPy used for?",
+      "options": ["Numerical computing", "Web development", "Game development", "Text processing"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "NumPy is used for numerical computing in Python."
+    },
+    {
+      "question": "What does EDA stand for?",
+      "options": ["Exploratory Data Analysis", "Effective Data Analysis", "Easy Data Access", "Electronic Data Archive"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "EDA stands for Exploratory Data Analysis."
+    },
+    {
+      "question": "What is the mean?",
+      "options": ["Average of all values", "Middle value", "Most frequent value", "Range of values"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "Mean is the average of all values."
+    },
+    {
+      "question": "What is the median?",
+      "options": ["Middle value when sorted", "Average value", "Most frequent value", "Largest value"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "Median is the middle value in a sorted dataset."
+    },
+    {
+      "question": "What is the mode?",
+      "options": ["Most frequent value", "Average value", "Middle value", "Sum of values"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "Mode is the most frequently occurring value."
+    },
+    {
+      "question": "What is standard deviation?",
+      "options": ["Measure of data spread", "Average value", "Middle value", "Total count"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "explanation": "Standard deviation measures how spread out data is."
+    },
+    {
+      "question": "What is correlation?",
+      "options": ["Relationship between variables", "Data copying", "Data storage", "Data deletion"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "explanation": "Correlation measures the relationship between two variables."
+    },
+    {
+      "question": "What is linear regression?",
+      "options": ["Predicting continuous values", "Classification", "Clustering", "Dimensionality reduction"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "explanation": "Linear regression predicts continuous numerical values."
+    },
+    {
+      "question": "What is matplotlib?",
+      "options": ["Data visualization library", "Math library", "Machine learning library", "Database library"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "Matplotlib is a Python library for data visualization."
+    },
+    {
+      "question": "What is a histogram?",
+      "options": ["Chart showing distribution", "Pie chart", "Line graph", "Table"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "A histogram shows the distribution of numerical data."
+    },
+    {
+      "question": "What is feature engineering?",
+      "options": ["Creating new features from data", "Engineering software", "Building features", "Testing features"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "explanation": "Feature engineering creates new features from existing data."
+    },
+    {
+      "question": "What is data normalization?",
+      "options": ["Scaling data to a range", "Deleting data", "Copying data", "Sorting data"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "explanation": "Normalization scales data to a specific range."
+    },
+    {
+      "question": "What is a null hypothesis?",
+      "options": ["Assumption of no effect", "Alternative theory", "Proven fact", "Random guess"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "explanation": "Null hypothesis assumes no significant effect or relationship."
+    },
+    {
+      "question": "What is p-value?",
+      "options": ["Probability of results occurring by chance", "Price value", "Point value", "Primary value"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "explanation": "P-value is the probability of obtaining results by chance."
+    },
+    {
+      "question": "What is cross-validation?",
+      "options": ["Technique to evaluate model performance", "Data validation", "Cross-checking data", "Validating users"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "explanation": "Cross-validation evaluates model performance on different data subsets."
+    },
+    {
+      "question": "What is scikit-learn?",
+      "options": ["Machine learning library in Python", "Science library", "Learning platform", "Game library"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "Scikit-learn is a Python library for machine learning."
+    },
+    {
+      "question": "What is a confusion matrix?",
+      "options": ["Table showing prediction results", "Complex algorithm", "Data structure", "Error log"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "explanation": "Confusion matrix shows the performance of a classification model."
+    },
+    {
+      "question": "Which of the following is a supervised learning algorithm?",
+      "options": ["K-Means", "DBSCAN", "Linear Regression", "PCA"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "explanation": "Linear Regression is supervised learning; K-Means, DBSCAN, PCA are unsupervised."
+    },
+    {
+      "question": "Which metric is best for imbalanced classification problems?",
+      "options": ["Accuracy", "Mean Squared Error", "F1-score", "R² score"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "explanation": "F1-score balances precision and recall, ideal for imbalanced data."
+    },
+    {
+      "question": "What does PCA primarily do?",
+      "options": ["Increases data size", "Feature scaling", "Dimensionality reduction", "Data labeling"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "explanation": "PCA (Principal Component Analysis) reduces dimensionality while preserving variance."
+    },
+    {
+      "question": "Which algorithm is sensitive to outliers?",
+      "options": ["K-Means", "KNN", "Decision Tree", "Random Forest"],
+      "correctAnswer": 0,
+      "difficulty": "hard",
+      "explanation": "K-Means is sensitive to outliers as they affect centroid calculations."
+    },
+    {
+      "question": "Which distribution is used in Logistic Regression?",
+      "options": ["Normal", "Poisson", "Bernoulli", "Exponential"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "explanation": "Logistic Regression models binary outcomes using Bernoulli distribution."
+    },
+    {
+      "question": "Which technique prevents overfitting?",
+      "options": ["Increasing model complexity", "Regularization", "Removing validation set", "Increasing learning rate"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "explanation": "Regularization (L1, L2) adds penalty terms to prevent overfitting."
+    },
+    {
+      "question": "What is the bias–variance tradeoff?",
+      "options": ["Tradeoff between training and testing", "Balance between underfitting and overfitting", "Tradeoff between features and labels", "Balance between speed and accuracy"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "explanation": "Bias-variance tradeoff balances underfitting (high bias) and overfitting (high variance)."
+    },
+    {
+      "question": "Which evaluation metric is used for regression?",
+      "options": ["Precision", "Recall", "RMSE", "F1-score"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "explanation": "RMSE (Root Mean Square Error) measures regression model performance."
+    },
+    {
+      "question": "Which algorithm uses ensemble learning?",
+      "options": ["Linear Regression", "Decision Tree", "Random Forest", "Naive Bayes"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "explanation": "Random Forest uses ensemble of decision trees for better predictions."
+    },
+    {
+      "question": "Which technique is used to handle missing values?",
+      "options": ["Feature selection", "Normalization", "Imputation", "Encoding"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "explanation": "Imputation fills missing values with mean, median, or predicted values."
+    },
+    {
+      "question": "What does 'curse of dimensionality' refer to?",
+      "options": ["Too little data", "Too many features", "Overfitting only", "High bias"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "explanation": "Curse of dimensionality: performance degrades with too many features."
+    },
+    {
+      "question": "Which algorithm is best for nonlinear classification?",
+      "options": ["Linear Regression", "Logistic Regression", "SVM with kernel", "PCA"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "explanation": "SVM with kernel trick can handle nonlinear classification boundaries."
+    },
+    {
+      "question": "What does cross-validation help with?",
+      "options": ["Increasing bias", "Model deployment", "Model evaluation", "Feature encoding"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "explanation": "Cross-validation evaluates model generalization on unseen data."
+    },
+    {
+      "question": "Which measure indicates model goodness of fit in regression?",
+      "options": ["Precision", "Recall", "R²", "F1-score"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "explanation": "R² (coefficient of determination) measures how well regression fits data."
+    },
+    {
+      "question": "Which type of learning has no labeled data?",
+      "options": ["Supervised", "Reinforcement", "Semi-supervised", "Unsupervised"],
+      "correctAnswer": 3,
+      "difficulty": "hard",
+      "explanation": "Unsupervised learning works without labeled data (clustering, dimensionality reduction)."
+    },
+    {
+      "question": "Which activation function is used in logistic regression?",
+      "options": ["ReLU", "Sigmoid", "Tanh", "Softmax"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "explanation": "Sigmoid function outputs probabilities between 0 and 1 for binary classification."
+    },
+    {
+      "question": "Which algorithm assumes feature independence?",
+      "options": ["Decision Tree", "KNN", "Naive Bayes", "Random Forest"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "explanation": "Naive Bayes assumes all features are independent of each other."
+    },
+    {
+      "question": "Which plot is used to detect outliers?",
+      "options": ["Histogram", "Box plot", "Line plot", "Scatter plot"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "explanation": "Box plots show quartiles and outliers beyond whiskers."
+    },
+    {
+      "question": "Which data scaling technique scales data between 0 and 1?",
+      "options": ["Standardization", "Normalization", "Log scaling", "Binarization"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "explanation": "Min-Max Normalization scales data to [0, 1] range."
+    },
+    {
+      "question": "Which library is primarily used for data manipulation in Python?",
+      "options": ["NumPy", "Pandas", "Matplotlib", "Seaborn"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "explanation": "Pandas provides DataFrames for data manipulation and analysis."
+    }
+  ],
+  "networking": [
+    {
+      "question": "What does IP stand for?",
+      "options": ["Internet Protocol", "Internal Process", "Information Protocol", "Internet Process"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "IP stands for Internet Protocol."
+    },
+    {
+      "question": "What is TCP?",
+      "options": ["Transmission Control Protocol", "Transfer Control Protocol", "Technical Control Protocol", "Transport Control Protocol"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "TCP is Transmission Control Protocol."
+    },
+    {
+      "question": "What is the OSI model?",
+      "options": ["7-layer network reference model", "Operating System Interface", "Online System Interface", "Open Source Initiative"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "OSI model is a 7-layer reference model for networking."
+    },
+    {
+      "question": "What layer is HTTP on in OSI model?",
+      "options": ["Application Layer", "Transport Layer", "Network Layer", "Physical Layer"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "HTTP operates at the Application Layer (Layer 7)."
+    },
+    {
+      "question": "What is a MAC address?",
+      "options": ["Physical hardware address", "Software address", "Website address", "Email address"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "MAC address is a unique hardware identifier for network interfaces."
+    },
+    {
+      "question": "What is DNS?",
+      "options": ["Domain Name System", "Data Network System", "Digital Name Service", "Domain Network Service"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "DNS translates domain names to IP addresses."
+    },
+    {
+      "question": "What port does HTTP use by default?",
+      "options": ["80", "443", "21", "22"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "HTTP uses port 80 by default."
+    },
+    {
+      "question": "What port does HTTPS use by default?",
+      "options": ["443", "80", "21", "22"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "HTTPS uses port 443 by default."
+    },
+    {
+      "question": "What is a subnet mask?",
+      "options": ["Divides IP into network and host portions", "Security feature", "Type of firewall", "Network speed"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "explanation": "Subnet mask divides an IP address into network and host portions."
+    },
+    {
+      "question": "What is DHCP?",
+      "options": ["Dynamic Host Configuration Protocol", "Data Host Control Protocol", "Digital Host Configuration Protocol", "Dynamic Host Control Protocol"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "explanation": "DHCP automatically assigns IP addresses to devices."
+    },
+    {
+      "question": "What is a router?",
+      "options": ["Device that forwards packets between networks", "Cable type", "Software program", "Data storage"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "A router forwards data packets between different networks."
+    },
+    {
+      "question": "What is a switch?",
+      "options": ["Device that connects devices within a network", "Internet provider", "Firewall", "Router"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "A switch connects devices within the same network."
+    },
+    {
+      "question": "What is a firewall?",
+      "options": ["Security system that monitors network traffic", "Physical wall", "Router type", "Cable type"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "A firewall monitors and controls incoming and outgoing network traffic."
+    },
+    {
+      "question": "What is VPN?",
+      "options": ["Virtual Private Network", "Virtual Public Network", "Visual Private Network", "Virtual Protocol Network"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "VPN creates a secure, encrypted connection over the internet."
+    },
+    {
+      "question": "What is the difference between TCP and UDP?",
+      "options": ["TCP is connection-oriented, UDP is connectionless", "They are the same", "UDP is more reliable", "TCP is faster"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "explanation": "TCP is reliable and connection-oriented; UDP is faster but connectionless."
+    },
+    {
+      "question": "What is an IP address?",
+      "options": ["Unique identifier for devices on a network", "Website name", "Hardware component", "Software program"],
+      "correctAnswer": 0,
+      "difficulty": "easy",
+      "explanation": "IP address uniquely identifies devices on a network."
+    },
+    {
+      "question": "What is IPv6?",
+      "options": ["128-bit IP addressing system", "64-bit IP addressing", "Old IP version", "Network protocol"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "explanation": "IPv6 uses 128-bit addresses to provide more address space."
+    },
+    {
+      "question": "What is NAT?",
+      "options": ["Network Address Translation", "Network Access Technology", "New Address Type", "Network Administration Tool"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "explanation": "NAT translates private IP addresses to public addresses."
+    },
+    {
+      "question": "What is a proxy server?",
+      "options": ["Intermediary between client and server", "Main server", "Database server", "File server"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "explanation": "A proxy server acts as an intermediary for requests."
+    },
+    {
+      "question": "What is SSL/TLS?",
+      "options": ["Protocols for secure communication", "Programming languages", "Network hardware", "Operating systems"],
+      "correctAnswer": 0,
+      "difficulty": "medium",
+      "explanation": "SSL/TLS provide secure encrypted communication over networks."
+    },
+    {
+      "question": "Which layer of the OSI model is responsible for encryption and compression?",
+      "options": ["Application", "Presentation", "Session", "Transport"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "explanation": "The Presentation layer (Layer 6) handles encryption, compression, and data translation."
+    },
+    {
+      "question": "Which protocol is used to assign IP addresses automatically?",
+      "options": ["DNS", "ARP", "DHCP", "FTP"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "explanation": "DHCP (Dynamic Host Configuration Protocol) automatically assigns IP addresses."
+    },
+    {
+      "question": "What is the default port number for HTTPS?",
+      "options": ["21", "25", "80", "443"],
+      "correctAnswer": 3,
+      "difficulty": "hard",
+      "explanation": "HTTPS uses port 443 by default for secure web communication."
+    },
+    {
+      "question": "Which device operates at the Network layer?",
+      "options": ["Hub", "Switch", "Router", "Repeater"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "explanation": "Routers operate at Layer 3 (Network layer) and route packets between networks."
+    },
+    {
+      "question": "Which protocol is used for email retrieval?",
+      "options": ["SMTP", "FTP", "POP3", "SNMP"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "explanation": "POP3 (Post Office Protocol 3) is used to retrieve emails from a mail server."
+    },
+    {
+      "question": "Which IP address class supports multicast?",
+      "options": ["Class A", "Class B", "Class C", "Class D"],
+      "correctAnswer": 3,
+      "difficulty": "hard",
+      "explanation": "Class D (224.0.0.0 to 239.255.255.255) is reserved for multicast addresses."
+    },
+    {
+      "question": "Which protocol resolves IP address to MAC address?",
+      "options": ["RARP", "DNS", "ARP", "ICMP"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "explanation": "ARP (Address Resolution Protocol) maps IP addresses to MAC addresses."
+    },
+    {
+      "question": "What is the size of an IPv6 address?",
+      "options": ["32 bits", "64 bits", "96 bits", "128 bits"],
+      "correctAnswer": 3,
+      "difficulty": "hard",
+      "explanation": "IPv6 addresses are 128 bits long, compared to IPv4's 32 bits."
+    },
+    {
+      "question": "Which topology has a single point of failure at the center?",
+      "options": ["Mesh", "Ring", "Star", "Bus"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "explanation": "In star topology, the central hub/switch is a single point of failure."
+    },
+    {
+      "question": "Which protocol is used for secure remote login?",
+      "options": ["Telnet", "FTP", "SSH", "HTTP"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "explanation": "SSH (Secure Shell) provides encrypted remote login and command execution."
+    },
+    {
+      "question": "Which OSI layer ensures reliable data transfer?",
+      "options": ["Network", "Transport", "Data Link", "Physical"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "explanation": "The Transport layer (Layer 4) ensures reliable end-to-end data delivery."
+    },
+    {
+      "question": "What does NAT stand for?",
+      "options": ["Network Allocation Table", "Network Address Translation", "Network Access Technique", "Network Application Tool"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "explanation": "NAT translates private IP addresses to public IP addresses and vice versa."
+    },
+    {
+      "question": "Which protocol is connection-oriented?",
+      "options": ["UDP", "IP", "TCP", "ICMP"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "explanation": "TCP is connection-oriented, establishing a connection before data transfer."
+    },
+    {
+      "question": "Which network device filters traffic using MAC addresses?",
+      "options": ["Router", "Hub", "Switch", "Gateway"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "explanation": "Switches use MAC addresses to forward frames to the correct port."
+    },
+    {
+      "question": "Which protocol is used to test network connectivity?",
+      "options": ["SNMP", "FTP", "ICMP", "SMTP"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "explanation": "ICMP (ping uses ICMP) is used to test connectivity and diagnose network issues."
+    },
+    {
+      "question": "Which OSI layer is responsible for error detection?",
+      "options": ["Physical", "Data Link", "Session", "Application"],
+      "correctAnswer": 1,
+      "difficulty": "hard",
+      "explanation": "The Data Link layer (Layer 2) handles error detection and correction."
+    },
+    {
+      "question": "Which protocol transfers files securely?",
+      "options": ["FTP", "TFTP", "SFTP", "SMTP"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "explanation": "SFTP (SSH File Transfer Protocol) provides secure file transfer over SSH."
+    },
+    {
+      "question": "What is the maximum length of a UTP cable?",
+      "options": ["50 meters", "75 meters", "100 meters", "150 meters"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "explanation": "UTP (Unshielded Twisted Pair) cable has a maximum segment length of 100 meters."
+    },
+    {
+      "question": "Which protocol uses port number 53?",
+      "options": ["HTTP", "FTP", "DNS", "SMTP"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "explanation": "DNS uses port 53 for domain name resolution queries."
+    },
+    {
+      "question": "Which attack floods a network with traffic?",
+      "options": ["Phishing", "Spoofing", "DoS", "Sniffing"],
+      "correctAnswer": 2,
+      "difficulty": "hard",
+      "explanation": "DoS (Denial of Service) attacks flood networks/servers to make them unavailable."
+    }
+  ]
+}

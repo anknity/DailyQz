@@ -1,0 +1,207 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #1e1e2e;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 10px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #4a4a5a;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #5a5a6a;
+}
+
+/* Base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Disable text selection during test (anti-cheat) */
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Animated gradient background */
+.animated-gradient {
+  background: linear-gradient(-45deg, #3b82f6, #8b5cf6, #ec4899, #f59e0b);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Glow effect */
+.glow {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+}
+
+.glow-lg {
+  box-shadow: 0 0 40px rgba(59, 130, 246, 0.6);
+}
+
+/* Card hover effect */
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.dark .card-hover:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Button styles */
+.btn-primary {
+  @apply bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl;
+}
+
+.btn-secondary {
+  @apply bg-gray-200 dark:bg-dark-100 hover:bg-gray-300 dark:hover:bg-dark-200 text-gray-800 dark:text-gray-200 font-semibold py-3 px-6 rounded-xl transition-all duration-300;
+}
+
+.btn-danger {
+  @apply bg-red-500 hover:bg-red-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95;
+}
+
+/* Input styles */
+.input-field {
+  @apply w-full py-3 px-4 rounded-xl border border-gray-300 dark:border-dark-100 bg-white dark:bg-dark-200 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all duration-300;
+}
+
+/* Input field with left icon - needs more left padding */
+.input-field.pl-12 {
+  padding-left: 3rem !important;
+}
+
+.input-field.pl-14 {
+  padding-left: 3.5rem !important;
+}
+
+.input-field::placeholder {
+  @apply text-gray-400 dark:text-gray-500;
+}
+
+/* Pulse animation for timer */
+.pulse-warning {
+  animation: pulse-warning 1s ease-in-out infinite;
+}
+
+@keyframes pulse-warning {
+  0%, 100% {
+    color: #ef4444;
+    transform: scale(1);
+  }
+  50% {
+    color: #f97316;
+    transform: scale(1.1);
+  }
+}
+
+/* Loading spinner */
+.spinner {
+  border: 4px solid rgba(59, 130, 246, 0.2);
+  border-top: 4px solid #3b82f6;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Streak fire animation */
+.fire-animation {
+  animation: fire 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes fire {
+  0% {
+    transform: scale(1) rotate(-5deg);
+  }
+  100% {
+    transform: scale(1.1) rotate(5deg);
+  }
+}
+
+/* Question palette styles */
+.question-btn {
+  @apply w-10 h-10 rounded-lg font-semibold text-sm transition-all duration-200 flex items-center justify-center;
+}
+
+.question-btn.unattempted {
+  @apply bg-gray-200 dark:bg-dark-100 text-gray-600 dark:text-gray-400 hover:bg-gray-300 dark:hover:bg-dark-200;
+}
+
+.question-btn.attempted {
+  @apply bg-green-500 text-white hover:bg-green-600;
+}
+
+.question-btn.current {
+  @apply bg-primary-500 text-white ring-2 ring-primary-300 ring-offset-2 dark:ring-offset-dark-200;
+}
+
+.question-btn.marked {
+  @apply bg-yellow-500 text-white hover:bg-yellow-600;
+}

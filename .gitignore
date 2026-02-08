@@ -1,0 +1,131 @@
+# ===================
+# SENSITIVE FILES - NEVER COMMIT
+# ===================
+
+# Environment variables (ALL variants)
+.env
+.env.*
+!.env.example
+.env.local
+.env.development
+.env.development.local
+.env.test
+.env.test.local
+.env.production
+.env.production.local
+*.env
+
+# Firebase credentials
+firebase*.json
+!firebase.json
+serviceAccountKey*.json
+*-firebase-adminsdk-*.json
+google-services.json
+GoogleService-Info.plist
+
+# API Keys and secrets
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+secrets/
+credentials/
+private/
+
+# ===================
+# DEPENDENCIES
+# ===================
+node_modules/
+.pnp/
+.pnp.js
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# ===================
+# BUILD OUTPUT
+# ===================
+dist/
+build/
+out/
+.next/
+.nuxt/
+
+# ===================
+# LOGS
+# ===================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ===================
+# EDITOR & IDE
+# ===================
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.sublime-workspace
+*.sublime-project
+
+# ===================
+# OS FILES
+# ===================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ===================
+# CACHE
+# ===================
+.cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
+*.tsbuildinfo
+
+# ===================
+# TESTING
+# ===================
+coverage/
+.nyc_output/
+
+# ===================
+# DEPLOYMENT
+# ===================
+.vercel
+.netlify
+.serverless/
+
+# ===================
+# BACKUP & TEMP FILES
+# ===================
+*.bak
+*.tmp
+*.temp
+*.orig
+*.rej
+.tmp/
+temp/
+
+# ===================
+# DEV DOCS (not needed in repo)
+# ===================
+DESIGN_IMPLEMENTATION_CHECKLIST.md
+DSA_REDESIGN_SUMMARY.md
+DSA_TESTING_GUIDE.md
+DSA_VISUAL_GUIDE.md
+NEW_DESIGN_SYSTEM.md
+NEW_FEATURES_SUMMARY.md
+QUICK_START.md
+UI_REDESIGN_GUIDE.md
