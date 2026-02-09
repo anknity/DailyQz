@@ -32,8 +32,10 @@ const ExamWaitingRoom = () => {
 
   useEffect(() => {
     fetchExamDetails();
+    // Poll for participants every 5 seconds
+    const participantInterval = setInterval(fetchParticipants, 5000);
     return () => {
-      // Cleanup camera/mic stream on unmount
+      clearInterval(participantInterval);
       if (stream) {
         stream.getTracks().forEach(track => track.stop());
       }
@@ -93,8 +95,8 @@ const ExamWaitingRoom = () => {
           instructions: examData.instructions,
           rules: defaultRules
         });
-        // TODO: Fetch real participants from API when available
-        setParticipants([]);
+        // Fetch participants after getting exam details
+        fetchParticipants();
       } else {
         setError(data.error || 'Failed to load exam');
       }
@@ -103,6 +105,35 @@ const ExamWaitingRoom = () => {
       setError('Failed to connect to server');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchParticipants = async () => {
+    try {
+      const token = currentUser ? await currentUser.getIdToken() : null;
+      const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+      
+      const response = await fetch(
+        `${API_URL.replace('/api', '')}/api/v2/scheduled-exams/${examId}/registrations`,
+        { headers }
+      );
+      const data = await response.json();
+      
+      if (data.success && Array.isArray(data.data)) {
+        const avatars = ['👤', '👩', '👨', '🧑', '👩‍💻', '👨‍💻', '🧑‍🎓', '👩‍🎓'];
+        const mapped = data.data
+          .filter(r => r.users?.id)
+          .map((r, i) => ({
+            id: r.users.id,
+            name: r.users.display_name || r.users.email?.split('@')[0] || 'User',
+            avatar: avatars[i % avatars.length],
+            status: r.status === 'started' ? 'ready' : 'waiting'
+          }))
+          .filter(p => p.id !== currentUser?.uid); // Exclude self
+        setParticipants(mapped);
+      }
+    } catch (err) {
+      console.error('Error fetching participants:', err);
     }
   };
 

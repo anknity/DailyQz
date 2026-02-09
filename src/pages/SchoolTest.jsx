@@ -74,11 +74,11 @@ const SchoolTest = () => {
       // class-11-12 has 99 questions available
       let category = classNum >= 11 ? 'class-11-12' : 'class-9-10'
       
-      // Map school subjects to available database categories
+      // Map school subjects to database categories (ordered by best match)
       const subjectToCategoryMap = {
         'Mathematics': ['Quantitative Aptitude', 'class-11-12'],
         'English': ['class-11-12'],
-        'Science': ['class-11-12', 'data-science'],
+        'Science': ['class-11-12'],
         'Physics': ['class-11-12'],
         'Chemistry': ['class-11-12'],
         'Computer Science': ['web-development', 'data-science'],
@@ -89,22 +89,23 @@ const SchoolTest = () => {
       // Get alternative categories for the subject
       const altCategories = subjectToCategoryMap[subjectName] || [category]
       
-      // Try multiple fetch strategies
+      // Try fetch strategies — always pass subject for filtering
       const fetchStrategies = [
-        // Strategy 1: Exact category match
+        // Strategy 1: Subject + class category
+        { category, subject: subjectName },
+        // Strategy 2: Subject + alternative categories
+        ...altCategories.map(cat => ({ category: cat, subject: subjectName })),
+        // Strategy 3: Subject only (any category)
+        { subject: subjectName },
+        // Strategy 4: Category only (no subject filter)
         { category },
-        // Strategy 2: Alternative categories for subject
-        ...altCategories.map(cat => ({ category: cat })),
-        // Strategy 3: Quantitative Aptitude (most questions)
-        { category: 'Quantitative Aptitude' },
-        // Strategy 4: Any approved questions
-        {}
       ]
       
       for (const filters of fetchStrategies) {
         const params = new URLSearchParams({
           count: questionCount.toString(),
           ...(filters.category && { category: filters.category }),
+          ...(filters.subject && { subject: filters.subject }),
           ...(difficulty !== 'mixed' && { difficulty })
         })
         

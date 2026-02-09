@@ -351,7 +351,7 @@ const TypingTest = () => {
     return (
       <div
         ref={textContainerRef}
-        className={`font-mono ${fontSize} ${lineHeight} select-none overflow-hidden`}
+        className={`font-mono ${fontSize} ${lineHeight} select-none overflow-hidden text-center`}
         style={{ maxHeight: isCode ? '14rem' : '12rem', wordBreak: 'normal', overflowWrap: 'break-word', whiteSpace: 'pre-wrap' }}
         onClick={() => hiddenInputRef.current?.focus()}
       >
