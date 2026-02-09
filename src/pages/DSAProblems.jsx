@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { DSA_TOPICS, DSA_CATEGORIES, DSA_DIFFICULTY } from '../config/categories';
@@ -1029,21 +1029,21 @@ const DSAProblems = () => {
       // const response = await api.get(API_ENDPOINTS.v2.dsa);
       // setProblems(response.data);
       
-      // Using sample data for now
-      setTimeout(() => {
-        setProblems(sampleProblems);
-        setTotalCount(sampleProblems.length);
-        setSolvedCount(sampleProblems.filter(p => p.solved).length);
-        setLoading(false);
-      }, 500);
+      // Using sample data — load instantly
+      setProblems(sampleProblems);
+      setTotalCount(sampleProblems.length);
+      setSolvedCount(sampleProblems.filter(p => p.solved).length);
+      setLoading(false);
     } catch (error) {
       console.error('Error fetching problems:', error);
       setProblems(sampleProblems);
+      setTotalCount(sampleProblems.length);
+      setSolvedCount(0);
       setLoading(false);
     }
   };
 
-  const filteredProblems = problems.filter(problem => {
+  const filteredProblems = useMemo(() => problems.filter(problem => {
     // Search filter
     if (searchQuery && !problem.title.toLowerCase().includes(searchQuery.toLowerCase())) {
       return false;
@@ -1067,10 +1067,10 @@ const DSAProblems = () => {
       return false;
     }
     return true;
-  });
+  }), [problems, searchQuery, selectedTopic, selectedDifficulty, selectedStatus]);
 
   // Sort problems
-  const sortedProblems = [...filteredProblems].sort((a, b) => {
+  const sortedProblems = useMemo(() => [...filteredProblems].sort((a, b) => {
     let comparison = 0;
     if (sortBy === 'id') {
       comparison = a.id - b.id;
@@ -1083,7 +1083,7 @@ const DSAProblems = () => {
       comparison = b.acceptance - a.acceptance;
     }
     return sortOrder === 'asc' ? comparison : -comparison;
-  });
+  }), [filteredProblems, sortBy, sortOrder]);
 
   const handleSort = (field) => {
     if (sortBy === field) {
@@ -1572,6 +1572,9 @@ const DSAProblems = () => {
 
         {/* Custom Scrollbar Styles */}
         <style>{`
+          .custom-scrollbar {
+            scroll-behavior: smooth;
+          }
           .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
           }
@@ -1585,6 +1588,15 @@ const DSAProblems = () => {
           }
           .custom-scrollbar::-webkit-scrollbar-thumb:hover {
             background: #6b7280;
+          }
+          /* Smooth problem row transitions */
+          .group {
+            will-change: background-color;
+            transform: translateZ(0);
+          }
+          /* Smooth page scroll */
+          html {
+            scroll-behavior: smooth;
           }
         `}</style>
       </div>

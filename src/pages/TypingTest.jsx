@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+import { useState, useEffect, useRef, useCallback, useMemo, memo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Navbar } from '../components'
 import { useAuth } from '../context/AuthContext'
@@ -9,6 +9,92 @@ import {
 } from 'react-icons/fi'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+
+/* ═══════════════════════════════════════════════════
+   10 DIVERSE TYPING PASSAGES — each user gets variety
+   ═══════════════════════════════════════════════════ */
+const TYPING_PASSAGES = [
+  {
+    id: 'local-1',
+    text: 'The quick brown fox jumps over the lazy dog near the riverbank while the sun sets behind the mountains casting golden light across the valley. Birds sing their evening songs as the wind gently rustles through the tall grass creating a peaceful symphony of nature. The farmer walks home along the dusty path carrying fresh vegetables from his garden thinking about the warm dinner awaiting him. Stars begin to appear one by one in the darkening sky as crickets start their nightly chorus filling the air with familiar sounds of summer.',
+    type: 'general', difficulty: 'easy', charCount: 520, wordCount: 88
+  },
+  {
+    id: 'local-2',
+    text: 'Software engineering is a discipline that combines mathematical precision with creative problem solving. Developers must understand algorithms data structures and system design to build scalable applications. The process of debugging requires patience and logical thinking as errors can hide in the most unexpected places. Testing is equally important because it ensures reliability and helps catch issues before they reach production. Modern development practices like continuous integration and automated testing have transformed how teams deliver software making it faster and more dependable.',
+    type: 'general', difficulty: 'medium', charCount: 540, wordCount: 82
+  },
+  {
+    id: 'local-3',
+    text: 'In the heart of every great city lies a story waiting to be told. Streets filled with people from different backgrounds create a tapestry of cultures languages and traditions. Coffee shops serve as meeting points where ideas are born and friendships are forged over steaming cups. The architecture tells tales of centuries past while modern skyscrapers reach toward the clouds symbolizing human ambition. Public parks provide green spaces where families gather children play and elderly couples walk hand in hand enjoying the simple pleasures that make life beautiful.',
+    type: 'general', difficulty: 'medium', charCount: 530, wordCount: 86
+  },
+  {
+    id: 'local-4',
+    text: 'Artificial intelligence has revolutionized the way we interact with technology. Machine learning models can now recognize speech translate languages and even generate creative content. Neural networks inspired by the human brain process vast amounts of data to find patterns that would take humans years to discover. From self driving cars to medical diagnostics these systems are becoming integral to our daily lives. However ethical considerations around privacy bias and job displacement remain important topics that society must address as this technology continues to evolve rapidly.',
+    type: 'general', difficulty: 'hard', charCount: 550, wordCount: 84
+  },
+  {
+    id: 'local-5',
+    text: 'The ocean covers more than seventy percent of our planet yet we have explored less than five percent of it. Deep beneath the waves mysterious creatures thrive in complete darkness near hydrothermal vents where temperatures can exceed four hundred degrees. Coral reefs often called the rainforests of the sea support thousands of marine species and protect coastal communities from storms. Scientists continue to discover new species every year reminding us how much remains unknown about our own world. Preserving these ecosystems is crucial for maintaining the delicate balance of life on Earth.',
+    type: 'general', difficulty: 'medium', charCount: 560, wordCount: 90
+  },
+  {
+    id: 'local-6',
+    text: 'Music has been a fundamental part of human culture since the earliest civilizations. From ancient drums and flutes to modern electronic synthesizers the tools have changed but the desire to create rhythm and melody remains constant. Studies show that playing an instrument improves memory coordination and emotional intelligence. Listening to music activates multiple areas of the brain simultaneously creating a unique neurological experience. Whether it is classical jazz rock or hip hop every genre carries the power to move people unite communities and express emotions that words alone cannot capture.',
+    type: 'general', difficulty: 'medium', charCount: 555, wordCount: 88
+  },
+  {
+    id: 'local-7',
+    text: 'The art of cooking transforms simple ingredients into extraordinary experiences. A skilled chef understands how heat chemistry and timing work together to create flavors that delight the senses. Different cultures have developed unique culinary traditions passed down through generations each reflecting local ingredients climate and history. From the spicy curries of India to the delicate sushi of Japan food tells the story of a people. Learning to cook is not just about following recipes it is about understanding the science behind each technique and developing an intuition that comes only with practice.',
+    type: 'general', difficulty: 'medium', charCount: 545, wordCount: 88
+  },
+  {
+    id: 'local-8',
+    text: 'Space exploration represents humanitys greatest adventure pushing the boundaries of what we thought possible. The first moon landing in nineteen sixty nine inspired an entire generation to dream bigger and reach further. Today private companies are making space travel more accessible while scientists search for signs of life on Mars and beyond. Telescopes peer deep into the cosmos revealing galaxies that formed billions of years ago. The International Space Station serves as a symbol of international cooperation where astronauts from different countries work together advancing our understanding of science and the universe.',
+    type: 'general', difficulty: 'hard', charCount: 560, wordCount: 86
+  },
+  {
+    id: 'local-9',
+    text: 'Reading is one of the most powerful habits a person can develop. Books open doors to new worlds ideas and perspectives that we might never encounter otherwise. Fiction cultivates empathy by allowing us to experience life through different characters while nonfiction expands our knowledge of the real world. Great writers have the ability to capture complex emotions in simple sentences creating connections across time and distance. Libraries serve as sanctuaries of knowledge free and open to everyone regardless of background. In an age of digital distraction the simple act of reading a book remains a profound exercise.',
+    type: 'general', difficulty: 'medium', charCount: 560, wordCount: 92
+  },
+  {
+    id: 'local-10',
+    text: 'Physical exercise is essential for both mental and physical health. Regular movement strengthens the heart improves circulation and helps maintain a healthy weight. Beyond the obvious physical benefits exercise releases endorphins that reduce stress and improve mood. Team sports teach valuable lessons about cooperation communication and perseverance. Even simple activities like walking or stretching can make a significant difference in overall wellbeing. The key is consistency rather than intensity because small daily efforts compound over time leading to lasting improvements in energy focus and quality of life.',
+    type: 'general', difficulty: 'easy', charCount: 530, wordCount: 85
+  }
+]
+
+/* Memoized character span to avoid re-renders */
+const CharSpan = memo(({ char, color, bg, isCurrent, activeCharRef, isCode }) => (
+  <span
+    ref={isCurrent ? activeCharRef : null}
+    style={{ color, backgroundColor: bg, position: 'relative', willChange: isCurrent ? 'color' : 'auto' }}
+  >
+    {isCurrent && (
+      <span
+        className="caret-blink"
+        style={{
+          position: 'absolute',
+          left: '-1.5px',
+          top: '3px',
+          bottom: '3px',
+          width: '2.5px',
+          backgroundColor: '#e2b714',
+          borderRadius: '2px',
+        }}
+      />
+    )}
+    {char === '\n' ? '\u21B5\n' : char}
+  </span>
+))
+CharSpan.displayName = 'CharSpan'
+
+const getRandomPassage = () => {
+  const idx = Math.floor(Math.random() * TYPING_PASSAGES.length)
+  return TYPING_PASSAGES[idx]
+}
 
 const TypingTest = () => {
   const { currentUser } = useAuth()
@@ -63,7 +149,7 @@ const TypingTest = () => {
      ══════════════════════════════════════════════ */
 
   const fetchPassage = useCallback(async (useAI = false) => {
-    setLoading(true)
+    /* Reset state immediately */
     setInput('')
     setStarted(false)
     setFinished(false)
@@ -75,31 +161,42 @@ const TypingTest = () => {
     setTimeLeft(testMode === 'time' ? timeLimit : null)
     if (textContainerRef.current) textContainerRef.current.scrollTop = 0
 
+    /* Show a random local passage INSTANTLY — no loading spinner */
+    const localPassage = getRandomPassage()
+    setPassage(localPassage)
+    setLoading(false)
+
+    /* Then try API in background (non-blocking) to get a better passage */
     try {
       const token = await currentUser?.getIdToken()
+      if (!token) return
+
       const endpoint = useAI ? 'passage/ai' : 'passage'
       const params = new URLSearchParams({ difficulty, type: testType })
       if (testType === 'code') params.append('language', codeLanguage)
 
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 5000) // 5s max
+
       const response = await fetch(`${API_URL}/v2/typing/${endpoint}?${params}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: { 'Authorization': `Bearer ${token}` },
+        signal: controller.signal
       })
+      clearTimeout(timeoutId)
+
       const data = await response.json()
-      if (data.success) {
-        setPassage(data.data)
+      if (data.success && data.data?.text) {
+        /* Only swap if user hasn't started typing yet */
+        setStarted(prev => {
+          if (!prev) setPassage(data.data)
+          return prev
+        })
       }
     } catch (error) {
-      console.error('Error fetching passage:', error)
-      setPassage({
-        id: 'fallback',
-        text: 'he make where present course become large right before over may of move still new that child early form again however keep would too must well system first that could would like of about over these after use two how our work first well way even new want because any these give day most us great big become through just form that state move high good very right large other',
-        type: 'general',
-        difficulty: 'easy',
-        charCount: 300,
-        wordCount: 60
-      })
-    } finally {
-      setLoading(false)
+      /* Silently keep local passage — user already has text to type */
+      if (error.name !== 'AbortError') {
+        console.warn('API passage fetch skipped:', error.message)
+      }
     }
   }, [currentUser, difficulty, testType, codeLanguage, testMode, timeLimit])
 
@@ -352,48 +449,33 @@ const TypingTest = () => {
       <div
         ref={textContainerRef}
         className={`font-mono ${fontSize} ${lineHeight} select-none overflow-hidden text-center`}
-        style={{ maxHeight: isCode ? '14rem' : '12rem', wordBreak: 'normal', overflowWrap: 'break-word', whiteSpace: 'pre-wrap' }}
+        style={{ maxHeight: isCode ? '14rem' : '12rem', wordBreak: 'normal', overflowWrap: 'break-word', whiteSpace: 'pre-wrap', willChange: 'scroll-position' }}
         onClick={() => hiddenInputRef.current?.focus()}
       >
         {displayText.split('').map((char, i) => {
-          // Color logic
-          let color = '#6b7a8d' // untyped — visible muted gray
+          let color = '#6b7a8d'
           let bg = 'transparent'
           if (i < charIndex) {
             if (errors.has(i)) {
-              color = '#ff6b6b' // error — bright red
+              color = '#ff6b6b'
               bg = 'rgba(255,107,107,0.12)'
             } else {
-              color = isCode ? '#98c379' : '#e2e0d8' // correct — green for code, bright beige for text
+              color = isCode ? '#98c379' : '#e2e0d8'
             }
           }
           const isCurrent = i === charIndex
-          if (isCurrent) {
-            color = '#ffffff' // current char — white
-          }
+          if (isCurrent) color = '#ffffff'
 
           return (
-            <span
+            <CharSpan
               key={i}
-              ref={isCurrent ? activeCharRef : null}
-              style={{ color, backgroundColor: bg, position: 'relative' }}
-            >
-              {isCurrent && (
-                <span
-                  style={{
-                    position: 'absolute',
-                    left: '-1.5px',
-                    top: '3px',
-                    bottom: '3px',
-                    width: '2.5px',
-                    backgroundColor: '#e2b714',
-                    borderRadius: '2px',
-                    animation: 'caret-blink 1s step-end infinite'
-                  }}
-                />
-              )}
-              {char === '\n' ? '\u21B5\n' : char}
-            </span>
+              char={char}
+              color={color}
+              bg={bg}
+              isCurrent={isCurrent}
+              activeCharRef={activeCharRef}
+              isCode={isCode}
+            />
           )
         })}
       </div>
@@ -408,11 +490,15 @@ const TypingTest = () => {
     <div className="min-h-screen bg-[#101922]">
       <Navbar />
 
-      {/* Caret blink keyframe */}
+      {/* Caret blink keyframe + GPU acceleration */}
       <style>{`
         @keyframes caret-blink {
           0%, 100% { opacity: 1; }
           50% { opacity: 0; }
+        }
+        .caret-blink {
+          animation: caret-blink 1s step-end infinite;
+          will-change: opacity;
         }
       `}</style>
 

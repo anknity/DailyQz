@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { PROGRAMMING_LANGUAGES, DSA_DIFFICULTY } from '../config/categories';
@@ -69,6 +69,366 @@ const highlightCode = (code, language) => {
   return coloredLines.join('\n');
 };
 
+// Comprehensive local problems database keyed by slug
+const ALL_PROBLEMS = {
+  'two-sum': {
+    id: 1, title: 'Two Sum', slug: 'two-sum', difficulty: 'easy', acceptance: 57.0,
+    topics: ['Array', 'Hash Table'], companies: ['Google', 'Amazon', 'Facebook', 'Apple', 'Microsoft'], likes: 27400, dislikes: 820,
+    description: `Given an array of integers \`nums\` and an integer \`target\`, return *indices of the two numbers such that they add up to* \`target\`.\n\nYou may assume that each input would have **exactly one solution**, and you may not use the *same* element twice.\n\nYou can return the answer in any order.`,
+    examples: [
+      { input: 'nums = [2,7,11,15], target = 9', output: '[0,1]', explanation: 'Because nums[0] + nums[1] == 9, we return [0, 1].' },
+      { input: 'nums = [3,2,4], target = 6', output: '[1,2]', explanation: null },
+      { input: 'nums = [3,3], target = 6', output: '[0,1]', explanation: null }
+    ],
+    constraints: ['2 <= nums.length <= 10⁴', '-10⁹ <= nums[i] <= 10⁹', '-10⁹ <= target <= 10⁹', 'Only one valid answer exists.'],
+    followUp: 'Can you come up with an algorithm that is less than O(n²) time complexity?',
+    starterCode: {
+      java: 'class Solution {\n    public int[] twoSum(int[] nums, int target) {\n        \n    }\n}',
+      javascript: '/**\n * @param {number[]} nums\n * @param {number} target\n * @return {number[]}\n */\nvar twoSum = function(nums, target) {\n    \n};',
+      python: 'class Solution:\n    def twoSum(self, nums: List[int], target: int) -> List[int]:\n        ',
+      cpp: 'class Solution {\npublic:\n    vector<int> twoSum(vector<int>& nums, int target) {\n        \n    }\n};'
+    },
+    testCases: [
+      { input: { nums: [2, 7, 11, 15], target: 9 }, expected: [0, 1] },
+      { input: { nums: [3, 2, 4], target: 6 }, expected: [1, 2] },
+      { input: { nums: [3, 3], target: 6 }, expected: [0, 1] }
+    ]
+  },
+  'add-two-numbers': {
+    id: 2, title: 'Add Two Numbers', slug: 'add-two-numbers', difficulty: 'medium', acceptance: 47.8,
+    topics: ['Linked List', 'Math', 'Recursion'], companies: ['Microsoft', 'Amazon'], likes: 15200, dislikes: 3100,
+    description: `You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order, and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.\n\nYou may assume the two numbers do not contain any leading zero, except the number 0 itself.`,
+    examples: [
+      { input: 'l1 = [2,4,3], l2 = [5,6,4]', output: '[7,0,8]', explanation: '342 + 465 = 807.' },
+      { input: 'l1 = [0], l2 = [0]', output: '[0]', explanation: null }
+    ],
+    constraints: ['The number of nodes in each linked list is in the range [1, 100].', '0 <= Node.val <= 9', 'It is guaranteed that the list represents a number that does not have leading zeros.'],
+    followUp: null,
+    starterCode: {
+      java: 'class Solution {\n    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {\n        \n    }\n}',
+      javascript: 'var addTwoNumbers = function(l1, l2) {\n    \n};',
+      python: 'class Solution:\n    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:\n        ',
+      cpp: 'class Solution {\npublic:\n    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {\n        \n    }\n};'
+    },
+    testCases: [
+      { input: { l1: [2,4,3], l2: [5,6,4] }, expected: [7,0,8] },
+      { input: { l1: [0], l2: [0] }, expected: [0] }
+    ]
+  },
+  'longest-substring-without-repeating-characters': {
+    id: 3, title: 'Longest Substring Without Repeating Characters', slug: 'longest-substring-without-repeating-characters', difficulty: 'medium', acceptance: 38.3,
+    topics: ['String', 'Hash Table', 'Sliding Window'], companies: ['Amazon', 'Bloomberg', 'Apple'], likes: 25100, dislikes: 1200,
+    description: `Given a string \`s\`, find the length of the longest substring without repeating characters.`,
+    examples: [
+      { input: 's = "abcabcbb"', output: '3', explanation: 'The answer is "abc", with the length of 3.' },
+      { input: 's = "bbbbb"', output: '1', explanation: 'The answer is "b", with the length of 1.' },
+      { input: 's = "pwwkew"', output: '3', explanation: 'The answer is "wke", with the length of 3.' }
+    ],
+    constraints: ['0 <= s.length <= 5 * 10⁴', 's consists of English letters, digits, symbols and spaces.'],
+    followUp: null,
+    starterCode: {
+      java: 'class Solution {\n    public int lengthOfLongestSubstring(String s) {\n        \n    }\n}',
+      javascript: 'var lengthOfLongestSubstring = function(s) {\n    \n};',
+      python: 'class Solution:\n    def lengthOfLongestSubstring(self, s: str) -> int:\n        ',
+      cpp: 'class Solution {\npublic:\n    int lengthOfLongestSubstring(string s) {\n        \n    }\n};'
+    },
+    testCases: [
+      { input: { s: 'abcabcbb' }, expected: 3 },
+      { input: { s: 'bbbbb' }, expected: 1 },
+      { input: { s: 'pwwkew' }, expected: 3 }
+    ]
+  },
+  'median-of-two-sorted-arrays': {
+    id: 4, title: 'Median of Two Sorted Arrays', slug: 'median-of-two-sorted-arrays', difficulty: 'hard', acceptance: 45.7,
+    topics: ['Array', 'Binary Search', 'Divide and Conquer'], companies: ['Google', 'Apple', 'Microsoft'], likes: 18900, dislikes: 2300,
+    description: `Given two sorted arrays \`nums1\` and \`nums2\` of size m and n respectively, return the median of the two sorted arrays.\n\nThe overall run time complexity should be O(log (m+n)).`,
+    examples: [
+      { input: 'nums1 = [1,3], nums2 = [2]', output: '2.00000', explanation: 'merged array = [1,2,3] and median is 2.' },
+      { input: 'nums1 = [1,2], nums2 = [3,4]', output: '2.50000', explanation: 'merged array = [1,2,3,4] and median is (2 + 3) / 2 = 2.5.' }
+    ],
+    constraints: ['nums1.length == m', 'nums2.length == n', '0 <= m <= 1000', '0 <= n <= 1000', '1 <= m + n <= 2000', '-10⁶ <= nums1[i], nums2[i] <= 10⁶'],
+    followUp: null,
+    starterCode: {
+      java: 'class Solution {\n    public double findMedianSortedArrays(int[] nums1, int[] nums2) {\n        \n    }\n}',
+      javascript: 'var findMedianSortedArrays = function(nums1, nums2) {\n    \n};',
+      python: 'class Solution:\n    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:\n        ',
+      cpp: 'class Solution {\npublic:\n    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {\n        \n    }\n};'
+    },
+    testCases: [
+      { input: { nums1: [1,3], nums2: [2] }, expected: 2.0 },
+      { input: { nums1: [1,2], nums2: [3,4] }, expected: 2.5 }
+    ]
+  },
+  'longest-palindromic-substring': {
+    id: 5, title: 'Longest Palindromic Substring', slug: 'longest-palindromic-substring', difficulty: 'medium', acceptance: 37.2,
+    topics: ['String', 'Dynamic Programming'], companies: ['Amazon', 'Microsoft', 'Adobe'], likes: 19800, dislikes: 1100,
+    description: `Given a string \`s\`, return the longest palindromic substring in \`s\`.`,
+    examples: [
+      { input: 's = "babad"', output: '"bab"', explanation: '"aba" is also a valid answer.' },
+      { input: 's = "cbbd"', output: '"bb"', explanation: null }
+    ],
+    constraints: ['1 <= s.length <= 1000', 's consist of only digits and English letters.'],
+    followUp: null,
+    starterCode: {
+      java: 'class Solution {\n    public String longestPalindrome(String s) {\n        \n    }\n}',
+      javascript: 'var longestPalindrome = function(s) {\n    \n};',
+      python: 'class Solution:\n    def longestPalindrome(self, s: str) -> str:\n        ',
+      cpp: 'class Solution {\npublic:\n    string longestPalindrome(string s) {\n        \n    }\n};'
+    },
+    testCases: [
+      { input: { s: 'babad' }, expected: 'bab' },
+      { input: { s: 'cbbd' }, expected: 'bb' }
+    ]
+  },
+  'container-with-most-water': {
+    id: 6, title: 'Container With Most Water', slug: 'container-with-most-water', difficulty: 'medium', acceptance: 59.4,
+    topics: ['Array', 'Two Pointers', 'Greedy'], companies: ['Amazon', 'Goldman Sachs', 'Adobe'], likes: 16700, dislikes: 1200,
+    description: `You are given an integer array \`height\` of length n. There are n vertical lines drawn such that the two endpoints of the i-th line are (i, 0) and (i, height[i]).\n\nFind two lines that together with the x-axis form a container, such that the container contains the most water.\n\nReturn the maximum amount of water a container can store.`,
+    examples: [
+      { input: 'height = [1,8,6,2,5,4,8,3,7]', output: '49', explanation: 'The max area is between indices 1 and 8.' },
+      { input: 'height = [1,1]', output: '1', explanation: null }
+    ],
+    constraints: ['n == height.length', '2 <= n <= 10⁵', '0 <= height[i] <= 10⁴'],
+    followUp: null,
+    starterCode: {
+      java: 'class Solution {\n    public int maxArea(int[] height) {\n        \n    }\n}',
+      javascript: 'var maxArea = function(height) {\n    \n};',
+      python: 'class Solution:\n    def maxArea(self, height: List[int]) -> int:\n        ',
+      cpp: 'class Solution {\npublic:\n    int maxArea(vector<int>& height) {\n        \n    }\n};'
+    },
+    testCases: [
+      { input: { height: [1,8,6,2,5,4,8,3,7] }, expected: 49 },
+      { input: { height: [1,1] }, expected: 1 }
+    ]
+  },
+  'roman-to-integer': {
+    id: 7, title: 'Roman to Integer', slug: 'roman-to-integer', difficulty: 'easy', acceptance: 66.1,
+    topics: ['Hash Table', 'Math', 'String'], companies: ['Facebook', 'Microsoft', 'Yahoo'], likes: 9700, dislikes: 600,
+    description: `Given a roman numeral, convert it to an integer.\n\nRoman numerals are represented by seven different symbols: I, V, X, L, C, D and M.`,
+    examples: [
+      { input: 's = "III"', output: '3', explanation: 'III = 3.' },
+      { input: 's = "LVIII"', output: '58', explanation: 'L = 50, V = 5, III = 3.' },
+      { input: 's = "MCMXCIV"', output: '1994', explanation: 'M = 1000, CM = 900, XC = 90 and IV = 4.' }
+    ],
+    constraints: ['1 <= s.length <= 15', 's contains only the characters I, V, X, L, C, D, M.', 'It is guaranteed that s is a valid roman numeral in the range [1, 3999].'],
+    followUp: null,
+    starterCode: {
+      java: 'class Solution {\n    public int romanToInt(String s) {\n        \n    }\n}',
+      javascript: 'var romanToInt = function(s) {\n    \n};',
+      python: 'class Solution:\n    def romanToInt(self, s: str) -> int:\n        ',
+      cpp: 'class Solution {\npublic:\n    int romanToInt(string s) {\n        \n    }\n};'
+    },
+    testCases: [
+      { input: { s: 'III' }, expected: 3 },
+      { input: { s: 'LVIII' }, expected: 58 },
+      { input: { s: 'MCMXCIV' }, expected: 1994 }
+    ]
+  },
+  '3sum': {
+    id: 8, title: '3Sum', slug: '3sum', difficulty: 'medium', acceptance: 33.8,
+    topics: ['Array', 'Two Pointers', 'Sorting'], companies: ['Amazon', 'Microsoft', 'Adobe'], likes: 20100, dislikes: 1900,
+    description: `Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.\n\nNotice that the solution set must not contain duplicate triplets.`,
+    examples: [
+      { input: 'nums = [-1,0,1,2,-1,-4]', output: '[[-1,-1,2],[-1,0,1]]', explanation: 'The distinct triplets are [-1,0,1] and [-1,-1,2].' },
+      { input: 'nums = [0,1,1]', output: '[]', explanation: 'The only possible triplet does not sum up to 0.' }
+    ],
+    constraints: ['3 <= nums.length <= 3000', '-10⁵ <= nums[i] <= 10⁵'],
+    followUp: null,
+    starterCode: {
+      java: 'class Solution {\n    public List<List<Integer>> threeSum(int[] nums) {\n        \n    }\n}',
+      javascript: 'var threeSum = function(nums) {\n    \n};',
+      python: 'class Solution:\n    def threeSum(self, nums: List[int]) -> List[List[int]]:\n        ',
+      cpp: 'class Solution {\npublic:\n    vector<vector<int>> threeSum(vector<int>& nums) {\n        \n    }\n};'
+    },
+    testCases: [
+      { input: { nums: [-1,0,1,2,-1,-4] }, expected: [[-1,-1,2],[-1,0,1]] },
+      { input: { nums: [0,1,1] }, expected: [] }
+    ]
+  },
+  'valid-parentheses': {
+    id: 9, title: 'Valid Parentheses', slug: 'valid-parentheses', difficulty: 'easy', acceptance: 42.6,
+    topics: ['String', 'Stack'], companies: ['Google', 'Amazon', 'Facebook', 'Bloomberg'], likes: 18500, dislikes: 950,
+    description: `Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.\n\nAn input string is valid if:\n1. Open brackets must be closed by the same type of brackets.\n2. Open brackets must be closed in the correct order.\n3. Every close bracket has a corresponding open bracket of the same type.`,
+    examples: [
+      { input: 's = "()"', output: 'true', explanation: null },
+      { input: 's = "()[]{}"', output: 'true', explanation: null },
+      { input: 's = "(]"', output: 'false', explanation: null }
+    ],
+    constraints: ['1 <= s.length <= 10⁴', 's consists of parentheses only \'()[]{}\''],
+    followUp: null,
+    starterCode: {
+      java: 'class Solution {\n    public boolean isValid(String s) {\n        \n    }\n}',
+      javascript: 'var isValid = function(s) {\n    \n};',
+      python: 'class Solution:\n    def isValid(self, s: str) -> bool:\n        ',
+      cpp: 'class Solution {\npublic:\n    bool isValid(string s) {\n        \n    }\n};'
+    },
+    testCases: [
+      { input: { s: '()' }, expected: true },
+      { input: { s: '()[]{}' }, expected: true },
+      { input: { s: '(]' }, expected: false }
+    ]
+  },
+  'merge-two-sorted-lists': {
+    id: 10, title: 'Merge Two Sorted Lists', slug: 'merge-two-sorted-lists', difficulty: 'easy', acceptance: 65.1,
+    topics: ['Linked List', 'Recursion'], companies: ['Amazon', 'Apple', 'Microsoft'], likes: 16200, dislikes: 1500,
+    description: `You are given the heads of two sorted linked lists list1 and list2. Merge the two lists into one sorted list. The list should be made by splicing together the nodes of the first two lists.\n\nReturn the head of the merged linked list.`,
+    examples: [
+      { input: 'list1 = [1,2,4], list2 = [1,3,4]', output: '[1,1,2,3,4,4]', explanation: null },
+      { input: 'list1 = [], list2 = []', output: '[]', explanation: null }
+    ],
+    constraints: ['The number of nodes in both lists is in the range [0, 50].', '-100 <= Node.val <= 100', 'Both list1 and list2 are sorted in non-decreasing order.'],
+    followUp: null,
+    starterCode: {
+      java: 'class Solution {\n    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {\n        \n    }\n}',
+      javascript: 'var mergeTwoLists = function(list1, list2) {\n    \n};',
+      python: 'class Solution:\n    def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:\n        ',
+      cpp: 'class Solution {\npublic:\n    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {\n        \n    }\n};'
+    },
+    testCases: [
+      { input: { list1: [1,2,4], list2: [1,3,4] }, expected: [1,1,2,3,4,4] },
+      { input: { list1: [], list2: [] }, expected: [] }
+    ]
+  },
+  'remove-duplicates-from-sorted-array': {
+    id: 11, title: 'Remove Duplicates from Sorted Array', slug: 'remove-duplicates-from-sorted-array', difficulty: 'easy', acceptance: 55.2,
+    topics: ['Array', 'Two Pointers'], companies: ['Facebook', 'Microsoft'], likes: 9200, dislikes: 1300,
+    description: `Given an integer array nums sorted in non-decreasing order, remove the duplicates in-place such that each unique element appears only once. The relative order of the elements should be kept the same.\n\nReturn k after placing the final result in the first k slots of nums.`,
+    examples: [
+      { input: 'nums = [1,1,2]', output: '2, nums = [1,2,_]', explanation: 'Your function should return k = 2.' },
+      { input: 'nums = [0,0,1,1,1,2,2,3,3,4]', output: '5, nums = [0,1,2,3,4,_,_,_,_,_]', explanation: 'Your function should return k = 5.' }
+    ],
+    constraints: ['1 <= nums.length <= 3 * 10⁴', '-100 <= nums[i] <= 100', 'nums is sorted in non-decreasing order.'],
+    followUp: null,
+    starterCode: {
+      java: 'class Solution {\n    public int removeDuplicates(int[] nums) {\n        \n    }\n}',
+      javascript: 'var removeDuplicates = function(nums) {\n    \n};',
+      python: 'class Solution:\n    def removeDuplicates(self, nums: List[int]) -> int:\n        ',
+      cpp: 'class Solution {\npublic:\n    int removeDuplicates(vector<int>& nums) {\n        \n    }\n};'
+    },
+    testCases: [
+      { input: { nums: [1,1,2] }, expected: 2 },
+      { input: { nums: [0,0,1,1,1,2,2,3,3,4] }, expected: 5 }
+    ]
+  },
+  'search-in-rotated-sorted-array': {
+    id: 12, title: 'Search in Rotated Sorted Array', slug: 'search-in-rotated-sorted-array', difficulty: 'medium', acceptance: 42.3,
+    topics: ['Array', 'Binary Search'], companies: ['Google', 'Amazon', 'Facebook', 'Microsoft'], likes: 18100, dislikes: 1100,
+    description: `Given the array nums after the possible rotation and an integer target, return the index of target if it is in nums, or -1 if it is not in nums.\n\nYou must write an algorithm with O(log n) runtime complexity.`,
+    examples: [
+      { input: 'nums = [4,5,6,7,0,1,2], target = 0', output: '4', explanation: null },
+      { input: 'nums = [4,5,6,7,0,1,2], target = 3', output: '-1', explanation: null }
+    ],
+    constraints: ['1 <= nums.length <= 5000', '-10⁴ <= nums[i] <= 10⁴', 'All values of nums are unique.', '-10⁴ <= target <= 10⁴'],
+    followUp: null,
+    starterCode: {
+      java: 'class Solution {\n    public int search(int[] nums, int target) {\n        \n    }\n}',
+      javascript: 'var search = function(nums, target) {\n    \n};',
+      python: 'class Solution:\n    def search(self, nums: List[int], target: int) -> int:\n        ',
+      cpp: 'class Solution {\npublic:\n    int search(vector<int>& nums, int target) {\n        \n    }\n};'
+    },
+    testCases: [
+      { input: { nums: [4,5,6,7,0,1,2], target: 0 }, expected: 4 },
+      { input: { nums: [4,5,6,7,0,1,2], target: 3 }, expected: -1 }
+    ]
+  },
+  'find-first-and-last-position': {
+    id: 13, title: 'Find First and Last Position of Element', slug: 'find-first-and-last-position', difficulty: 'medium', acceptance: 44.8,
+    topics: ['Array', 'Binary Search'], companies: ['Google', 'Amazon', 'LinkedIn'], likes: 14200, dislikes: 470,
+    description: `Given an array of integers nums sorted in non-decreasing order, find the starting and ending position of a given target value.\n\nIf target is not found in the array, return [-1, -1].\n\nYou must write an algorithm with O(log n) runtime complexity.`,
+    examples: [
+      { input: 'nums = [5,7,7,8,8,10], target = 8', output: '[3,4]', explanation: null },
+      { input: 'nums = [5,7,7,8,8,10], target = 6', output: '[-1,-1]', explanation: null }
+    ],
+    constraints: ['0 <= nums.length <= 10⁵', '-10⁹ <= nums[i] <= 10⁹', 'nums is a non-decreasing array.'],
+    followUp: null,
+    starterCode: {
+      java: 'class Solution {\n    public int[] searchRange(int[] nums, int target) {\n        \n    }\n}',
+      javascript: 'var searchRange = function(nums, target) {\n    \n};',
+      python: 'class Solution:\n    def searchRange(self, nums: List[int], target: int) -> List[int]:\n        ',
+      cpp: 'class Solution {\npublic:\n    vector<int> searchRange(vector<int>& nums, int target) {\n        \n    }\n};'
+    },
+    testCases: [
+      { input: { nums: [5,7,7,8,8,10], target: 8 }, expected: [3,4] },
+      { input: { nums: [5,7,7,8,8,10], target: 6 }, expected: [-1,-1] }
+    ]
+  },
+  'combination-sum': {
+    id: 14, title: 'Combination Sum', slug: 'combination-sum', difficulty: 'medium', acceptance: 73.5,
+    topics: ['Array', 'Backtracking'], companies: ['Amazon', 'Apple', 'Airbnb'], likes: 14800, dislikes: 310,
+    description: `Given an array of distinct integers candidates and a target integer target, return a list of all unique combinations of candidates where the chosen numbers sum to target. You may return the combinations in any order.\n\nThe same number may be chosen from candidates an unlimited number of times.`,
+    examples: [
+      { input: 'candidates = [2,3,6,7], target = 7', output: '[[2,2,3],[7]]', explanation: null },
+      { input: 'candidates = [2,3,5], target = 8', output: '[[2,2,2,2],[2,3,3],[3,5]]', explanation: null }
+    ],
+    constraints: ['1 <= candidates.length <= 30', '2 <= candidates[i] <= 40', 'All elements of candidates are distinct.', '1 <= target <= 40'],
+    followUp: null,
+    starterCode: {
+      java: 'class Solution {\n    public List<List<Integer>> combinationSum(int[] candidates, int target) {\n        \n    }\n}',
+      javascript: 'var combinationSum = function(candidates, target) {\n    \n};',
+      python: 'class Solution:\n    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:\n        ',
+      cpp: 'class Solution {\npublic:\n    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {\n        \n    }\n};'
+    },
+    testCases: [
+      { input: { candidates: [2,3,6,7], target: 7 }, expected: [[2,2,3],[7]] },
+      { input: { candidates: [2,3,5], target: 8 }, expected: [[2,2,2,2],[2,3,3],[3,5]] }
+    ]
+  },
+  'trapping-rain-water': {
+    id: 15, title: 'Trapping Rain Water', slug: 'trapping-rain-water', difficulty: 'hard', acceptance: 61.0,
+    topics: ['Array', 'Two Pointers', 'Dynamic Programming', 'Stack'], companies: ['Amazon', 'Goldman Sachs', 'Google', 'Microsoft'], likes: 25300, dislikes: 380,
+    description: `Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.`,
+    examples: [
+      { input: 'height = [0,1,0,2,1,0,1,3,2,1,2,1]', output: '6', explanation: 'The elevation map can trap 6 units of rain water.' },
+      { input: 'height = [4,2,0,3,2,5]', output: '9', explanation: null }
+    ],
+    constraints: ['n == height.length', '1 <= n <= 2 * 10⁴', '0 <= height[i] <= 10⁵'],
+    followUp: null,
+    starterCode: {
+      java: 'class Solution {\n    public int trap(int[] height) {\n        \n    }\n}',
+      javascript: 'var trap = function(height) {\n    \n};',
+      python: 'class Solution:\n    def trap(self, height: List[int]) -> int:\n        ',
+      cpp: 'class Solution {\npublic:\n    int trap(vector<int>& height) {\n        \n    }\n};'
+    },
+    testCases: [
+      { input: { height: [0,1,0,2,1,0,1,3,2,1,2,1] }, expected: 6 },
+      { input: { height: [4,2,0,3,2,5] }, expected: 9 }
+    ]
+  }
+};
+
+// Generate generic problem data for slugs not in the detailed database
+const generateGenericProblem = (slug) => {
+  // Convert slug to title
+  const title = slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  
+  return {
+    id: 0,
+    title,
+    slug,
+    difficulty: 'medium',
+    acceptance: 50.0,
+    topics: ['General'],
+    companies: [],
+    likes: 0,
+    dislikes: 0,
+    description: `Solve the "${title}" problem.\n\nImplement the solution function below.`,
+    examples: [
+      { input: 'See problem statement', output: 'See expected output', explanation: 'Implement the solution.' }
+    ],
+    constraints: ['See problem statement for constraints.'],
+    followUp: null,
+    starterCode: {
+      java: `class Solution {\n    // Implement your solution here\n    public void solve() {\n        \n    }\n}`,
+      javascript: `// Implement your solution here\nvar solve = function() {\n    \n};`,
+      python: `class Solution:\n    def solve(self):\n        # Implement your solution here\n        pass`,
+      cpp: `class Solution {\npublic:\n    // Implement your solution here\n    void solve() {\n        \n    }\n};`
+    },
+    testCases: [
+      { input: { example: 'input' }, expected: 'output' }
+    ]
+  };
+};
+
 const DSAProblemDetail = () => {
   const { slug } = useParams();
   const { currentUser } = useAuth();
@@ -95,77 +455,6 @@ const DSAProblemDetail = () => {
   const [isDraggingVertical, setIsDraggingVertical] = useState(false);
   const containerRef = useRef(null);
 
-  // Sample problem data
-  const sampleProblem = {
-    id: 1,
-    title: 'Two Sum',
-    slug: 'two-sum',
-    difficulty: 'easy',
-    acceptance: 57.0,
-    topics: ['Array', 'Hash Table'],
-    companies: ['Google', 'Amazon', 'Facebook', 'Apple', 'Microsoft'],
-    likes: 27400,
-    dislikes: 820,
-    description: `Given an array of integers \`nums\` and an integer \`target\`, return *indices of the two numbers such that they add up to* \`target\`.
-
-You may assume that each input would have **exactly one solution**, and you may not use the *same* element twice.
-
-You can return the answer in any order.`,
-    examples: [
-      {
-        input: 'nums = [2,7,11,15], target = 9',
-        output: '[0,1]',
-        explanation: 'Because nums[0] + nums[1] == 9, we return [0, 1].'
-      },
-      {
-        input: 'nums = [3,2,4], target = 6',
-        output: '[1,2]',
-        explanation: null
-      },
-      {
-        input: 'nums = [3,3], target = 6',
-        output: '[0,1]',
-        explanation: null
-      }
-    ],
-    constraints: [
-      '2 <= nums.length <= 10⁴',
-      '-10⁹ <= nums[i] <= 10⁹',
-      '-10⁹ <= target <= 10⁹',
-      'Only one valid answer exists.'
-    ],
-    followUp: 'Can you come up with an algorithm that is less than O(n²) time complexity?',
-    starterCode: {
-      java: `class Solution {
-    public int[] twoSum(int[] nums, int target) {
-        
-    }
-}`,
-      javascript: `/**
- * @param {number[]} nums
- * @param {number} target
- * @return {number[]}
- */
-var twoSum = function(nums, target) {
-    
-};`,
-      python: `class Solution:
-    def twoSum(self, nums: List[int], target: int) -> List[int]:
-        `,
-      cpp: `class Solution {
-public:
-    vector<int> twoSum(vector<int>& nums, int target) {
-        
-    }
-};`
-    },
-    testCases: [
-      { input: { nums: [2, 7, 11, 15], target: 9 }, expected: [0, 1] },
-      { input: { nums: [3, 2, 4], target: 6 }, expected: [1, 2] },
-      { input: { nums: [3, 3], target: 6 }, expected: [0, 1] }
-    ]
-  };
-
   useEffect(() => {
     fetchProblem();
   }, [slug]);
@@ -176,33 +465,39 @@ public:
     }
   }, [language, problem]);
 
-  // Handle resize
+  // Handle resize with requestAnimationFrame for smooth drag
   useEffect(() => {
+    let rafId = null;
     const handleMouseMove = (e) => {
-      if (isDraggingHorizontal && containerRef.current) {
-        const containerRect = containerRef.current.getBoundingClientRect();
-        const newWidth = ((e.clientX - containerRect.left) / containerRect.width) * 100;
-        setLeftPanelWidth(Math.max(20, Math.min(80, newWidth)));
-      }
-      if (isDraggingVertical) {
-        const newHeight = window.innerHeight - e.clientY - 60;
-        setConsolePanelHeight(Math.max(150, Math.min(600, newHeight)));
-      }
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        if (isDraggingHorizontal && containerRef.current) {
+          const containerRect = containerRef.current.getBoundingClientRect();
+          const newWidth = ((e.clientX - containerRect.left) / containerRect.width) * 100;
+          setLeftPanelWidth(Math.max(20, Math.min(80, newWidth)));
+        }
+        if (isDraggingVertical) {
+          const newHeight = window.innerHeight - e.clientY - 60;
+          setConsolePanelHeight(Math.max(150, Math.min(600, newHeight)));
+        }
+      });
     };
 
     const handleMouseUp = () => {
+      if (rafId) cancelAnimationFrame(rafId);
       setIsDraggingHorizontal(false);
       setIsDraggingVertical(false);
     };
 
     if (isDraggingHorizontal || isDraggingVertical) {
-      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mousemove', handleMouseMove, { passive: true });
       document.addEventListener('mouseup', handleMouseUp);
       document.body.style.cursor = isDraggingHorizontal ? 'col-resize' : 'row-resize';
       document.body.style.userSelect = 'none';
     }
 
     return () => {
+      if (rafId) cancelAnimationFrame(rafId);
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
       document.body.style.cursor = '';
@@ -213,13 +508,61 @@ public:
   const fetchProblem = async () => {
     setLoading(true);
     try {
-      setTimeout(() => {
-        setProblem(sampleProblem);
-        setCode(sampleProblem.starterCode.java);
-        setLoading(false);
-      }, 300);
+      // 1. Try fetching from backend API
+      const token = currentUser ? await currentUser.getIdToken() : null;
+      if (token) {
+        try {
+          const response = await fetch(`${API_URL.replace('/api', '')}/api/v2/dsa/problems/${slug}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          if (response.ok) {
+            const data = await response.json();
+            if (data.success && data.data) {
+              const p = data.data;
+              const problemData = {
+                id: p.id || 0,
+                title: p.title,
+                slug: p.slug,
+                difficulty: (p.difficulty || 'medium').toLowerCase(),
+                acceptance: p.acceptance || p.acceptance_rate || 50,
+                topics: p.topics || [p.topic] || [],
+                companies: p.companies || [],
+                likes: p.likes || 0,
+                dislikes: p.dislikes || 0,
+                description: p.description || '',
+                examples: p.examples || [],
+                constraints: Array.isArray(p.constraints) ? p.constraints : (p.constraints ? [p.constraints] : []),
+                followUp: p.followUp || null,
+                starterCode: p.starterCode || p.starter_code || {
+                  java: `class Solution {\n    // Implement your solution\n}`,
+                  javascript: `var solve = function() {\n    \n};`,
+                  python: `class Solution:\n    def solve(self):\n        pass`,
+                  cpp: `class Solution {\npublic:\n    void solve() {\n        \n    }\n};`
+                },
+                testCases: p.testCases || p.test_cases || [{ input: { example: 'input' }, expected: 'output' }]
+              };
+              setProblem(problemData);
+              setCode(problemData.starterCode[language] || problemData.starterCode.java || '');
+              setLoading(false);
+              return;
+            }
+          }
+        } catch (apiError) {
+          console.warn('API fetch failed, falling back to local data:', apiError.message);
+        }
+      }
+
+      // 2. Fall back to local problems database
+      const localProblem = ALL_PROBLEMS[slug] || generateGenericProblem(slug);
+      setProblem(localProblem);
+      setCode(localProblem.starterCode[language] || localProblem.starterCode.java || '');
+      setLoading(false);
     } catch (error) {
       console.error('Error fetching problem:', error);
+      // Last resort fallback
+      const fallback = ALL_PROBLEMS[slug] || generateGenericProblem(slug);
+      setProblem(fallback);
+      setCode(fallback.starterCode[language] || fallback.starterCode.java || '');
       setLoading(false);
     }
   };
@@ -425,6 +768,9 @@ public:
           line-height: 1.6;
           tab-size: 4;
         }
+        .custom-scrollbar {
+          scroll-behavior: smooth;
+        }
         .custom-scrollbar::-webkit-scrollbar {
           width: 8px;
           height: 8px;
@@ -438,6 +784,22 @@ public:
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
           background: #505050;
+        }
+        
+        /* GPU-accelerated panel transitions */
+        .panel-smooth {
+          will-change: width, height;
+          transform: translateZ(0);
+          -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+        }
+        
+        /* Smooth resize transitions (disabled during drag for perf) */
+        .panel-transition {
+          transition: width 0.15s ease-out, height 0.15s ease-out;
+        }
+        .panel-dragging {
+          transition: none !important;
         }
         
         /* Code highlighting colors */
@@ -474,6 +836,11 @@ public:
           color: #858585;
           font-size: 12px;
         }
+        
+        /* Synchronized scroll for code editor */
+        .code-editor-sync {
+          scrollbar-gutter: stable;
+        }
       `}</style>
       
       {/* Top Navigation Bar */}
@@ -503,7 +870,7 @@ public:
       <div ref={containerRef} className="flex-1 flex overflow-hidden">
         {/* Left Panel - Problem Description */}
         <div 
-          className="border-r border-gray-800 flex flex-col bg-[#0a0a0a]"
+          className={`border-r border-gray-800 flex flex-col bg-[#0a0a0a] panel-smooth ${isDraggingHorizontal ? 'panel-dragging' : 'panel-transition'}`}
           style={{ width: `${leftPanelWidth}%`, height: 'calc(100vh - 64px)' }}
         >
           {/* Tabs */}
@@ -686,7 +1053,7 @@ public:
 
         {/* Right Panel - Code Editor */}
         <div 
-          className="flex flex-col bg-[#0a0a0a]"
+          className={`flex flex-col bg-[#0a0a0a] panel-smooth ${isDraggingHorizontal ? 'panel-dragging' : 'panel-transition'}`}
           style={{ width: `${100 - leftPanelWidth}%`, height: '100%' }}
         >
           {/* Editor Header */}
@@ -756,7 +1123,7 @@ public:
 
           {/* Console Panel */}
           <div 
-            className="border-t border-gray-800 flex flex-col bg-[#1a1a1a] overflow-hidden"
+            className={`border-t border-gray-800 flex flex-col bg-[#1a1a1a] overflow-hidden panel-smooth ${isDraggingVertical ? 'panel-dragging' : 'panel-transition'}`}
             style={{ height: `${consolePanelHeight}px`, minHeight: '200px' }}
           >
             {/* Console Tabs */}
