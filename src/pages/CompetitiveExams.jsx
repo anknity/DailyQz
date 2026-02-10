@@ -34,6 +34,27 @@ const EXAM_CATEGORIES = {
       { id: 'state-psc', name: 'State PSC', icon: '🗳️', color: 'bg-teal-500', subjects: ['GK', 'State GK', 'Current Affairs'] }
     ]
   },
+  nimcet: {
+    title: 'NIMCET 2026',
+    description: 'NIT MCA Common Entrance Test - 120 Questions, 1000 Marks',
+    examInfo: {
+      totalQuestions: 120,
+      totalMarks: 1000,
+      sections: [
+        { name: 'Mathematics', questions: 50, marksPerQ: 12, negativeMarks: -3 },
+        { name: 'Analytical Ability & Logical Reasoning', questions: 40, marksPerQ: 8, negativeMarks: -2 },
+        { name: 'Computer Awareness', questions: 15, marksPerQ: 5, negativeMarks: -1 },
+        { name: 'General English', questions: 15, marksPerQ: 5, negativeMarks: -1 }
+      ]
+    },
+    items: [
+      { id: 'nimcet', name: 'NIMCET Full Mock', icon: '🎓', color: 'bg-rose-500', subjects: ['Mathematics', 'Analytical Reasoning', 'Computer Awareness', 'English'], questionCount: 40, description: '10 questions from each section' },
+      { id: 'nimcet-math', name: 'Mathematics', icon: '📐', color: 'bg-blue-600', subjects: ['Set Theory & Logic', 'Algebra', 'Calculus', 'Coordinate Geometry', 'Probability & Statistics'], questionCount: 20 },
+      { id: 'nimcet-reasoning', name: 'Analytical Reasoning', icon: '🧠', color: 'bg-purple-600', subjects: ['Puzzles', 'Coding-Decoding', 'Blood Relations', 'Series', 'Syllogisms', 'Directions', 'Data Interpretation'], questionCount: 20 },
+      { id: 'nimcet-computer', name: 'Computer Awareness', icon: '💻', color: 'bg-green-600', subjects: ['Computer Basics', 'Number Systems', 'Boolean Algebra', 'Operating Systems', 'Computer Architecture'], questionCount: 15 },
+      { id: 'nimcet-english', name: 'General English', icon: '📝', color: 'bg-amber-600', subjects: ['Reading Comprehension', 'Vocabulary', 'Grammar', 'Sentence Structure', 'Idioms'], questionCount: 15 }
+    ]
+  },
   dsa: {
     title: 'Data Structures & Algorithms',
     description: 'Master DSA for coding interviews',
@@ -252,6 +273,7 @@ const CompetitiveExams = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
+              className="mb-10"
             >
               <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
                 💻 {EXAM_CATEGORIES.technical.title}
@@ -276,6 +298,46 @@ const CompetitiveExams = () => {
                     <span className={`text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-400'} mt-1`}>
                       {tech.subjects.length} topics
                     </span>
+                  </motion.button>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* NIMCET 2026 Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+            >
+              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                🎓 {EXAM_CATEGORIES.nimcet.title}
+              </h2>
+              <p className={`mb-6 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                {EXAM_CATEGORIES.nimcet.description}
+              </p>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                {EXAM_CATEGORIES.nimcet.items.map((exam, index) => (
+                  <motion.button
+                    key={exam.id}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.4 + index * 0.05 }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => handleCategoryClick(exam)}
+                    className={`${cardClasses} border rounded-xl p-4 flex flex-col items-center justify-center hover:shadow-lg transition-all duration-200`}
+                  >
+                    <span className="text-3xl mb-2">{exam.icon}</span>
+                    <span className="font-medium text-sm text-center">{exam.name}</span>
+                    <span className={`text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-400'} mt-1`}>
+                      {exam.questionCount || exam.subjects.length} {exam.questionCount ? 'questions' : 'topics'}
+                    </span>
+                    {exam.description && (
+                      <span className={`text-xs ${isDarkMode ? 'text-gray-600' : 'text-gray-500'} mt-1 text-center`}>
+                        {exam.description}
+                      </span>
+                    )}
                   </motion.button>
                 ))}
               </div>

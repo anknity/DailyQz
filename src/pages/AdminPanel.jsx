@@ -32,7 +32,8 @@ import {
   FiServer,
   FiClock,
   FiAward,
-  FiChevronRight
+  FiChevronRight,
+  FiChevronLeft
 } from 'react-icons/fi'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
@@ -150,6 +151,8 @@ const AdminPanel = () => {
   const [directFeedDifficulty, setDirectFeedDifficulty] = useState('medium')
   const [directFeedAiProvider, setDirectFeedAiProvider] = useState('openrouter')
   const [parsedQuestion, setParsedQuestion] = useState(null)
+  const [parsedQuestions, setParsedQuestions] = useState([])
+  const [currentParsedIndex, setCurrentParsedIndex] = useState(0)
   const [parsingQuestion, setParsingQuestion] = useState(false)
   const [savingQuestion, setSavingQuestion] = useState(false)
   const [directFeedStats, setDirectFeedStats] = useState(null)
@@ -594,6 +597,35 @@ const AdminPanel = () => {
         { id: 'verbal-cat', name: 'Verbal Ability' },
         { id: 'lrdi-cat', name: 'LRDI' }
       ]
+    },
+    {
+      id: 'nimcet',
+      name: '🎓 NIMCET 2026',
+      group: 'Competitive',
+      subcategories: [
+        { id: 'nimcet-math-sets', name: 'Math - Set Theory & Logic' },
+        { id: 'nimcet-math-algebra', name: 'Math - Algebra' },
+        { id: 'nimcet-math-calculus', name: 'Math - Calculus' },
+        { id: 'nimcet-math-coordinate', name: 'Math - Coordinate Geometry' },
+        { id: 'nimcet-math-probability', name: 'Math - Probability & Statistics' },
+        { id: 'nimcet-reasoning-puzzles', name: 'Reasoning - Puzzles' },
+        { id: 'nimcet-reasoning-coding', name: 'Reasoning - Coding-Decoding' },
+        { id: 'nimcet-reasoning-blood', name: 'Reasoning - Blood Relations' },
+        { id: 'nimcet-reasoning-series', name: 'Reasoning - Series' },
+        { id: 'nimcet-reasoning-syllogism', name: 'Reasoning - Syllogisms' },
+        { id: 'nimcet-reasoning-direction', name: 'Reasoning - Directions' },
+        { id: 'nimcet-reasoning-di', name: 'Reasoning - Data Interpretation' },
+        { id: 'nimcet-computer-basics', name: 'Computer - Basics' },
+        { id: 'nimcet-computer-number', name: 'Computer - Number Systems' },
+        { id: 'nimcet-computer-boolean', name: 'Computer - Boolean Algebra' },
+        { id: 'nimcet-computer-os', name: 'Computer - Operating Systems' },
+        { id: 'nimcet-computer-arch', name: 'Computer - Architecture' },
+        { id: 'nimcet-english-rc', name: 'English - Reading Comprehension' },
+        { id: 'nimcet-english-vocab', name: 'English - Vocabulary' },
+        { id: 'nimcet-english-grammar', name: 'English - Grammar' },
+        { id: 'nimcet-english-sentence', name: 'English - Sentence Structure' },
+        { id: 'nimcet-english-idioms', name: 'English - Idioms' }
+      ]
     }
   ]
   
@@ -647,7 +679,14 @@ const AdminPanel = () => {
     // General
     { id: 'aptitude', name: 'General Aptitude', subjects: ['quantitative', 'logical-reasoning', 'verbal', 'data-interpretation'] },
     { id: 'current-affairs', name: 'Current Affairs', subjects: ['national', 'international', 'sports', 'science-tech', 'economy'] },
-    { id: 'computer-science-gk', name: 'CS General Knowledge', subjects: ['programming', 'data-structures', 'networking', 'os', 'database'] }
+    { id: 'computer-science-gk', name: 'CS General Knowledge', subjects: ['programming', 'data-structures', 'networking', 'os', 'database'] },
+    
+    // NIMCET 2026 - NIT MCA Common Entrance Test
+    { id: 'nimcet', name: 'NIMCET (Full Mock)', subjects: ['mathematics', 'reasoning', 'computer', 'english'] },
+    { id: 'nimcet-math', name: 'NIMCET - Mathematics (50Q, 12 marks each)', subjects: ['set-theory-logic', 'algebra', 'calculus', 'coordinate-geometry', 'probability-statistics'] },
+    { id: 'nimcet-reasoning', name: 'NIMCET - Analytical Reasoning (40Q)', subjects: ['puzzles', 'coding-decoding', 'blood-relations', 'series', 'syllogisms', 'directions', 'data-interpretation'] },
+    { id: 'nimcet-computer', name: 'NIMCET - Computer Awareness (15Q)', subjects: ['computer-basics', 'number-systems', 'boolean-algebra', 'operating-systems', 'computer-architecture'] },
+    { id: 'nimcet-english', name: 'NIMCET - General English (15Q)', subjects: ['reading-comprehension', 'vocabulary', 'grammar', 'sentence-structure', 'idioms'] }
   ]
   
   // Check if user is admin
@@ -1044,7 +1083,188 @@ const AdminPanel = () => {
     return category?.subcategories || []
   }
 
-  const handleParseQuestion = async () => {
+  // ─── Local Question Parser ──────────────────────────────────────────
+  // Parses raw text with multiple numbered MCQ questions into structured objects
+  const parseQuestionsLocally = (rawText) => {
+    const text = rawText.trim()
+    if (!text) return []
+
+    // Step 1: Split into individual question blocks by finding numbered question starts
+    // We look for patterns like "1." "2." "Q1." etc. that appear to start a new question
+    const questionBlocks = []
+    
+    // Find all potential question start positions (number followed by period/parenthesis)
+    // But we need to be smart - numbers appear in content too
+    // Strategy: find positions where (A) appears, then work backwards to find the question start
+    const optionAPositions = []
+    const optionARegex = /\(A\)/g
+    let m
+    while ((m = optionARegex.exec(text)) !== null) {
+      optionAPositions.push(m.index)
+    }
+
+    if (optionAPositions.length === 0) {
+      // No (A)(B)(C)(D) format - try A) B) C) D) format
+      const altOptionRegex = /(?:^|\n)\s*A[).]\s/gm
+      while ((m = altOptionRegex.exec(text)) !== null) {
+        optionAPositions.push(m.index)
+      }
+    }
+
+    if (optionAPositions.length === 0) {
+      // Can't parse locally - return single raw block for AI
+      return [{ question: text, options: [], correctAnswer: -1, explanation: '', raw: true }]
+    }
+
+    // For each (A) position, extract the question and its options
+    for (let qi = 0; qi < optionAPositions.length; qi++) {
+      const aPos = optionAPositions[qi]
+      
+      // Find the question text: everything from end of previous block (or start) to this (A)
+      let prevEnd = 0
+      if (qi > 0) {
+        // Previous block ends after its (D) option
+        // Find end by looking at region before current (A)
+        prevEnd = questionBlocks[qi - 1]?._endPos || 0
+      }
+      
+      let questionText = text.slice(prevEnd, aPos).trim()
+      
+      // Remove leading question number patterns: "1.", "1)", "Q1.", "Q.1", etc.
+      questionText = questionText.replace(/^\s*(?:Q\.?\s*)?\d+\s*[.)]\s*/i, '').trim()
+      // Remove trailing dots or colons
+      questionText = questionText.replace(/[:\s]+$/, '').trim()
+      
+      // Find the boundary for this question's options
+      // Options end at the next (A) or end of text  
+      const nextAPos = qi + 1 < optionAPositions.length ? optionAPositions[qi + 1] : text.length
+      const optionsRegion = text.slice(aPos, nextAPos)
+      
+      // Parse options: (A)...(B)...(C)...(D)...
+      let options = []
+      let correctAnswer = -1
+      let explanation = ''
+      let endPos = nextAPos
+      
+      const optMatch = optionsRegion.match(
+        /\(A\)\s*([\s\S]*?)\s*\(B\)\s*([\s\S]*?)\s*\(C\)\s*([\s\S]*?)\s*\(D\)\s*([\s\S]*)/i
+      )
+      
+      if (!optMatch) {
+        // Try A) B) C) D) format
+        const altMatch = optionsRegion.match(
+          /A[).]\s*([\s\S]*?)\s*B[).]\s*([\s\S]*?)\s*C[).]\s*([\s\S]*?)\s*D[).]\s*([\s\S]*)/i
+        )
+        if (altMatch) {
+          Object.assign(optMatch || {}, altMatch)
+        }
+      }
+      
+      if (optMatch) {
+        let optA = optMatch[1].trim()
+        let optB = optMatch[2].trim()
+        let optC = optMatch[3].trim()
+        let optD = optMatch[4].trim()
+        
+        // Clean optD - may contain next question number, answer, explanation, or source text
+        // Remove trailing source like "acmeacademy.in" or similar
+        optD = optD.replace(/\s*[a-zA-Z]+academy\.[a-z]+\s*/gi, '').trim()
+        optD = optD.replace(/\s*www\.\S+\s*/gi, '').trim()
+        
+        // Extract answer from text: "Answer: A", "Ans: (B)", "Correct Answer: C", etc.
+        const answerPatterns = [
+          /(?:Correct\s*Answer|Answer|Ans|Correct)\s*[:\s-]+\s*\(?([A-Da-d])\)?/i,
+          /(?:Correct\s*Answer|Answer|Ans|Correct)\s*[:\s-]+\s*(?:Option\s*)?([A-Da-d])/i,
+          /\b([A-D])\s+is\s+(?:the\s+)?correct\b/i,
+        ]
+        
+        // Search for answer in optD (often appended at the end) and in the full region
+        const searchText = optD + ' ' + optionsRegion
+        for (const pat of answerPatterns) {
+          const ansMatch = searchText.match(pat)
+          if (ansMatch) {
+            correctAnswer = ansMatch[1].toUpperCase().charCodeAt(0) - 65
+            // Clean the answer text from optD
+            optD = optD.replace(pat, '').trim()
+            break
+          }
+        }
+        
+        // Extract explanation
+        const explPatterns = [
+          /(?:Explanation|Solution|Reason|Hint)\s*[:\s-]+\s*([\s\S]+)/i,
+        ]
+        for (const pat of explPatterns) {
+          const explMatch = optD.match(pat)
+          if (explMatch) {
+            explanation = explMatch[1].trim()
+            optD = optD.replace(pat, '').trim()
+            break
+          }
+        }
+        
+        // Remove trailing question number that belongs to next question
+        optD = optD.replace(/\s*\d+\s*[.)]\s*$/, '').trim()
+        
+        options = [optA, optB, optC, optD]
+      }
+      
+      if (questionText || options.length > 0) {
+        const block = {
+          question: questionText,
+          options,
+          correctAnswer,
+          explanation,
+          _endPos: aPos + (optMatch ? optMatch[0].length + optMatch.index : optionsRegion.length),
+        }
+        questionBlocks.push(block)
+      }
+    }
+    
+    // Clean up internal tracking and return
+    return questionBlocks.map(({ _endPos, ...q }) => q)
+  }
+
+  const handleParseQuestion = () => {
+    if (!directFeedInput.trim()) {
+      alert('Please enter question text')
+      return
+    }
+
+    setParsingQuestion(true)
+    try {
+      const results = parseQuestionsLocally(directFeedInput)
+      
+      if (results.length === 0) {
+        alert('Could not parse any questions. Check the format.')
+        return
+      }
+      
+      // Check if any question is raw (couldn't parse options)
+      const hasRaw = results.some(q => q.raw)
+      
+      if (hasRaw && results.length === 1) {
+        // Single unparseable question - fall back to showing it raw
+        setParsedQuestions(results)
+        setParsedQuestion(results[0])
+      } else {
+        setParsedQuestions(results)
+        setParsedQuestion(results[0])
+      }
+      setCurrentParsedIndex(0)
+      
+      if (results.length > 1) {
+        alert(`Successfully parsed ${results.length} questions! Use the navigation arrows to review each one.`)
+      }
+    } catch (error) {
+      console.error('Parse error:', error)
+      alert('Error parsing questions')
+    } finally {
+      setParsingQuestion(false)
+    }
+  }
+
+  const handleParseWithAI = async () => {
     if (!directFeedInput.trim()) {
       alert('Please enter question text')
       return
@@ -1065,23 +1285,19 @@ const AdminPanel = () => {
       const data = await response.json()
 
       if (data.success) {
-        setParsedQuestion(data.data)
-        // Auto-select suggested category if available
-        if (data.data.suggestedCategory) {
-          setDirectFeedCategory(data.data.suggestedCategory)
-        }
-        if (data.data.suggestedSubcategory) {
-          setDirectFeedSubcategory(data.data.suggestedSubcategory)
-        }
-        if (data.data.difficulty) {
-          setDirectFeedDifficulty(data.data.difficulty)
-        }
+        const q = data.data
+        setParsedQuestion(q)
+        setParsedQuestions([q])
+        setCurrentParsedIndex(0)
+        if (q.suggestedCategory) setDirectFeedCategory(q.suggestedCategory)
+        if (q.suggestedSubcategory) setDirectFeedSubcategory(q.suggestedSubcategory)
+        if (q.difficulty) setDirectFeedDifficulty(q.difficulty)
       } else {
         alert('Failed to parse question: ' + (data.error || 'Unknown error'))
       }
     } catch (error) {
       console.error('Parse error:', error)
-      alert('Error parsing question')
+      alert('Error parsing question with AI')
     } finally {
       setParsingQuestion(false)
     }
@@ -1108,7 +1324,14 @@ const AdminPanel = () => {
       const data = await response.json()
 
       if (data.success) {
-        setParsedQuestion(data.data)
+        const updated = data.data
+        setParsedQuestion(updated)
+        // Also update in array
+        setParsedQuestions(prev => {
+          const copy = [...prev]
+          copy[currentParsedIndex] = updated
+          return copy
+        })
         if (data.data.improvements && data.data.improvements.length > 0) {
           alert('Question improved:\n' + data.data.improvements.join('\n'))
         }
@@ -1126,6 +1349,11 @@ const AdminPanel = () => {
   const handleSaveDirectFeedQuestion = async () => {
     if (!parsedQuestion) {
       alert('Please parse a question first')
+      return
+    }
+
+    if (parsedQuestion.correctAnswer === -1 || parsedQuestion.correctAnswer === undefined) {
+      alert('Please set the correct answer before saving')
       return
     }
 
@@ -1149,11 +1377,21 @@ const AdminPanel = () => {
       const data = await response.json()
 
       if (data.success) {
-        alert('Question saved successfully!')
-        setDirectFeedInput('')
-        setParsedQuestion(null)
+        // Mark as saved in the array
+        setParsedQuestions(prev => {
+          const copy = [...prev]
+          copy[currentParsedIndex] = { ...copy[currentParsedIndex], _saved: true }
+          return copy
+        })
+        alert(`Question ${currentParsedIndex + 1} saved successfully!`)
         fetchDirectFeedStats()
         fetchDashboardData()
+        // Move to next unsaved question
+        const nextUnsaved = parsedQuestions.findIndex((q, i) => i > currentParsedIndex && !q._saved)
+        if (nextUnsaved !== -1) {
+          setCurrentParsedIndex(nextUnsaved)
+          setParsedQuestion(parsedQuestions[nextUnsaved])
+        }
       } else {
         alert('Failed to save question: ' + (data.error || 'Unknown error'))
       }
@@ -1163,6 +1401,72 @@ const AdminPanel = () => {
     } finally {
       setSavingQuestion(false)
     }
+  }
+
+  const handleSaveAllParsedQuestions = async () => {
+    const validQuestions = parsedQuestions.filter(q => 
+      q.question && q.options?.length === 4 && !q._saved && !q.raw
+    )
+    
+    if (validQuestions.length === 0) {
+      alert('No valid unsaved questions to save. Each question needs text and 4 options.')
+      return
+    }
+
+    setSavingQuestion(true)
+    try {
+      const headers = await getAuthHeaders()
+      const response = await fetch(`${API_URL.replace('/api', '')}/api/v2/direct-feed/save-bulk`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          questions: validQuestions.map(q => ({
+            question: q.question,
+            options: q.options,
+            correctAnswer: q.correctAnswer >= 0 ? q.correctAnswer : 0,
+            explanation: q.explanation || ''
+          })),
+          category: directFeedCategory,
+          subcategory: directFeedSubcategory,
+          difficulty: directFeedDifficulty
+        })
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        alert(`Successfully saved ${data.count} questions!`)
+        setParsedQuestions(prev => prev.map(q => ({ ...q, _saved: true })))
+        fetchDirectFeedStats()
+        fetchDashboardData()
+      } else {
+        alert('Failed to save questions: ' + (data.error || 'Unknown error'))
+      }
+    } catch (error) {
+      console.error('Bulk save error:', error)
+      alert('Error saving questions')
+    } finally {
+      setSavingQuestion(false)
+    }
+  }
+
+  // Navigate parsed questions
+  const goToParsedQuestion = (index) => {
+    if (index >= 0 && index < parsedQuestions.length) {
+      setCurrentParsedIndex(index)
+      setParsedQuestion(parsedQuestions[index])
+    }
+  }
+
+  // Update correct answer for current question
+  const setCorrectAnswerForCurrent = (answerIndex) => {
+    const updated = { ...parsedQuestion, correctAnswer: answerIndex }
+    setParsedQuestion(updated)
+    setParsedQuestions(prev => {
+      const copy = [...prev]
+      copy[currentParsedIndex] = updated
+      return copy
+    })
   }
 
   const handleGenerateDirectFeedQuestions = async () => {
@@ -2112,6 +2416,24 @@ Explanation: 25% of 800 = (25/100) × 800 = 200`}
                     ) : (
                       <>
                         <FiCpu className="w-5 h-5" />
+                        Parse Locally
+                      </>
+                    )}
+                  </button>
+
+                  <button
+                    onClick={handleParseWithAI}
+                    disabled={parsingQuestion || !directFeedInput.trim()}
+                    className="flex items-center gap-2 px-6 py-3 bg-indigo-500 text-white rounded-lg font-medium hover:bg-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                  >
+                    {parsingQuestion ? (
+                      <>
+                        <FiRefreshCw className="w-5 h-5 animate-spin" />
+                        Parsing...
+                      </>
+                    ) : (
+                      <>
+                        <FiZap className="w-5 h-5" />
                         Parse with AI
                       </>
                     )}
@@ -2137,13 +2459,42 @@ Explanation: 25% of 800 = (25/100) × 800 = 200`}
                 </div>
 
                 {/* Parsed Question Preview */}
-                {parsedQuestion && (
+                {parsedQuestions.length > 0 && parsedQuestion && (
                   <div className="bg-gray-50 dark:bg-dark-100 rounded-xl p-6 mb-6 border-2 border-blue-200 dark:border-blue-800">
+                    {/* Header with navigation */}
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                        <FiEye className="w-5 h-5 text-blue-500" />
-                        Parsed Question Preview
-                      </h3>
+                      <div className="flex items-center gap-4">
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                          <FiEye className="w-5 h-5 text-blue-500" />
+                          Parsed Question Preview
+                        </h3>
+                        {parsedQuestions.length > 1 && (
+                          <div className="flex items-center gap-2 bg-gray-200 dark:bg-dark-200 rounded-lg px-2 py-1">
+                            <button
+                              onClick={() => goToParsedQuestion(currentParsedIndex - 1)}
+                              disabled={currentParsedIndex === 0}
+                              className="p-1 rounded hover:bg-gray-300 dark:hover:bg-dark-100 disabled:opacity-30 disabled:cursor-not-allowed"
+                            >
+                              <FiChevronLeft className="w-5 h-5" />
+                            </button>
+                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300 min-w-[60px] text-center">
+                              {currentParsedIndex + 1} / {parsedQuestions.length}
+                            </span>
+                            <button
+                              onClick={() => goToParsedQuestion(currentParsedIndex + 1)}
+                              disabled={currentParsedIndex === parsedQuestions.length - 1}
+                              className="p-1 rounded hover:bg-gray-300 dark:hover:bg-dark-100 disabled:opacity-30 disabled:cursor-not-allowed"
+                            >
+                              <FiChevronRight className="w-5 h-5" />
+                            </button>
+                          </div>
+                        )}
+                        {parsedQuestion._saved && (
+                          <span className="text-xs bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 px-2 py-1 rounded">
+                            ✓ Saved
+                          </span>
+                        )}
+                      </div>
                       <div className="flex gap-2">
                         <button
                           onClick={handleValidateQuestion}
@@ -2154,38 +2505,78 @@ Explanation: 25% of 800 = (25/100) × 800 = 200`}
                           Validate & Improve
                         </button>
                         <button
-                          onClick={() => setParsedQuestion(null)}
+                          onClick={() => { setParsedQuestions([]); setParsedQuestion(null); setCurrentParsedIndex(0) }}
                           className="flex items-center gap-1 px-3 py-1.5 bg-gray-500 text-white rounded-lg text-sm hover:bg-gray-600"
                         >
                           <FiX className="w-4 h-4" />
-                          Clear
+                          Clear All
                         </button>
                       </div>
                     </div>
 
+                    {/* Question number pills for quick navigation */}
+                    {parsedQuestions.length > 1 && (
+                      <div className="flex flex-wrap gap-1 mb-4 p-2 bg-gray-100 dark:bg-dark-200 rounded-lg">
+                        {parsedQuestions.map((q, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => goToParsedQuestion(idx)}
+                            className={`w-8 h-8 rounded-lg text-sm font-medium transition-all ${
+                              idx === currentParsedIndex
+                                ? 'bg-blue-500 text-white'
+                                : q._saved
+                                  ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                                  : q.correctAnswer === -1 || q.correctAnswer === undefined
+                                    ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400'
+                                    : 'bg-gray-200 text-gray-700 dark:bg-dark-100 dark:text-gray-300 hover:bg-gray-300'
+                            }`}
+                            title={q._saved ? 'Saved' : q.correctAnswer === -1 ? 'No answer set' : `Question ${idx + 1}`}
+                          >
+                            {idx + 1}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+
                     <div className="space-y-4">
                       <div>
                         <p className="text-sm text-gray-500 mb-1">Question:</p>
-                        <p className="text-gray-900 dark:text-white font-medium">{parsedQuestion.question}</p>
+                        <p className="text-gray-900 dark:text-white font-medium">{parsedQuestion.question || '(Could not extract question text)'}</p>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-2">
-                        {parsedQuestion.options?.map((opt, i) => (
-                          <div
-                            key={i}
-                            className={`p-3 rounded-lg ${
-                              i === parsedQuestion.correctAnswer
-                                ? 'bg-green-100 dark:bg-green-900/30 border-2 border-green-500 text-green-800 dark:text-green-300'
-                                : 'bg-white dark:bg-dark-200 border border-gray-200 dark:border-dark-100 text-gray-700 dark:text-gray-300'
-                            }`}
-                          >
-                            <span className="font-medium">{String.fromCharCode(65 + i)}.</span> {opt}
-                            {i === parsedQuestion.correctAnswer && (
-                              <span className="ml-2 text-green-600 dark:text-green-400">✓ Correct</span>
-                            )}
+                      {parsedQuestion.options?.length > 0 ? (
+                        <div>
+                          <p className="text-sm text-gray-500 mb-2">Options (click to set correct answer):</p>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            {parsedQuestion.options.map((opt, i) => (
+                              <button
+                                key={i}
+                                onClick={() => setCorrectAnswerForCurrent(i)}
+                                className={`p-3 rounded-lg text-left transition-all ${
+                                  i === parsedQuestion.correctAnswer
+                                    ? 'bg-green-100 dark:bg-green-900/30 border-2 border-green-500 text-green-800 dark:text-green-300'
+                                    : 'bg-white dark:bg-dark-200 border border-gray-200 dark:border-dark-100 text-gray-700 dark:text-gray-300 hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
+                                }`}
+                              >
+                                <span className="font-medium">{String.fromCharCode(65 + i)}.</span> {opt}
+                                {i === parsedQuestion.correctAnswer && (
+                                  <span className="ml-2 text-green-600 dark:text-green-400">✓ Correct</span>
+                                )}
+                              </button>
+                            ))}
                           </div>
-                        ))}
-                      </div>
+                        </div>
+                      ) : (
+                        <div className="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg text-orange-700 dark:text-orange-300">
+                          ⚠️ Could not parse options. The question format may not be recognized.
+                        </div>
+                      )}
+
+                      {parsedQuestion.correctAnswer === -1 && parsedQuestion.options?.length > 0 && (
+                        <div className="p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg text-orange-700 dark:text-orange-300 text-sm">
+                          ⚠️ No correct answer detected. Click an option above to set it.
+                        </div>
+                      )}
 
                       {parsedQuestion.explanation && (
                         <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg">
@@ -2208,23 +2599,51 @@ Explanation: 25% of 800 = (25/100) × 800 = 200`}
                       )}
                     </div>
 
-                    <button
-                      onClick={handleSaveDirectFeedQuestion}
-                      disabled={savingQuestion}
-                      className="mt-4 w-full flex items-center justify-center gap-2 px-6 py-3 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-                    >
-                      {savingQuestion ? (
-                        <>
-                          <FiRefreshCw className="w-5 h-5 animate-spin" />
-                          Saving...
-                        </>
-                      ) : (
-                        <>
-                          <FiSend className="w-5 h-5" />
-                          Save to Supabase
-                        </>
+                    {/* Save buttons */}
+                    <div className="mt-4 flex flex-col sm:flex-row gap-3">
+                      <button
+                        onClick={handleSaveDirectFeedQuestion}
+                        disabled={savingQuestion || parsedQuestion._saved}
+                        className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                      >
+                        {savingQuestion ? (
+                          <>
+                            <FiRefreshCw className="w-5 h-5 animate-spin" />
+                            Saving...
+                          </>
+                        ) : parsedQuestion._saved ? (
+                          <>
+                            <FiCheck className="w-5 h-5" />
+                            Already Saved
+                          </>
+                        ) : (
+                          <>
+                            <FiSend className="w-5 h-5" />
+                            Save This Question
+                          </>
+                        )}
+                      </button>
+                      
+                      {parsedQuestions.length > 1 && (
+                        <button
+                          onClick={handleSaveAllParsedQuestions}
+                          disabled={savingQuestion || parsedQuestions.every(q => q._saved)}
+                          className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                        >
+                          {savingQuestion ? (
+                            <>
+                              <FiRefreshCw className="w-5 h-5 animate-spin" />
+                              Saving All...
+                            </>
+                          ) : (
+                            <>
+                              <FiDatabase className="w-5 h-5" />
+                              Save All ({parsedQuestions.filter(q => !q._saved && !q.raw && q.options?.length === 4).length} questions)
+                            </>
+                          )}
+                        </button>
                       )}
-                    </button>
+                    </div>
                   </div>
                 )}
 

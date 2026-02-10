@@ -34,7 +34,6 @@ const TEST_CATEGORIES = [
     borderColor: 'border-blue-500/20',
     glowColor: 'hover:shadow-blue-500/10',
     route: '/daily-practice',
-    progress: { label: 'Progress', value: '65%', showBar: true, barPercent: 65, barColor: 'bg-blue-500' },
     subcategories: ['Web Dev', 'Data Science', 'Networking', 'GK', 'Sports', 'Aptitude', 'Reasoning', 'NEET']
   },
   {
@@ -91,7 +90,7 @@ const TEST_CATEGORIES = [
     route: '/competitive-exams',
     badge: 'New',
     badgeColor: 'bg-orange-500/20 text-orange-400',
-    subcategories: ['TCS', 'Infosys', 'SSC', 'Banking', 'Bihar Police']
+    subcategories: ['TCS', 'Infosys', 'SSC', 'Banking', 'NIMCET', 'Bihar Police']
   },
   {
     id: 'typing-test',
