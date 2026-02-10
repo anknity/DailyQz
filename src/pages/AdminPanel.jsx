@@ -33,7 +33,9 @@ import {
   FiClock,
   FiAward,
   FiChevronRight,
-  FiChevronLeft
+  FiChevronLeft,
+  FiMessageCircle,
+  FiMail
 } from 'react-icons/fi'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
@@ -171,6 +173,10 @@ const AdminPanel = () => {
   const [analytics, setAnalytics] = useState(null)
   const [analyticsPeriod, setAnalyticsPeriod] = useState('7')
   const [analyticsLoading, setAnalyticsLoading] = useState(false)
+
+  // Suggestions/Feedback state
+  const [feedbackList, setFeedbackList] = useState([])
+  const [feedbackLoading, setFeedbackLoading] = useState(false)
 
   // DSA Topics for dropdown
   const dsaTopics = [
@@ -745,6 +751,33 @@ const AdminPanel = () => {
       console.error('Error fetching analytics:', error)
     } finally {
       setAnalyticsLoading(false)
+    }
+  }
+
+  /* ─── Feedback / Suggestions (in-memory, auto-deletes after 24h) ─── */
+  const fetchFeedback = async () => {
+    try {
+      setFeedbackLoading(true)
+      const headers = await getAuthHeaders()
+      const response = await fetch(`${API_URL}/users/feedback`, { headers })
+      const data = await response.json()
+      if (data.success) {
+        setFeedbackList(data.data || [])
+      }
+    } catch (error) {
+      console.error('Error fetching feedback:', error)
+    } finally {
+      setFeedbackLoading(false)
+    }
+  }
+
+  const deleteFeedback = async (id) => {
+    try {
+      const headers = await getAuthHeaders()
+      await fetch(`${API_URL}/users/feedback/${id}`, { method: 'DELETE', headers })
+      setFeedbackList(prev => prev.filter(f => f.id !== id))
+    } catch (error) {
+      console.error('Error deleting feedback:', error)
     }
   }
 
@@ -1601,7 +1634,8 @@ const AdminPanel = () => {
     { id: 'generate', label: 'AI Generate', icon: FiCpu },
     { id: 'upload', label: 'JSON Upload', icon: FiUpload },
     { id: 'questions', label: 'Questions', icon: FiFileText },
-    { id: 'users', label: 'Users', icon: FiUsers }
+    { id: 'users', label: 'Users', icon: FiUsers },
+    { id: 'suggestions', label: 'Suggestions', icon: FiMessageCircle }
   ]
 
   const getCategorySubcategories = (categoryId) => {
@@ -1638,7 +1672,10 @@ const AdminPanel = () => {
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => {
+                setActiveTab(tab.id)
+                if (tab.id === 'suggestions') fetchFeedback()
+              }}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
                 activeTab === tab.id
                   ? 'bg-cyan-500 text-white shadow-lg shadow-cyan-500/20'
@@ -3574,6 +3611,118 @@ Explanation: 25% of 800 = (25/100) × 800 = 200`}
                         No users registered yet.
                       </p>
                     )}
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          )}
+
+          {/* ═══════ SUGGESTIONS / FEEDBACK TAB ═══════ */}
+          {activeTab === 'suggestions' && (
+            <motion.div
+              key="suggestions"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+            >
+              <div className="bg-[#111d2e] rounded-2xl border border-gray-700/30 p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                      <FiMessageCircle className="w-5 h-5 text-cyan-400" />
+                      User Suggestions & Feedback
+                    </h2>
+                    <p className="text-gray-400 text-sm mt-1">
+                      Messages auto-delete after 24 hours &bull; {feedbackList.length} message{feedbackList.length !== 1 ? 's' : ''}
+                    </p>
+                  </div>
+                  <button
+                    onClick={fetchFeedback}
+                    disabled={feedbackLoading}
+                    className="flex items-center gap-2 px-4 py-2 bg-cyan-500/10 text-cyan-400 rounded-lg hover:bg-cyan-500/20 transition-colors disabled:opacity-50"
+                  >
+                    <FiRefreshCw className={`w-4 h-4 ${feedbackLoading ? 'animate-spin' : ''}`} />
+                    Refresh
+                  </button>
+                </div>
+
+                {feedbackLoading ? (
+                  <div className="flex justify-center py-12">
+                    <div className="w-8 h-8 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin" />
+                  </div>
+                ) : feedbackList.length === 0 ? (
+                  <div className="text-center py-16">
+                    <FiMail className="w-12 h-12 text-gray-600 mx-auto mb-3" />
+                    <p className="text-gray-400 text-lg">No suggestions yet</p>
+                    <p className="text-gray-500 text-sm mt-1">User messages will appear here and auto-delete after 24 hours</p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {feedbackList.map((fb) => {
+                      const timeAgo = (() => {
+                        const diff = Date.now() - fb.createdAt
+                        const mins = Math.floor(diff / 60000)
+                        if (mins < 60) return `${mins}m ago`
+                        const hrs = Math.floor(mins / 60)
+                        if (hrs < 24) return `${hrs}h ago`
+                        return 'expiring soon'
+                      })()
+
+                      const subjectColors = {
+                        suggestion: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+                        bug_report: 'bg-red-500/10 text-red-400 border-red-500/20',
+                        feature_request: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
+                        new_exam: 'bg-green-500/10 text-green-400 border-green-500/20',
+                        other: 'bg-gray-500/10 text-gray-400 border-gray-500/20'
+                      }
+
+                      const subjectLabels = {
+                        suggestion: 'Suggestion',
+                        bug_report: 'Bug Report',
+                        feature_request: 'Feature Request',
+                        new_exam: 'New Exam Request',
+                        other: 'Other'
+                      }
+
+                      return (
+                        <div key={fb.id} className="bg-[#0a1628] rounded-xl border border-gray-700/30 p-5 hover:border-gray-600/50 transition-colors">
+                          <div className="flex items-start justify-between gap-4">
+                            <div className="flex-1 min-w-0">
+                              {/* Header: name, email, subject badge */}
+                              <div className="flex flex-wrap items-center gap-2 mb-2">
+                                <span className="font-semibold text-white text-sm">
+                                  {fb.name || 'Anonymous'}
+                                </span>
+                                {fb.email && (
+                                  <span className="text-gray-500 text-xs">
+                                    {fb.email}
+                                  </span>
+                                )}
+                                <span className={`px-2 py-0.5 rounded-full text-xs font-medium border ${subjectColors[fb.subject] || subjectColors.other}`}>
+                                  {subjectLabels[fb.subject] || fb.subject}
+                                </span>
+                                <span className="text-gray-500 text-xs flex items-center gap-1">
+                                  <FiClock className="w-3 h-3" />
+                                  {timeAgo}
+                                </span>
+                              </div>
+                              {/* Message */}
+                              <p className="text-gray-300 text-sm leading-relaxed whitespace-pre-wrap break-words">
+                                {fb.message}
+                              </p>
+                            </div>
+                            {/* Delete button */}
+                            <button
+                              onClick={() => deleteFeedback(fb.id)}
+                              className="p-2 text-gray-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors flex-shrink-0"
+                              title="Delete this message"
+                            >
+                              <FiTrash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
+                      )
+                    })}
                   </div>
                 )}
               </div>

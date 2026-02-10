@@ -11,9 +11,10 @@ import {
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
 
 /* ═══════════════════════════════════════════════════
-   10 DIVERSE TYPING PASSAGES — each user gets variety
+   30 DIVERSE TYPING PASSAGES — rich variety of topics
    ═══════════════════════════════════════════════════ */
 const TYPING_PASSAGES = [
+  // ── Nature & Animals ──
   {
     id: 'local-1',
     text: 'The quick brown fox jumps over the lazy dog near the riverbank while the sun sets behind the mountains casting golden light across the valley. Birds sing their evening songs as the wind gently rustles through the tall grass creating a peaceful symphony of nature. The farmer walks home along the dusty path carrying fresh vegetables from his garden thinking about the warm dinner awaiting him. Stars begin to appear one by one in the darkening sky as crickets start their nightly chorus filling the air with familiar sounds of summer.',
@@ -21,48 +22,163 @@ const TYPING_PASSAGES = [
   },
   {
     id: 'local-2',
-    text: 'Software engineering is a discipline that combines mathematical precision with creative problem solving. Developers must understand algorithms data structures and system design to build scalable applications. The process of debugging requires patience and logical thinking as errors can hide in the most unexpected places. Testing is equally important because it ensures reliability and helps catch issues before they reach production. Modern development practices like continuous integration and automated testing have transformed how teams deliver software making it faster and more dependable.',
-    type: 'general', difficulty: 'medium', charCount: 540, wordCount: 82
-  },
-  {
-    id: 'local-3',
-    text: 'In the heart of every great city lies a story waiting to be told. Streets filled with people from different backgrounds create a tapestry of cultures languages and traditions. Coffee shops serve as meeting points where ideas are born and friendships are forged over steaming cups. The architecture tells tales of centuries past while modern skyscrapers reach toward the clouds symbolizing human ambition. Public parks provide green spaces where families gather children play and elderly couples walk hand in hand enjoying the simple pleasures that make life beautiful.',
-    type: 'general', difficulty: 'medium', charCount: 530, wordCount: 86
-  },
-  {
-    id: 'local-4',
-    text: 'Artificial intelligence has revolutionized the way we interact with technology. Machine learning models can now recognize speech translate languages and even generate creative content. Neural networks inspired by the human brain process vast amounts of data to find patterns that would take humans years to discover. From self driving cars to medical diagnostics these systems are becoming integral to our daily lives. However ethical considerations around privacy bias and job displacement remain important topics that society must address as this technology continues to evolve rapidly.',
-    type: 'general', difficulty: 'hard', charCount: 550, wordCount: 84
-  },
-  {
-    id: 'local-5',
     text: 'The ocean covers more than seventy percent of our planet yet we have explored less than five percent of it. Deep beneath the waves mysterious creatures thrive in complete darkness near hydrothermal vents where temperatures can exceed four hundred degrees. Coral reefs often called the rainforests of the sea support thousands of marine species and protect coastal communities from storms. Scientists continue to discover new species every year reminding us how much remains unknown about our own world. Preserving these ecosystems is crucial for maintaining the delicate balance of life on Earth.',
     type: 'general', difficulty: 'medium', charCount: 560, wordCount: 90
   },
   {
+    id: 'local-3',
+    text: 'Butterflies undergo one of the most remarkable transformations in nature. Starting as tiny eggs laid on leaves they hatch into caterpillars that spend their days eating and growing. When the time comes each caterpillar wraps itself in a chrysalis and slowly reorganizes its entire body into a completely new form. Weeks later a beautiful butterfly emerges with delicate wings ready to take flight. This process called metamorphosis shows how patience and change can lead to something truly extraordinary.',
+    type: 'general', difficulty: 'easy', charCount: 470, wordCount: 75
+  },
+  // ── Technology & Programming ──
+  {
+    id: 'local-4',
+    text: 'Software engineering is a discipline that combines mathematical precision with creative problem solving. Developers must understand algorithms data structures and system design to build scalable applications. The process of debugging requires patience and logical thinking as errors can hide in the most unexpected places. Testing is equally important because it ensures reliability and helps catch issues before they reach production. Modern development practices like continuous integration and automated testing have transformed how teams deliver software making it faster and more dependable.',
+    type: 'general', difficulty: 'medium', charCount: 540, wordCount: 82
+  },
+  {
+    id: 'local-5',
+    text: 'Artificial intelligence has revolutionized the way we interact with technology. Machine learning models can now recognize speech translate languages and even generate creative content. Neural networks inspired by the human brain process vast amounts of data to find patterns that would take humans years to discover. From self driving cars to medical diagnostics these systems are becoming integral to our daily lives. However ethical considerations around privacy bias and job displacement remain important topics that society must address as this technology continues to evolve rapidly.',
+    type: 'general', difficulty: 'hard', charCount: 550, wordCount: 84
+  },
+  {
     id: 'local-6',
+    text: 'Version control systems like Git have become essential tools for every developer. They allow teams to work on the same codebase simultaneously without overwriting each other changes. Branching and merging enable experimentation without risking the stability of the main project. Pull requests provide a structured way to review code before it becomes part of the production system. Understanding Git is no longer optional for programmers because virtually every company in the software industry relies on it for daily operations.',
+    type: 'general', difficulty: 'medium', charCount: 490, wordCount: 77
+  },
+  {
+    id: 'local-7',
+    text: 'Cybersecurity is one of the fastest growing fields in technology today. Every organization from small startups to large governments faces threats from hackers phishing attacks and malware. Strong passwords two factor authentication and encrypted communications form the basic defenses that everyone should use. Security professionals work around the clock to identify vulnerabilities patch systems and respond to breaches. As our world becomes more connected the importance of protecting digital assets and personal information continues to grow exponentially.',
+    type: 'general', difficulty: 'hard', charCount: 510, wordCount: 76
+  },
+  // ── Culture & City Life ──
+  {
+    id: 'local-8',
+    text: 'In the heart of every great city lies a story waiting to be told. Streets filled with people from different backgrounds create a tapestry of cultures languages and traditions. Coffee shops serve as meeting points where ideas are born and friendships are forged over steaming cups. The architecture tells tales of centuries past while modern skyscrapers reach toward the clouds symbolizing human ambition. Public parks provide green spaces where families gather children play and elderly couples walk hand in hand enjoying the simple pleasures that make life beautiful.',
+    type: 'general', difficulty: 'medium', charCount: 530, wordCount: 86
+  },
+  {
+    id: 'local-9',
+    text: 'Street food vendors serve some of the most delicious meals you will ever taste. From steaming bowls of noodles in Bangkok to crispy tacos in Mexico City these humble stalls offer authentic flavors at affordable prices. Each vendor has perfected their craft over years of practice often using family recipes passed down through generations. The sizzle of a hot grill the aroma of fresh spices and the bustling crowds create an atmosphere that no fancy restaurant can replicate. Trying local street food is one of the best ways to truly experience a new culture.',
+    type: 'general', difficulty: 'medium', charCount: 520, wordCount: 87
+  },
+  // ── Music & Arts ──
+  {
+    id: 'local-10',
     text: 'Music has been a fundamental part of human culture since the earliest civilizations. From ancient drums and flutes to modern electronic synthesizers the tools have changed but the desire to create rhythm and melody remains constant. Studies show that playing an instrument improves memory coordination and emotional intelligence. Listening to music activates multiple areas of the brain simultaneously creating a unique neurological experience. Whether it is classical jazz rock or hip hop every genre carries the power to move people unite communities and express emotions that words alone cannot capture.',
     type: 'general', difficulty: 'medium', charCount: 555, wordCount: 88
   },
   {
-    id: 'local-7',
+    id: 'local-11',
+    text: 'Photography captures moments that words cannot describe. A single photograph can tell the story of an entire era preserving emotions landscapes and events for future generations. Digital cameras and smartphones have made photography accessible to everyone turning billions of people into visual storytellers. Understanding composition lighting and timing separates a good photo from a great one. Whether you are shooting a sunset portrait or cityscape the ability to freeze a moment in time remains one of humanity most powerful forms of expression.',
+    type: 'general', difficulty: 'medium', charCount: 480, wordCount: 74
+  },
+  // ── Food & Cooking ──
+  {
+    id: 'local-12',
     text: 'The art of cooking transforms simple ingredients into extraordinary experiences. A skilled chef understands how heat chemistry and timing work together to create flavors that delight the senses. Different cultures have developed unique culinary traditions passed down through generations each reflecting local ingredients climate and history. From the spicy curries of India to the delicate sushi of Japan food tells the story of a people. Learning to cook is not just about following recipes it is about understanding the science behind each technique and developing an intuition that comes only with practice.',
     type: 'general', difficulty: 'medium', charCount: 545, wordCount: 88
   },
+  // ── Space & Science ──
   {
-    id: 'local-8',
-    text: 'Space exploration represents humanitys greatest adventure pushing the boundaries of what we thought possible. The first moon landing in nineteen sixty nine inspired an entire generation to dream bigger and reach further. Today private companies are making space travel more accessible while scientists search for signs of life on Mars and beyond. Telescopes peer deep into the cosmos revealing galaxies that formed billions of years ago. The International Space Station serves as a symbol of international cooperation where astronauts from different countries work together advancing our understanding of science and the universe.',
+    id: 'local-13',
+    text: 'Space exploration represents humanity greatest adventure pushing the boundaries of what we thought possible. The first moon landing in nineteen sixty nine inspired an entire generation to dream bigger and reach further. Today private companies are making space travel more accessible while scientists search for signs of life on Mars and beyond. Telescopes peer deep into the cosmos revealing galaxies that formed billions of years ago. The International Space Station serves as a symbol of international cooperation where astronauts from different countries work together advancing our understanding of science and the universe.',
     type: 'general', difficulty: 'hard', charCount: 560, wordCount: 86
   },
   {
-    id: 'local-9',
+    id: 'local-14',
+    text: 'The human body contains approximately thirty seven trillion cells each performing specific functions to keep us alive. Red blood cells carry oxygen to every organ while white blood cells defend against infections and diseases. The brain processes millions of signals every second controlling everything from breathing to complex thought. Bones provide structure and protection while muscles enable movement and strength. Even during sleep the body continues its remarkable work repairing tissues consolidating memories and regulating hormones to ensure we wake up refreshed and ready for a new day.',
+    type: 'general', difficulty: 'medium', charCount: 530, wordCount: 82
+  },
+  // ── Books & Reading ──
+  {
+    id: 'local-15',
     text: 'Reading is one of the most powerful habits a person can develop. Books open doors to new worlds ideas and perspectives that we might never encounter otherwise. Fiction cultivates empathy by allowing us to experience life through different characters while nonfiction expands our knowledge of the real world. Great writers have the ability to capture complex emotions in simple sentences creating connections across time and distance. Libraries serve as sanctuaries of knowledge free and open to everyone regardless of background. In an age of digital distraction the simple act of reading a book remains a profound exercise.',
     type: 'general', difficulty: 'medium', charCount: 560, wordCount: 92
   },
+  // ── Health & Fitness ──
   {
-    id: 'local-10',
+    id: 'local-16',
     text: 'Physical exercise is essential for both mental and physical health. Regular movement strengthens the heart improves circulation and helps maintain a healthy weight. Beyond the obvious physical benefits exercise releases endorphins that reduce stress and improve mood. Team sports teach valuable lessons about cooperation communication and perseverance. Even simple activities like walking or stretching can make a significant difference in overall wellbeing. The key is consistency rather than intensity because small daily efforts compound over time leading to lasting improvements in energy focus and quality of life.',
     type: 'general', difficulty: 'easy', charCount: 530, wordCount: 85
+  },
+  {
+    id: 'local-17',
+    text: 'Sleep is the foundation of good health yet millions of people do not get enough of it. During sleep the brain clears toxins consolidates memories and processes the emotions of the day. Adults need between seven and nine hours of quality rest each night to function at their best. Poor sleep has been linked to increased risk of heart disease obesity and depression. Creating a consistent bedtime routine limiting screen time before bed and keeping the room cool and dark are simple steps that can dramatically improve the quality of your sleep.',
+    type: 'general', difficulty: 'easy', charCount: 490, wordCount: 83
+  },
+  // ── History ──
+  {
+    id: 'local-18',
+    text: 'The ancient Egyptians built the pyramids more than four thousand years ago using techniques that still puzzle engineers today. These massive structures served as tombs for pharaohs who believed they would need their treasures in the afterlife. Workers moved enormous stone blocks weighing several tons each across vast distances without modern machinery. The Great Pyramid of Giza stood as the tallest structure on Earth for nearly four thousand years. These monuments remain a testament to human ingenuity and the remarkable capabilities of organized labor working toward a shared vision.',
+    type: 'general', difficulty: 'medium', charCount: 520, wordCount: 83
+  },
+  {
+    id: 'local-19',
+    text: 'The invention of the printing press by Johannes Gutenberg around fourteen fifty changed the world forever. Before this innovation books were copied by hand making them extremely expensive and rare. The printing press made it possible to produce books quickly and affordably allowing knowledge to spread across Europe at an unprecedented rate. Literacy rates soared as ordinary people gained access to information that was previously available only to the wealthy and the clergy. This revolution in communication laid the groundwork for the scientific revolution the reformation and the modern information age.',
+    type: 'general', difficulty: 'hard', charCount: 550, wordCount: 88
+  },
+  // ── Travel & Geography ──
+  {
+    id: 'local-20',
+    text: 'Traveling teaches lessons that no classroom ever could. Stepping into an unfamiliar country forces you to adapt to new customs languages and ways of thinking. You learn patience while waiting for delayed trains flexibility when plans fall apart and gratitude for the kindness of strangers. Every journey broadens your perspective and challenges assumptions you did not even know you held. Whether you are hiking through mountain trails exploring ancient ruins or simply sitting in a foreign cafe watching the world go by travel has a way of changing how you see yourself and others.',
+    type: 'general', difficulty: 'medium', charCount: 510, wordCount: 86
+  },
+  {
+    id: 'local-21',
+    text: 'Mount Everest stands at eight thousand eight hundred and forty nine meters making it the tallest peak on Earth. Every year hundreds of climbers attempt to reach its summit braving freezing temperatures unpredictable weather and dangerously thin air. The death zone above eight thousand meters is where the human body begins to deteriorate rapidly as oxygen levels drop to a third of what they are at sea level. Despite the risks the mountain continues to attract adventurers from around the world drawn by the ultimate challenge of standing on top of the world.',
+    type: 'general', difficulty: 'hard', charCount: 520, wordCount: 86
+  },
+  // ── Education & Learning ──
+  {
+    id: 'local-22',
+    text: 'Learning a new language opens up an entirely new world of opportunities and connections. Bilingual individuals often have better memory stronger problem solving skills and greater cultural awareness. The process requires consistent practice whether through conversation apps books or immersion in a foreign environment. Making mistakes is a natural and necessary part of the journey because each error teaches you something new. With dedication and patience anyone can become fluent in a second language and gain access to literature friendships and career paths that were previously out of reach.',
+    type: 'general', difficulty: 'medium', charCount: 530, wordCount: 83
+  },
+  {
+    id: 'local-23',
+    text: 'Mathematics is the universal language that underlies everything from music to architecture. Numbers and patterns appear throughout nature in the spiral of a seashell the branching of trees and the orbits of planets. Problem solving in mathematics trains the mind to think logically and approach challenges systematically. From simple addition to complex calculus each concept builds upon the last creating a beautiful chain of understanding. Students who embrace math rather than fear it often discover a subject full of elegance surprise and deeply satisfying moments of clarity.',
+    type: 'general', difficulty: 'medium', charCount: 510, wordCount: 78
+  },
+  // ── Environment ──
+  {
+    id: 'local-24',
+    text: 'Climate change is the defining challenge of our generation demanding urgent action from individuals governments and businesses alike. Rising global temperatures are causing ice caps to melt sea levels to rise and weather patterns to become more extreme. Renewable energy sources like solar wind and hydroelectric power offer viable alternatives to fossil fuels. Small changes in daily habits such as reducing waste conserving water and choosing sustainable products can collectively make a significant impact. The decisions we make today will determine the kind of planet future generations inherit.',
+    type: 'general', difficulty: 'hard', charCount: 540, wordCount: 83
+  },
+  // ── Business & Finance ──
+  {
+    id: 'local-25',
+    text: 'Starting a small business requires courage determination and a willingness to learn from failure. Most successful entrepreneurs faced multiple setbacks before finding the formula that worked. A solid business plan clear understanding of the target market and careful financial management form the foundation of any viable venture. Building a loyal customer base takes time and depends on consistently delivering value and excellent service. The journey of entrepreneurship is filled with long hours and difficult decisions but the reward of building something meaningful from nothing makes every challenge worthwhile.',
+    type: 'general', difficulty: 'medium', charCount: 530, wordCount: 82
+  },
+  // ── Psychology & Mind ──
+  {
+    id: 'local-26',
+    text: 'The human mind is capable of extraordinary things yet we often underestimate our own potential. Psychologists have discovered that our beliefs about our abilities directly influence how well we perform. People who adopt a growth mindset believing that skills can be developed through effort tend to achieve more than those who think talent is fixed. Practicing gratitude meditation and positive self talk can rewire neural pathways over time leading to greater resilience and happiness. Understanding how the mind works is the first step toward unlocking the best version of yourself.',
+    type: 'general', difficulty: 'medium', charCount: 520, wordCount: 83
+  },
+  // ── Sports ──
+  {
+    id: 'local-27',
+    text: 'Cricket is more than just a sport in countries like India Australia and England where it brings entire nations together. A test match can last five days with players demonstrating incredible endurance strategy and skill. The roar of the crowd when a batsman hits a six or a bowler takes a wicket creates an electrifying atmosphere that fans never forget. Young players dream of representing their country and carrying forward the legacy of legends who came before them. Whether played on a grand stadium or a dusty street cricket teaches discipline teamwork and the thrill of competition.',
+    type: 'general', difficulty: 'medium', charCount: 530, wordCount: 89
+  },
+  {
+    id: 'local-28',
+    text: 'The marathon is a race that tests human endurance like no other covering a distance of forty two kilometers. Training for a marathon requires months of preparation including long runs strength training and careful nutrition planning. Race day brings a mix of excitement nerves and determination as thousands of runners line up at the starting point. The final kilometers are the most challenging as muscles ache and the mind begs to stop. Crossing the finish line is a moment of pure triumph that proves the incredible resilience of the human spirit.',
+    type: 'general', difficulty: 'easy', charCount: 490, wordCount: 82
+  },
+  // ── Philosophy & Quotes ──
+  {
+    id: 'local-29',
+    text: 'The only way to do great work is to love what you do. Success is not final and failure is not fatal it is the courage to continue that counts. In the middle of difficulty lies opportunity and every expert was once a beginner. Life is what happens when you are busy making other plans so take time to appreciate the present moment. The journey of a thousand miles begins with a single step and the best time to plant a tree was twenty years ago but the second best time is now.',
+    type: 'general', difficulty: 'easy', charCount: 440, wordCount: 84
+  },
+  {
+    id: 'local-30',
+    text: 'Time management is the most valuable skill anyone can master in the modern world. Every person has the same twenty four hours in a day yet some accomplish remarkable things while others struggle to keep up. The secret lies in prioritization focus and the ability to say no to distractions. Breaking large tasks into smaller manageable pieces makes even the most daunting projects feel achievable. Setting clear goals tracking progress and rewarding yourself for milestones creates a positive cycle of productivity that builds momentum over time.',
+    type: 'general', difficulty: 'easy', charCount: 490, wordCount: 78
   }
 ]
 
@@ -91,9 +207,19 @@ const CharSpan = memo(({ char, color, bg, isCurrent, activeCharRef, isCode }) =>
 ))
 CharSpan.displayName = 'CharSpan'
 
-const getRandomPassage = () => {
-  const idx = Math.floor(Math.random() * TYPING_PASSAGES.length)
-  return TYPING_PASSAGES[idx]
+/* Pick a random passage, avoid immediate repeats */
+let lastPassageId = null
+const getRandomPassage = (preferDifficulty) => {
+  let pool = TYPING_PASSAGES
+  if (preferDifficulty) {
+    const filtered = TYPING_PASSAGES.filter(p => p.difficulty === preferDifficulty)
+    if (filtered.length > 1) pool = filtered
+  }
+  // Avoid showing the same passage twice in a row
+  const available = pool.length > 1 ? pool.filter(p => p.id !== lastPassageId) : pool
+  const idx = Math.floor(Math.random() * available.length)
+  lastPassageId = available[idx].id
+  return available[idx]
 }
 
 const TypingTest = () => {
@@ -134,6 +260,7 @@ const TypingTest = () => {
   const timerRef = useRef(null)
   const activeCharRef = useRef(null)
   const textContainerRef = useRef(null)
+  const hasStartedRef = useRef(false)
 
   /* ───────── Display text (truncated for word mode) ───────── */
   const displayText = useMemo(() => {
@@ -161,42 +288,56 @@ const TypingTest = () => {
     setTimeLeft(testMode === 'time' ? timeLimit : null)
     if (textContainerRef.current) textContainerRef.current.scrollTop = 0
 
-    /* Show a random local passage INSTANTLY — no loading spinner */
-    const localPassage = getRandomPassage()
-    setPassage(localPassage)
-    setLoading(false)
+    hasStartedRef.current = false
 
-    /* Then try API in background (non-blocking) to get a better passage */
-    try {
-      const token = await currentUser?.getIdToken()
-      if (!token) return
+    /*
+     * FIX: Only fetch from API for CODE mode or explicit AI requests.
+     * For general typing, always use local passages — no background fetch
+     * that could replace the text and cause flickering/inability to type.
+     */
+    if (testType === 'code' || useAI) {
+      /* Code snippets & AI passages need the API */
+      setLoading(true)
+      try {
+        const token = await currentUser?.getIdToken()
+        if (!token) {
+          setPassage(getRandomPassage(difficulty))
+          setLoading(false)
+          return
+        }
 
-      const endpoint = useAI ? 'passage/ai' : 'passage'
-      const params = new URLSearchParams({ difficulty, type: testType })
-      if (testType === 'code') params.append('language', codeLanguage)
+        const endpoint = useAI ? 'passage/ai' : 'passage'
+        const params = new URLSearchParams({ difficulty, type: testType })
+        if (testType === 'code') params.append('language', codeLanguage)
 
-      const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 5000) // 5s max
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 5000)
 
-      const response = await fetch(`${API_URL}/v2/typing/${endpoint}?${params}`, {
-        headers: { 'Authorization': `Bearer ${token}` },
-        signal: controller.signal
-      })
-      clearTimeout(timeoutId)
-
-      const data = await response.json()
-      if (data.success && data.data?.text) {
-        /* Only swap if user hasn't started typing yet */
-        setStarted(prev => {
-          if (!prev) setPassage(data.data)
-          return prev
+        const response = await fetch(`${API_URL}/v2/typing/${endpoint}?${params}`, {
+          headers: { 'Authorization': `Bearer ${token}` },
+          signal: controller.signal
         })
+        clearTimeout(timeoutId)
+
+        const data = await response.json()
+        if (data.success && data.data?.text) {
+          setPassage(data.data)
+        } else {
+          setPassage(getRandomPassage(difficulty))
+        }
+      } catch (error) {
+        /* Fallback to local passage on any error */
+        setPassage(getRandomPassage(difficulty))
+        if (error.name !== 'AbortError') {
+          console.warn('API passage fetch failed:', error.message)
+        }
+      } finally {
+        setLoading(false)
       }
-    } catch (error) {
-      /* Silently keep local passage — user already has text to type */
-      if (error.name !== 'AbortError') {
-        console.warn('API passage fetch skipped:', error.message)
-      }
+    } else {
+      /* General typing: use local passages instantly — no flicker, always works */
+      setPassage(getRandomPassage(difficulty))
+      setLoading(false)
     }
   }, [currentUser, difficulty, testType, codeLanguage, testMode, timeLimit])
 
@@ -215,7 +356,7 @@ const TypingTest = () => {
           const remaining = Math.max(0, timeLimit - Math.floor((now - startTime) / 1000))
           setTimeLeft(remaining)
         }
-      }, 100)
+      }, 200)
     }
     return () => clearInterval(timerRef.current)
   }, [started, finished, startTime, testMode, timeLimit])
@@ -227,21 +368,25 @@ const TypingTest = () => {
     }
   }, [timeLeft, started, finished])
 
-  /* ───────── Scroll active character into view ───────── */
+  /* ───────── Scroll active character into view (debounced) ───────── */
+  const scrollTimerRef = useRef(null)
   useEffect(() => {
     if (charIndex === 0 && textContainerRef.current) {
       textContainerRef.current.scrollTop = 0
       return
     }
-    if (activeCharRef.current && textContainerRef.current) {
-      const container = textContainerRef.current
-      const charEl = activeCharRef.current
-      const charRect = charEl.getBoundingClientRect()
-      const containerRect = container.getBoundingClientRect()
-      if (charRect.bottom > containerRect.bottom - 8) {
-        container.scrollTop += charRect.height + 12
+    if (scrollTimerRef.current) cancelAnimationFrame(scrollTimerRef.current)
+    scrollTimerRef.current = requestAnimationFrame(() => {
+      if (activeCharRef.current && textContainerRef.current) {
+        const container = textContainerRef.current
+        const charEl = activeCharRef.current
+        const charRect = charEl.getBoundingClientRect()
+        const containerRect = container.getBoundingClientRect()
+        if (charRect.bottom > containerRect.bottom - 8) {
+          container.scrollTop += charRect.height + 12
+        }
       }
-    }
+    })
   }, [charIndex])
 
   const fetchStats = async () => {
@@ -287,6 +432,7 @@ const TypingTest = () => {
 
     if (!started) {
       setStarted(true)
+      hasStartedRef.current = true
       setStartTime(Date.now())
       if (testMode === 'time') setTimeLeft(timeLimit)
     }
@@ -537,14 +683,10 @@ const TypingTest = () => {
           <div className="flex flex-col items-center">
 
             {/* MonkeyType Mode Bar */}
-            <AnimatePresence>
-              {!started && !finished && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10, transition: { duration: 0.15 } }}
-                  className="bg-[#1a2632] rounded-xl px-2 sm:px-3 py-2 mb-6 flex flex-wrap items-center justify-center gap-0.5 sm:gap-1 border border-[#2f4b66] text-[12px] sm:text-[13px] font-medium select-none"
-                >
+            {!started && !finished && (
+              <div
+                className="bg-[#1a2632] rounded-xl px-2 sm:px-3 py-2 mb-6 flex flex-wrap items-center justify-center gap-0.5 sm:gap-1 border border-[#2f4b66] text-[12px] sm:text-[13px] font-medium select-none"
+              >
                   {/* Punctuation toggle */}
                   <button
                     onClick={() => setIncludePunctuation(p => !p)}
@@ -654,19 +796,12 @@ const TypingTest = () => {
                   >
                     {'\u{1F916}'} ai
                   </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
+              </div>
+            )}
 
             {/* Language / Difficulty */}
-            <AnimatePresence>
-              {!started && !finished && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0, transition: { duration: 0.1 } }}
-                  className="flex items-center gap-4 mb-6 text-sm"
-                >
+            {!started && !finished && (
+              <div className="flex items-center gap-4 mb-6 text-sm">
                   <span className="flex items-center gap-1.5 text-[#d1d0c5]">
                     <FiGlobe className="w-4 h-4" />
                     english
@@ -686,9 +821,8 @@ const TypingTest = () => {
                       </button>
                     ))}
                   </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+              </div>
+            )}
 
             {/* Live Stats (visible while typing) */}
             <AnimatePresence>
@@ -727,13 +861,18 @@ const TypingTest = () => {
                   {renderPassage()}
 
                   {/* Hidden input for capturing keystrokes */}
-                  <input
+                  <textarea
                     ref={hiddenInputRef}
-                    className="opacity-0 absolute inset-0 w-full h-full cursor-text z-10"
+                    className="opacity-0 absolute inset-0 w-full h-full cursor-text z-10 resize-none"
                     onKeyDown={handleKeyDown}
+                    onChange={(e) => { e.target.value = '' }}
                     autoFocus
-                    readOnly
+                    autoComplete="off"
+                    autoCorrect="off"
+                    autoCapitalize="off"
+                    spellCheck={false}
                     aria-label="Type here"
+                    inputMode="text"
                   />
 
                   {!started && !finished && (
