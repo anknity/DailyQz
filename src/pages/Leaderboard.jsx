@@ -4,7 +4,7 @@ import { Navbar, LoadingSpinner } from '../components'
 import { LeaderboardService } from '../services/firestoreService'
 import { useAuth } from '../context/AuthContext'
 import { getInitials, getAvatarColor } from '../utils/helpers'
-import { FiAward, FiTrendingUp, FiTrendingDown, FiMinus, FiTarget, FiZap, FiFilter, FiChevronDown, FiBookOpen, FiFileText, FiType, FiCode, FiSearch } from 'react-icons/fi'
+import { FiAward, FiTrendingUp, FiTrendingDown, FiMinus, FiTarget, FiZap, FiFilter, FiChevronDown, FiBookOpen, FiFileText, FiType, FiCode, FiSearch, FiBook } from 'react-icons/fi'
 import { CATEGORIES } from '../context/TestContext'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
@@ -36,12 +36,17 @@ const Leaderboard = () => {
   const [typingDifficulty, setTypingDifficulty] = useState('all')
   const [typingType, setTypingType] = useState('all')
 
+  // School-specific filters
+  const [schoolClass, setSchoolClass] = useState('all')
+  const [schoolSubject, setSchoolSubject] = useState('all')
+
   const modes = [
     { id: 'practice', label: 'Practice', icon: <FiBookOpen className="w-5 h-5" /> },
     { id: 'exam', label: 'Exams', icon: <FiFileText className="w-5 h-5" /> },
     { id: 'dsa', label: 'DSA', icon: <FiCode className="w-5 h-5" /> },
     { id: 'scheduled', label: 'Scheduled', icon: <span className="text-lg">📅</span> },
     { id: 'competitive', label: 'Competitive', icon: <FiTarget className="w-5 h-5" /> },
+    { id: 'school', label: 'School', icon: <FiBook className="w-5 h-5" /> },
     { id: 'typing', label: 'Typing', icon: <FiType className="w-5 h-5" /> }
   ]
 
@@ -60,7 +65,7 @@ const Leaderboard = () => {
   // Fetch leaderboard on filter changes (exact old behavior - no currentUser dependency)
   useEffect(() => {
     fetchLeaderboard()
-  }, [activeTab, selectedCategory, selectedSubcategory, mode, typingDifficulty, typingType])
+  }, [activeTab, selectedCategory, selectedSubcategory, mode, typingDifficulty, typingType, schoolClass, schoolSubject])
 
   // ====================================================================
   // EXACT OLD fetchLeaderboard - preserves original API response fields
@@ -146,6 +151,29 @@ const Leaderboard = () => {
             bestScore: entry.bestScore || entry.score || 0,
             avgScore: entry.totalQuestions > 0 ? Math.round((entry.correctAnswers / entry.totalQuestions) * 100) : 0,
             testsCompleted: 1
+          }))
+        }
+      } else if (mode === 'school') {
+        // Fetch school/college leaderboard
+        let url = `${API_URL.replace('/api', '')}/api/v2/school-exams/leaderboard`
+        const params = new URLSearchParams()
+        if (schoolClass !== 'all') params.append('classLevel', schoolClass)
+        if (schoolSubject !== 'all') params.append('subject', schoolSubject)
+        if (params.toString()) url += `?${params.toString()}`
+        
+        const response = await fetch(url, { headers })
+        const result = await response.json()
+        
+        if (result.success) {
+          const entries = result.data?.leaderboard || result.data || []
+          data = entries.map((entry) => ({
+            ...entry,
+            uid: entry.id,
+            name: entry.name || entry.displayName || 'Anonymous',
+            displayName: entry.displayName || entry.name || 'Anonymous',
+            bestScore: entry.bestScore || entry.score || 0,
+            avgScore: entry.avgScore || 0,
+            testsCompleted: entry.testsCompleted || 0
           }))
         }
       } else if (mode === 'typing') {
@@ -238,6 +266,8 @@ const Leaderboard = () => {
         return { col1: 'Score', col2: 'Solved', col3: 'Submissions' }
       case 'competitive':
         return { col1: 'Best', col2: 'Correct', col3: 'Accuracy' }
+      case 'school':
+        return { col1: 'Best', col2: 'Tests', col3: 'Avg' }
       case 'exam':
       case 'scheduled':
         return { col1: 'Best', col2: 'Exams', col3: 'Avg' }
@@ -280,6 +310,14 @@ const Leaderboard = () => {
           subtitle: user.category ? `Category: ${user.category}` : `Accuracy: ${user.avgScore || 0}%`,
           mainScore: user.bestScore || user.score || 0
         }
+      case 'school':
+        return {
+          col1: <span className={`font-bold ${(user.bestScore || 0) >= 70 ? 'text-green-400' : 'text-white'}`}>{user.bestScore || user.score || 0}%</span>,
+          col2: <span className="text-[#90adcb]">{user.testsCompleted || 0}</span>,
+          col3: <span className="text-[#90adcb] font-medium">{user.avgScore || 0}%</span>,
+          subtitle: user.classLevel ? `Class ${user.classLevel} • ${user.subject || ''}` : `Avg: ${user.avgScore || 0}%`,
+          mainScore: user.bestScore || user.score || 0
+        }
       case 'exam':
       case 'scheduled':
         return {
@@ -310,6 +348,7 @@ const Leaderboard = () => {
       case 'typing': return user.wpm || user.bestWpm || 0
       case 'dsa': return user.score || user.bestScore || 0
       case 'competitive': return user.bestScore || user.score || 0
+      case 'school': return user.bestScore || user.score || 0
       case 'exam':
       case 'scheduled': return user.bestScore || user.score || 0
       default: return user.totalScore || user.xp || user.score || 0
@@ -322,6 +361,7 @@ const Leaderboard = () => {
       case 'typing': return 'WPM'
       case 'dsa': return 'DSA Score'
       case 'competitive': return 'Best Score'
+      case 'school': return 'Best Score'
       case 'exam':
       case 'scheduled': return 'Best Score'
       default: return 'XP Points'
@@ -348,6 +388,12 @@ const Leaderboard = () => {
           { icon: <FiTrendingUp className="w-8 h-8 mx-auto mb-2 text-red-400" />, title: 'Best Score', desc: 'Highest score in competitive exams' },
           { icon: <FiTarget className="w-8 h-8 mx-auto mb-2 text-green-400" />, title: 'Correct Answers', desc: 'Questions answered correctly' },
           { icon: <FiZap className="w-8 h-8 mx-auto mb-2 text-orange-400" />, title: 'Accuracy', desc: 'Overall answer accuracy' }
+        ]
+      case 'school':
+        return [
+          { icon: <FiTrendingUp className="w-8 h-8 mx-auto mb-2 text-yellow-400" />, title: 'Best Score', desc: 'Highest school exam score' },
+          { icon: <FiTarget className="w-8 h-8 mx-auto mb-2 text-green-400" />, title: 'Tests Taken', desc: 'Total school tests completed' },
+          { icon: <FiZap className="w-8 h-8 mx-auto mb-2 text-blue-400" />, title: 'Average Score', desc: 'Average across all school tests' }
         ]
       case 'exam':
       case 'scheduled':
@@ -493,6 +539,53 @@ const Leaderboard = () => {
                     }`}
                   >
                     {t.charAt(0).toUpperCase() + t.slice(1)}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* School-specific Filters */}
+        {mode === 'school' && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="w-full flex flex-wrap justify-center gap-4 mb-8"
+          >
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-[#90adcb]">Class:</span>
+              <div className="flex gap-1 flex-wrap">
+                {['all', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'].map((c) => (
+                  <button
+                    key={c}
+                    onClick={() => { setSchoolClass(c); setSchoolSubject('all') }}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                      schoolClass === c
+                        ? 'bg-[#0d7ff2] text-white shadow-lg shadow-[#0d7ff2]/20'
+                        : 'bg-[#223649] text-[#90adcb] hover:text-white hover:bg-[#314d68]'
+                    }`}
+                  >
+                    {c === 'all' ? 'All' : c}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-[#90adcb]">Subject:</span>
+              <div className="flex gap-1 flex-wrap">
+                {['all', 'Mathematics', 'Science', 'English', 'Physics', 'Chemistry', 'Computer Science', 'Hindi'].map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => setSchoolSubject(s)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                      schoolSubject === s
+                        ? 'bg-[#0d7ff2] text-white shadow-lg shadow-[#0d7ff2]/20'
+                        : 'bg-[#223649] text-[#90adcb] hover:text-white hover:bg-[#314d68]'
+                    }`}
+                  >
+                    {s === 'all' ? 'All' : s}
                   </button>
                 ))}
               </div>

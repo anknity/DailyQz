@@ -287,8 +287,28 @@ const SchoolTest = () => {
           headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
           body: JSON.stringify({ activityType: 'school' })
         })
+
+        // Save result to backend for leaderboard
+        await fetch(`${API_URL.replace('/api', '')}/api/v2/school-exams/submit-result`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            classLevel: testConfig.class || testConfig.classLevel,
+            stream: testConfig.stream || null,
+            subject: testConfig.subject || 'General',
+            score,
+            totalQuestions: questions.length,
+            correctAnswers: correct,
+            wrongAnswers: incorrect,
+            unanswered,
+            timeTaken,
+            testTitle,
+            displayName: currentUser.displayName || 'Anonymous',
+            photoURL: currentUser.photoURL || null
+          })
+        })
       }
-    } catch (e) { /* streak update is non-blocking */ }
+    } catch (e) { /* streak/result save is non-blocking */ }
     
     // Navigate to result page
     navigate('/school-result', { state: { result } })
