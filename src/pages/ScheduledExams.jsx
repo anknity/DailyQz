@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { SCHEDULED_EXAM_CONFIG, EXAM_STATUS } from '../config/categories';
-import Navbar from '../components/Navbar';
+import Layout from '../components/Layout';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { FiCalendar, FiClock, FiFileText, FiUsers, FiArrowRight, FiChevronLeft, FiChevronRight, FiCheckCircle, FiTrendingUp, FiZap, FiHome } from 'react-icons/fi';
 
@@ -140,9 +140,7 @@ const ScheduledExams = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a1628]">
-      <Navbar />
-
+    <Layout>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
@@ -432,7 +430,7 @@ const ScheduledExams = () => {
           </div>
         </motion.div>
       </div>
-    </div>
+    </Layout>
   );
 };
 

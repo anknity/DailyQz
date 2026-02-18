@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Navbar } from '../components'
+import Layout from '../components/Layout'
 import { useAuth } from '../context/AuthContext'
 import { 
   FiArrowLeft, 
@@ -255,9 +255,7 @@ const Schools = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-dark-300">
-      <Navbar />
-      
+    <Layout>
       <motion.main
         initial="hidden"
         animate="visible"
@@ -732,7 +730,7 @@ const Schools = () => {
           )}
         </AnimatePresence>
       </motion.main>
-    </div>
+    </Layout>
   )
 }
 

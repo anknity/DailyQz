@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useMemo, memo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Navbar } from '../components'
+import Layout from '../components/Layout'
 import { useAuth } from '../context/AuthContext'
 import {
   FiType, FiClock, FiTarget, FiTrendingUp, FiZap, FiRefreshCw,
@@ -633,8 +633,7 @@ const TypingTest = () => {
      ══════════════════════════════════════════════ */
 
   return (
-    <div className="min-h-screen bg-[#101922]">
-      <Navbar />
+    <Layout>
 
       {/* Caret blink keyframe + GPU acceleration */}
       <style>{`
@@ -1102,7 +1101,7 @@ const TypingTest = () => {
           </motion.div>
         )}
       </main>
-    </div>
+    </Layout>
   )
 }
 
