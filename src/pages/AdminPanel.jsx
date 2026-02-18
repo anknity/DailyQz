@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Navbar, LoadingSpinner } from '../components'
+import { Layout, LoadingSpinner } from '../components'
+import {
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine
+} from 'recharts'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { 
@@ -55,6 +58,19 @@ const AdminPanel = () => {
   const [stats, setStats] = useState(null)
   const [questions, setQuestions] = useState([])
   const [categories, setCategories] = useState([
+    {
+      id: 'daily-practice',
+      name: '🧠 Daily Practice',
+      subcategories: [
+        { id: 'python', name: '🐍 Python' },
+        { id: 'java', name: '☕ Java' },
+        { id: 'sql', name: '🗄️ SQL' },
+        { id: 'javascript', name: '⚡ JavaScript' },
+        { id: 'react', name: '⚛️ React' },
+        { id: 'dsa', name: '🧩 Data Structures & Algorithms' },
+        { id: 'web-development', name: '🌐 Web Development' }
+      ]
+    },
     {
       id: 'web-development',
       name: 'Web Development',
@@ -124,10 +140,10 @@ const AdminPanel = () => {
   const [generating, setGenerating] = useState(false)
   const [generatedQuestions, setGeneratedQuestions] = useState([])
   const [genConfig, setGenConfig] = useState({
-    category: 'web-development',
-    subcategory: 'javascript',
+    category: 'daily-practice',
+    subcategory: 'python',
     difficulty: 'medium',
-    count: 5
+    count: 10
   })
   
   // Upload state
@@ -1644,9 +1660,7 @@ const AdminPanel = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a1628]">
-      <Navbar />
-      
+    <Layout>
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <motion.div
@@ -1782,71 +1796,46 @@ const AdminPanel = () => {
                         </div>
                       </div>
 
-                      {/* SVG Area Chart */}
-                      <div className="relative h-52">
+                      {/* Recharts NumberDotLineChart */}
+                      <div className="h-52">
                         {analytics?.dailyActivity && analytics.dailyActivity.length > 0 ? (() => {
-                          const data = analytics.dailyActivity
-                          const maxVal = Math.max(...data.map(d => Math.max(d.activeUsers, d.exams + d.tests)), 1)
-                          const w = 100
-                          const h = 100
-                          const points = data.map((d, i) => ({
-                            x: (i / Math.max(data.length - 1, 1)) * w,
-                            yUsers: h - (d.activeUsers / maxVal) * h * 0.85,
-                            yExams: h - ((d.exams + d.tests) / maxVal) * h * 0.85,
-                            label: d.dayLabel,
+                          const chartData = analytics.dailyActivity.map(d => ({
+                            name: d.dayLabel,
                             users: d.activeUsers,
-                            exams: d.exams + d.tests,
-                            date: d.date
+                            exams: (d.exams || 0) + (d.tests || 0)
                           }))
-                          const linePath = (key) => points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p[key]}`).join(' ')
-                          const areaPath = (key) => `${linePath(key)} L ${points[points.length - 1].x} ${h} L ${points[0].x} ${h} Z`
-
+                          const CustomDot = (props) => {
+                            const { cx, cy, value } = props
+                            if (value === undefined || value === null) return null
+                            return (
+                              <g>
+                                <circle cx={cx} cy={cy} r={14} fill="#111d2e" stroke="#06b6d4" strokeWidth={1.5} />
+                                <text x={cx} y={cy + 4} textAnchor="middle" fill="#06b6d4" fontSize={9} fontWeight="bold">{value}</text>
+                              </g>
+                            )
+                          }
                           return (
-                            <svg viewBox={`0 0 ${w} ${h + 12}`} className="w-full h-full" preserveAspectRatio="none">
-                              <defs>
-                                <linearGradient id="areaGradUsers" x1="0" y1="0" x2="0" y2="1">
-                                  <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.35" />
-                                  <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.02" />
-                                </linearGradient>
-                                <linearGradient id="areaGradExams" x1="0" y1="0" x2="0" y2="1">
-                                  <stop offset="0%" stopColor="#2563eb" stopOpacity="0.25" />
-                                  <stop offset="100%" stopColor="#2563eb" stopOpacity="0.02" />
-                                </linearGradient>
-                              </defs>
-                              {/* Grid lines */}
-                              {[0.25, 0.5, 0.75].map(frac => (
-                                <line key={frac} x1="0" y1={h * frac} x2={w} y2={h * frac} stroke="#1e3a5f" strokeWidth="0.3" strokeDasharray="2,2" />
-                              ))}
-                              {/* Area fills */}
-                              <path d={areaPath('yUsers')} fill="url(#areaGradUsers)" />
-                              <path d={areaPath('yExams')} fill="url(#areaGradExams)" />
-                              {/* Lines */}
-                              <path d={linePath('yUsers')} fill="none" stroke="#06b6d4" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-                              <path d={linePath('yExams')} fill="none" stroke="#2563eb" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-                              {/* Data points */}
-                              {points.map((p, i) => (
-                                <g key={i}>
-                                  <circle cx={p.x} cy={p.yUsers} r="1.5" fill="#06b6d4" />
-                                  {/* Tooltip label on hover via title */}
-                                  <title>{p.label}: {p.users} users, {p.exams} exams</title>
-                                  {/* Show peak label */}
-                                  {p.users === Math.max(...points.map(pp => pp.users)) && p.users > 0 && (
-                                    <g>
-                                      <rect x={p.x - 10} y={p.yUsers - 12} width="20" height="9" rx="2" fill="#111d2e" stroke="#06b6d4" strokeWidth="0.3" />
-                                      <text x={p.x} y={p.yUsers - 5.5} textAnchor="middle" fill="#06b6d4" fontSize="4" fontWeight="bold">
-                                        {p.users.toLocaleString()}
-                                      </text>
-                                    </g>
-                                  )}
-                                </g>
-                              ))}
-                              {/* X-axis labels */}
-                              {points.filter((_, i) => data.length <= 7 || i % Math.ceil(data.length / 7) === 0).map((p) => (
-                                <text key={p.x} x={p.x} y={h + 8} textAnchor="middle" fill="#6b7280" fontSize="3.5">
-                                  {p.label}
-                                </text>
-                              ))}
-                            </svg>
+                            <ResponsiveContainer width="100%" height="100%">
+                              <LineChart data={chartData} margin={{ top: 16, right: 16, left: -20, bottom: 0 }}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#1e3a5f" vertical={false} />
+                                <XAxis dataKey="name" tick={{ fill: '#6b7280', fontSize: 11 }} axisLine={false} tickLine={false} />
+                                <YAxis tick={{ fill: '#6b7280', fontSize: 11 }} axisLine={false} tickLine={false} />
+                                <Tooltip
+                                  contentStyle={{ background: '#0a1628', border: '1px solid #1e3a5f', borderRadius: 8, color: '#e2e8f0', fontSize: 12 }}
+                                  cursor={{ stroke: '#1e3a5f', strokeWidth: 1 }}
+                                />
+                                <Line
+                                  type="monotone"
+                                  dataKey="users"
+                                  name="Active Users"
+                                  stroke="#06b6d4"
+                                  strokeWidth={2}
+                                  strokeDasharray="5 3"
+                                  dot={<CustomDot />}
+                                  activeDot={{ r: 6, fill: '#06b6d4' }}
+                                />
+                              </LineChart>
+                            </ResponsiveContainer>
                           )
                         })() : (
                           <div className="flex items-center justify-center h-full text-gray-500 text-sm">
@@ -1985,42 +1974,69 @@ const AdminPanel = () => {
                         <option value="30">Last 30 Days</option>
                       </select>
                     </div>
-                    {/* Bar Chart */}
-                    <div className="flex items-end gap-1 h-48">
-                      {analytics?.engagementTrends && analytics.engagementTrends.length > 0 ? (
-                        analytics.engagementTrends.map((d, i) => {
-                          const maxEngagement = Math.max(...analytics.engagementTrends.map(t => Math.max(t.examCompletions, t.activeSessions)), 1)
-                          const completionH = (d.examCompletions / maxEngagement) * 100
-                          const sessionH = (d.activeSessions / maxEngagement) * 100
+                    {/* Recharts DottedMultiLineChart */}
+                    <div className="h-52">
+                      {analytics?.engagementTrends && analytics.engagementTrends.length > 0 ? (() => {
+                        const chartData = analytics.engagementTrends.map(d => ({
+                          name: d.label,
+                          completions: d.examCompletions,
+                          sessions: d.activeSessions
+                        }))
+                        const DotWithValue = (color) => (props) => {
+                          const { cx, cy, value } = props
+                          if (value === undefined || value === null) return null
                           return (
-                            <div key={i} className="flex-1 flex flex-col items-center gap-0.5 group relative" title={`${d.label}: ${d.examCompletions} completions, ${d.activeSessions} sessions`}>
-                              <div className="w-full flex items-end gap-[2px] h-40">
-                                <div
-                                  className="flex-1 bg-blue-500 rounded-t-sm transition-all group-hover:bg-blue-400"
-                                  style={{ height: `${Math.max(completionH, 2)}%` }}
-                                />
-                                <div
-                                  className="flex-1 bg-cyan-500/60 rounded-t-sm transition-all group-hover:bg-cyan-400/60"
-                                  style={{ height: `${Math.max(sessionH, 2)}%` }}
-                                />
-                              </div>
-                              <span className="text-[9px] text-gray-500 mt-1">{d.label}</span>
-                            </div>
+                            <g>
+                              <circle cx={cx} cy={cy} r={13} fill="#111d2e" stroke={color} strokeWidth={1.5} />
+                              <text x={cx} y={cy + 4} textAnchor="middle" fill={color} fontSize={8} fontWeight="bold">{value}</text>
+                            </g>
                           )
-                        })
-                      ) : (
-                        <div className="flex-1 flex items-center justify-center text-gray-500 text-sm">
+                        }
+                        return (
+                          <ResponsiveContainer width="100%" height="100%">
+                            <LineChart data={chartData} margin={{ top: 16, right: 16, left: -20, bottom: 0 }}>
+                              <CartesianGrid strokeDasharray="3 3" stroke="#1e3a5f" vertical={false} />
+                              <XAxis dataKey="name" tick={{ fill: '#6b7280', fontSize: 11 }} axisLine={false} tickLine={false} />
+                              <YAxis tick={{ fill: '#6b7280', fontSize: 11 }} axisLine={false} tickLine={false} />
+                              <Tooltip
+                                contentStyle={{ background: '#0a1628', border: '1px solid #1e3a5f', borderRadius: 8, color: '#e2e8f0', fontSize: 12 }}
+                                cursor={{ stroke: '#1e3a5f', strokeWidth: 1 }}
+                              />
+                              <Line
+                                type="monotone"
+                                dataKey="completions"
+                                name="Exam Completions"
+                                stroke="#22c55e"
+                                strokeWidth={2}
+                                strokeDasharray="5 3"
+                                dot={DotWithValue('#22c55e')}
+                                activeDot={{ r: 6, fill: '#22c55e' }}
+                              />
+                              <Line
+                                type="monotone"
+                                dataKey="sessions"
+                                name="Active Sessions"
+                                stroke="#ef4444"
+                                strokeWidth={2}
+                                dot={DotWithValue('#ef4444')}
+                                activeDot={{ r: 6, fill: '#ef4444' }}
+                              />
+                            </LineChart>
+                          </ResponsiveContainer>
+                        )
+                      })() : (
+                        <div className="flex items-center justify-center h-full text-gray-500 text-sm">
                           No engagement data
                         </div>
                       )}
                     </div>
                     <div className="flex items-center justify-center gap-6 mt-3">
-                      <div className="flex items-center gap-1.5">
-                        <div className="w-3 h-3 rounded-sm bg-blue-500" />
+                      <div className="flex items-center gap-2">
+                        <svg width="24" height="8"><line x1="0" y1="4" x2="24" y2="4" stroke="#22c55e" strokeWidth="2" strokeDasharray="5 3" /></svg>
                         <span className="text-xs text-gray-400">Exam Completions</span>
                       </div>
-                      <div className="flex items-center gap-1.5">
-                        <div className="w-3 h-3 rounded-sm bg-cyan-500/60" />
+                      <div className="flex items-center gap-2">
+                        <svg width="24" height="8"><line x1="0" y1="4" x2="24" y2="4" stroke="#ef4444" strokeWidth="2" /></svg>
                         <span className="text-xs text-gray-400">Active Sessions</span>
                       </div>
                     </div>
@@ -3213,139 +3229,185 @@ Explanation: 25% of 800 = (25/100) × 800 = 200`}
               exit={{ opacity: 0 }}
               className="space-y-6"
             >
-              <div className="bg-white dark:bg-dark-200 rounded-xl p-6 shadow-lg">
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                  <FiCpu className="w-5 h-5 text-primary-500" />
-                  AI Question Generator (Daily Practice)
-                </h2>
-                <p className="text-gray-600 dark:text-gray-400 mb-6">
-                  Use Gemini AI to generate new MCQ questions for daily practice.
-                </p>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+              {/* Header Card */}
+              <div className="bg-[#111d2e] rounded-2xl p-6 border border-gray-700/30">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="p-2.5 rounded-xl bg-cyan-500/15">
+                    <FiCpu className="w-6 h-6 text-cyan-400" />
+                  </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Category
-                    </label>
+                    <h2 className="text-xl font-bold text-white">AI Question Generator</h2>
+                    <p className="text-sm text-gray-400">Generate MCQ questions for Daily Practice using Gemini AI</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Config Card */}
+              <div className="bg-[#111d2e] rounded-2xl p-6 border border-gray-700/30">
+                <h3 className="text-base font-semibold text-white mb-5 flex items-center gap-2">
+                  <FiSettings className="w-4 h-4 text-gray-400" />
+                  Generation Settings
+                </h3>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
+                  {/* Category */}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Category</label>
                     <select
                       value={genConfig.category}
                       onChange={(e) => setGenConfig({ ...genConfig, category: e.target.value, subcategory: '' })}
-                      className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-dark-100 bg-white dark:bg-dark-100 text-gray-900 dark:text-white"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#0a1628] text-white border border-gray-700/50 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 transition-colors"
                     >
                       {categories.map(cat => (
                         <option key={cat.id} value={cat.id}>{cat.name}</option>
                       ))}
                     </select>
                   </div>
-                  
+
+                  {/* Subcategory */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Subcategory
-                    </label>
+                    <label className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Topic</label>
                     <select
                       value={genConfig.subcategory}
                       onChange={(e) => setGenConfig({ ...genConfig, subcategory: e.target.value })}
-                      className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-dark-100 bg-white dark:bg-dark-100 text-gray-900 dark:text-white"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#0a1628] text-white border border-gray-700/50 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 transition-colors"
                     >
-                      <option value="">Select subcategory</option>
+                      <option value="">All Topics</option>
                       {getCategorySubcategories(genConfig.category).map(sub => (
                         <option key={sub.id} value={sub.id}>{sub.name}</option>
                       ))}
                     </select>
                   </div>
-                  
+
+                  {/* Difficulty */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Difficulty
-                    </label>
+                    <label className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Difficulty</label>
                     <select
                       value={genConfig.difficulty}
                       onChange={(e) => setGenConfig({ ...genConfig, difficulty: e.target.value })}
-                      className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-dark-100 bg-white dark:bg-dark-100 text-gray-900 dark:text-white"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#0a1628] text-white border border-gray-700/50 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 transition-colors"
                     >
-                      <option value="easy">Easy</option>
-                      <option value="medium">Medium</option>
-                      <option value="hard">Hard</option>
+                      <option value="easy">🟢 Easy</option>
+                      <option value="medium">🟡 Medium</option>
+                      <option value="hard">🔴 Hard</option>
                     </select>
                   </div>
-                  
+
+                  {/* Count */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Count
-                    </label>
+                    <label className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Count</label>
                     <select
                       value={genConfig.count}
                       onChange={(e) => setGenConfig({ ...genConfig, count: parseInt(e.target.value) })}
-                      className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-dark-100 bg-white dark:bg-dark-100 text-gray-900 dark:text-white"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#0a1628] text-white border border-gray-700/50 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 transition-colors"
                     >
                       <option value={5}>5 questions</option>
                       <option value={10}>10 questions</option>
                       <option value={15}>15 questions</option>
                       <option value={20}>20 questions</option>
+                      <option value={25}>25 questions</option>
+                      <option value={30}>30 questions</option>
                     </select>
                   </div>
                 </div>
-                
+
+                {/* Quick Topic Chips for Daily Practice */}
+                {genConfig.category === 'daily-practice' && (
+                  <div className="mb-6">
+                    <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-3">Quick Select Topic</p>
+                    <div className="flex flex-wrap gap-2">
+                      {[
+                        { id: 'python', label: '🐍 Python' },
+                        { id: 'java', label: '☕ Java' },
+                        { id: 'sql', label: '🗄️ SQL' },
+                        { id: 'javascript', label: '⚡ JavaScript' },
+                        { id: 'react', label: '⚛️ React' },
+                        { id: 'dsa', label: '🧩 DSA' },
+                        { id: 'web-development', label: '🌐 Web Dev' }
+                      ].map(topic => (
+                        <button
+                          key={topic.id}
+                          onClick={() => setGenConfig({ ...genConfig, subcategory: topic.id })}
+                          className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                            genConfig.subcategory === topic.id
+                              ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/50'
+                              : 'bg-[#0a1628] text-gray-400 border border-gray-700/50 hover:border-gray-600/50 hover:text-gray-300'
+                          }`}
+                        >
+                          {topic.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <button
                   onClick={handleGenerateQuestions}
                   disabled={generating}
-                  className="flex items-center gap-2 px-6 py-3 bg-primary-500 text-white rounded-lg font-medium hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white rounded-xl font-semibold shadow-lg shadow-cyan-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                 >
                   {generating ? (
                     <>
                       <FiRefreshCw className="w-5 h-5 animate-spin" />
-                      Generating...
+                      Generating with AI...
                     </>
                   ) : (
                     <>
-                      <FiCpu className="w-5 h-5" />
-                      Generate Questions
+                      <FiZap className="w-5 h-5" />
+                      Generate {genConfig.count} Questions
                     </>
                   )}
                 </button>
               </div>
-              
+
               {/* Generated Questions Preview */}
               {generatedQuestions.length > 0 && (
-                <div className="bg-white dark:bg-dark-200 rounded-xl p-6 shadow-lg">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-                      Generated Questions ({generatedQuestions.length})
+                <div className="bg-[#111d2e] rounded-2xl p-6 border border-gray-700/30">
+                  <div className="flex items-center justify-between mb-5">
+                    <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                      <FiCheckCircle className="w-5 h-5 text-emerald-400" />
+                      Generated Questions
+                      <span className="text-sm font-medium bg-emerald-500/15 text-emerald-400 px-2.5 py-0.5 rounded-full">{generatedQuestions.length}</span>
                     </h3>
                     <button
                       onClick={handleSaveGeneratedQuestions}
                       disabled={generating}
-                      className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600 disabled:opacity-50"
+                      className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-400 hover:to-green-400 text-white rounded-xl font-semibold shadow-lg shadow-emerald-500/20 disabled:opacity-50 transition-all"
                     >
                       <FiCheck className="w-4 h-4" />
-                      Save All
+                      Save All to DB
                     </button>
                   </div>
-                  
+
                   <div className="space-y-4">
                     {generatedQuestions.map((q, index) => (
-                      <div key={index} className="p-4 bg-gray-50 dark:bg-dark-100 rounded-lg">
-                        <p className="font-medium text-gray-900 dark:text-white mb-2">
-                          {index + 1}. {q.question}
+                      <div key={index} className="p-5 bg-[#0a1628] rounded-xl border border-gray-700/30">
+                        <p className="font-medium text-white mb-3">
+                          <span className="text-cyan-400 font-bold mr-2">{index + 1}.</span>
+                          {q.question}
                         </p>
                         <div className="grid grid-cols-2 gap-2 text-sm">
                           {q.options.map((opt, i) => (
                             <div
                               key={i}
-                              className={`p-2 rounded ${
+                              className={`p-2.5 rounded-lg flex items-start gap-2 ${
                                 i === q.correctAnswer
-                                  ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300'
-                                  : 'bg-gray-100 dark:bg-dark-200 text-gray-600 dark:text-gray-400'
+                                  ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+                                  : 'bg-[#111d2e] text-gray-400 border border-gray-700/30'
                               }`}
                             >
-                              {String.fromCharCode(65 + i)}. {opt}
+                              <span className={`font-bold flex-shrink-0 ${i === q.correctAnswer ? 'text-emerald-400' : 'text-gray-500'}`}>
+                                {String.fromCharCode(65 + i)}.
+                              </span>
+                              {opt}
                             </div>
                           ))}
                         </div>
                         {q.explanation && (
-                          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                            <strong>Explanation:</strong> {q.explanation}
-                          </p>
+                          <div className="mt-3 flex items-start gap-2 text-sm text-gray-400 bg-blue-500/5 border border-blue-500/15 rounded-lg p-3">
+                            <FiAlertCircle className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
+                            <span><strong className="text-blue-400">Explanation:</strong> {q.explanation}</span>
+                          </div>
                         )}
                       </div>
                     ))}
@@ -3730,7 +3792,7 @@ Explanation: 25% of 800 = (25/100) × 800 = 200`}
           )}
         </AnimatePresence>
       </main>
-    </div>
+    </Layout>
   )
 }
 

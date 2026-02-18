@@ -1,204 +1,188 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
-import { useTheme } from '../context/ThemeContext'
 import { getInitials, getAvatarColor } from '../utils/helpers'
-import { 
-  FiHome, 
-  FiAward, 
-  FiUser, 
-  FiLogOut, 
-  FiSun, 
-  FiMoon,
-  FiMenu,
-  FiX,
-  FiFileText,
-  FiSettings
-} from 'react-icons/fi'
 import { useState } from 'react'
 
-// Admin email for access control
+// Admin email
 const ADMIN_EMAIL = 'nityanand666.nk@gmail.com'
 
+const NAV_LINKS = [
+  { path: '/dashboard',   label: 'Dashboard',   icon: 'grid_view' },
+  { path: '/leaderboard', label: 'Leaderboard', icon: 'emoji_events' },
+  { path: '/courses',     label: 'Courses',     icon: 'menu_book' },
+  { path: '/suggestions', label: 'Suggestions', icon: 'lightbulb' },
+  { path: '/profile',     label: 'Profile',     icon: 'person' },
+]
+
 /**
- * Navbar Component
- * Main navigation bar with user info and theme toggle
+ * Navbar Component — Glassmorphism floating sidebar
+ * upcomingExams prop: array of upcoming exam objects (from Dashboard)
  */
-const Navbar = () => {
+const Navbar = ({ upcomingExams = [] }) => {
   const { currentUser, userProfile, logout } = useAuth()
-  const { isDark, toggleTheme } = useTheme()
   const navigate = useNavigate()
   const location = useLocation()
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
 
-  // Check if current user is admin
   const isAdmin = currentUser?.email === ADMIN_EMAIL
+  const links = isAdmin
+    ? [...NAV_LINKS, { path: '/admin', label: 'Admin', icon: 'admin_panel_settings' }]
+    : NAV_LINKS
 
   const handleLogout = async () => {
-    try {
-      await logout()
-      navigate('/login')
-    } catch (error) {
-      console.error('Logout error:', error)
-    }
+    try { await logout(); navigate('/login') } catch (e) { console.error(e) }
   }
-
-  // Base nav links for all users
-  const baseNavLinks = [
-    { path: '/dashboard', label: 'Dashboard', icon: FiHome },
-    { path: '/exam', label: 'Exam', icon: FiFileText },
-    { path: '/leaderboard', label: 'Leaderboard', icon: FiAward },
-    { path: '/profile', label: 'Profile', icon: FiUser },
-  ]
-
-  // Add Admin link only for admin users
-  const navLinks = isAdmin 
-    ? [...baseNavLinks, { path: '/admin', label: 'Admin', icon: FiSettings }]
-    : baseNavLinks
 
   const isActive = (path) => location.pathname === path
 
-  return (
-    <motion.nav
-      initial={{ y: -20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      className="sticky top-0 z-50 bg-white/80 dark:bg-dark-200/80 backdrop-blur-lg border-b border-gray-200 dark:border-dark-100"
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <Link to="/dashboard" className="flex items-center gap-2">
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-2"
-            >
-              <img 
-                src="/DailiQ.png" 
-                alt="DailyQ Logo" 
-                className="h-[50px] w-auto"
-              />
-            </motion.div>
-          </Link>
+  // Countdown widget for next upcoming exam
+  const nextExam = upcomingExams[0]
+  let days = 0, hours = 0, mins = 0
+  if (nextExam) {
+    const diff = Math.max(0, new Date(nextExam.startTime) - new Date())
+    days = Math.floor(diff / (1000 * 60 * 60 * 24))
+    hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+    mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+  }
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-200 ${
-                  isActive(link.path)
-                    ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400'
-                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-dark-100'
-                }`}
-              >
-                <link.icon className="w-4 h-4" />
-                <span className="font-medium">{link.label}</span>
-              </Link>
-            ))}
+  const sidebarContent = (
+    <>
+      {/* Logo */}
+      <div className="p-6 pb-4 flex-shrink-0">
+        <Link to="/dashboard" className="flex items-center gap-3" onClick={() => setMobileOpen(false)}>
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-orange-500 flex items-center justify-center shadow-lg shadow-purple-500/30 flex-shrink-0">
+            <span className="material-symbols-outlined text-white text-2xl">school</span>
           </div>
-
-          {/* Right side */}
-          <div className="flex items-center gap-3">
-            {/* Streak badge */}
-            {userProfile?.streak > 0 && (
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                className="hidden sm:flex items-center gap-1 px-3 py-1.5 bg-orange-100 dark:bg-orange-900/30 rounded-full"
-              >
-                <span className="fire-animation">🔥</span>
-                <span className="text-sm font-semibold text-orange-600 dark:text-orange-400">
-                  {userProfile.streak}
-                </span>
-              </motion.div>
-            )}
-
-            {/* User avatar */}
-            <div className="hidden sm:flex items-center gap-3">
-              <div className="flex items-center gap-2">
-                {currentUser?.photoURL ? (
-                  <img
-                    src={currentUser.photoURL}
-                    alt="Profile"
-                    className="w-9 h-9 rounded-full object-cover"
-                  />
-                ) : (
-                  <div
-                    className={`w-9 h-9 rounded-full flex items-center justify-center text-white font-semibold text-sm ${getAvatarColor(
-                      userProfile?.name
-                    )}`}
-                  >
-                    {getInitials(userProfile?.name)}
-                  </div>
-                )}
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  {userProfile?.name?.split(' ')[0] || 'User'}
-                </span>
-              </div>
-              
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleLogout}
-                className="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-red-500 transition-colors"
-              >
-                <FiLogOut className="w-5 h-5" />
-              </motion.button>
-            </div>
-
-            {/* Mobile menu button */}
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg bg-gray-100 dark:bg-dark-100 text-gray-600 dark:text-gray-400"
-            >
-              {isMobileMenuOpen ? (
-                <FiX className="w-5 h-5" />
-              ) : (
-                <FiMenu className="w-5 h-5" />
-              )}
-            </motion.button>
+          <div className="flex flex-col">
+            <h1 className="text-white text-xl font-bold tracking-tight">DailyQ</h1>
+            <p className="text-slate-400 text-[10px] font-medium tracking-widest uppercase">Learning Platform</p>
           </div>
-        </div>
-
-        {/* Mobile menu */}
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden py-4 border-t border-gray-200 dark:border-dark-100"
-          >
-            <div className="flex flex-col gap-2">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={`px-4 py-3 rounded-lg flex items-center gap-3 transition-all duration-200 ${
-                    isActive(link.path)
-                      ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400'
-                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-dark-100'
-                  }`}
-                >
-                  <link.icon className="w-5 h-5" />
-                  <span className="font-medium">{link.label}</span>
-                </Link>
-              ))}
-              <button
-                onClick={handleLogout}
-                className="px-4 py-3 rounded-lg flex items-center gap-3 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors"
-              >
-                <FiLogOut className="w-5 h-5" />
-                <span className="font-medium">Logout</span>
-              </button>
-            </div>
-          </motion.div>
-        )}
+        </Link>
       </div>
-    </motion.nav>
+
+      {/* Nav links */}
+      <nav className="flex-1 overflow-y-auto py-1 px-3 flex flex-col gap-0.5 dq-scrollbar">
+        {links.map((link) => (
+          <Link
+            key={link.path + link.label}
+            to={link.path}
+            onClick={() => setMobileOpen(false)}
+            className={`flex items-center gap-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group
+              ${isActive(link.path)
+                ? 'bg-gradient-to-r from-purple-500/20 to-transparent text-white border-l-[3px] border-purple-500 pl-3 pr-4 shadow-sm'
+                : 'text-slate-400 hover:text-white hover:bg-white/5 border-l-[3px] border-transparent pl-3 pr-4'
+              }`}
+          >
+            <span className={`material-symbols-outlined text-[20px] flex-shrink-0 transition-colors
+              ${isActive(link.path) ? 'text-purple-400' : 'text-slate-500 group-hover:text-slate-300'}`}>
+              {link.icon}
+            </span>
+            <span>{link.label}</span>
+          </Link>
+        ))}
+
+        {/* Upcoming Exam Countdown Widget */}
+        {nextExam && (
+          <div className="mt-4 mx-1 p-4 rounded-xl bg-gradient-to-b from-purple-600/80 to-purple-900 text-center relative overflow-hidden">
+            <div className="absolute top-0 right-0 -mr-4 -mt-4 w-20 h-20 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+            <h3 className="text-white font-bold text-xs mb-3 relative z-10">Exam Starts In</h3>
+            <div className="bg-white/10 rounded-lg p-2 flex justify-center gap-1 mb-3 backdrop-blur-sm relative z-10">
+              {[{ v: String(days).padStart(2,'0'), l: 'Days' }, { v: String(hours).padStart(2,'0'), l: 'Hours' }, { v: String(mins).padStart(2,'0'), l: 'Mins' }].map((item, i) => (
+                <div key={i} className="flex items-center gap-1">
+                  {i > 0 && <span className="text-white font-bold text-sm mb-3">:</span>}
+                  <div className="flex flex-col items-center">
+                    <div className="bg-purple-900/50 rounded p-1 w-8 h-8 flex items-center justify-center border border-white/10">
+                      <span className="text-white font-bold text-sm">{item.v}</span>
+                    </div>
+                    <span className="text-[9px] text-purple-200 mt-1">{item.l}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <span className="relative z-10 text-3xl">📚</span>
+          </div>
+        )}
+      </nav>
+
+      {/* User profile footer */}
+      <div className="p-3 mx-1 mb-2 flex-shrink-0">
+        <div className="dq-glass-card rounded-2xl p-3 flex items-center justify-between group hover:bg-white/5 transition-colors">
+          <Link to="/profile" className="flex items-center gap-3 flex-1 min-w-0" onClick={() => setMobileOpen(false)}>
+            <div className="relative flex-shrink-0">
+              {currentUser?.photoURL ? (
+                <img src={currentUser.photoURL} alt="Avatar" className="w-10 h-10 rounded-full object-cover ring-2 ring-white/10" />
+              ) : (
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm ring-2 ring-white/10 ${getAvatarColor(userProfile?.name)}`}>
+                  {getInitials(userProfile?.name)}
+                </div>
+              )}
+              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-[#1e293b] rounded-full" />
+            </div>
+            <div className="flex flex-col items-start min-w-0">
+              <span className="text-sm font-bold text-white truncate">{userProfile?.name?.split(' ')[0] || 'User'}</span>
+              <span className="text-[10px] text-purple-400 uppercase tracking-wider font-bold">
+                {userProfile?.role === 'admin' ? 'Admin' : 'Pro'}
+              </span>
+            </div>
+          </Link>
+          <button
+            onClick={handleLogout}
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-colors flex-shrink-0"
+            title="Logout"
+          >
+            <span className="material-symbols-outlined text-[20px]">logout</span>
+          </button>
+        </div>
+      </div>
+    </>
+  )
+
+  return (
+    <>
+      {/* ── Desktop Floating Sidebar ── */}
+      <aside className="hidden lg:flex flex-col w-[280px] dq-glass-panel fixed left-4 top-4 bottom-4 z-50 rounded-3xl overflow-hidden">
+        {sidebarContent}
+      </aside>
+
+      {/* ── Mobile Top Bar ── */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-3 dq-glass-panel">
+        <Link to="/dashboard" className="flex items-center gap-2">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-500 to-orange-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
+            <span className="material-symbols-outlined text-white text-lg">school</span>
+          </div>
+          <span className="text-white font-bold text-base tracking-tight">DailyQ</span>
+        </Link>
+        <div className="flex items-center gap-2">
+          {userProfile?.streak > 0 && (
+            <span className="flex items-center gap-1 px-2.5 py-1 bg-orange-500/20 text-orange-400 rounded-full text-xs font-bold">
+              🔥 {userProfile.streak}
+            </span>
+          )}
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="w-10 h-10 rounded-xl dq-glass-card flex items-center justify-center text-slate-300"
+          >
+            <span className="material-symbols-outlined text-[22px]">{mobileOpen ? 'close' : 'menu'}</span>
+          </button>
+        </div>
+      </div>
+
+      {/* ── Mobile Backdrop ── */}
+      {mobileOpen && (
+        <div className="lg:hidden fixed inset-0 z-40" onClick={() => setMobileOpen(false)}>
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+        </div>
+      )}
+
+      {/* ── Mobile Drawer ── */}
+      <aside
+        className={`lg:hidden fixed top-0 left-0 bottom-0 z-50 w-[280px] dq-glass-panel flex flex-col transition-transform duration-300 ease-in-out ${
+          mobileOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
+        {sidebarContent}
+      </aside>
+    </>
   )
 }
 

@@ -1,116 +1,30 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import { Navbar, StatCard } from '../components'
+import { Layout } from '../components'
 import { useAuth } from '../context/AuthContext'
-import { getStreakMessage } from '../utils/helpers'
-import { 
-  FiAward, 
-  FiTarget, 
-  FiTrendingUp, 
-  FiZap,
-  FiBookOpen,
-  FiClock,
-  FiPlay,
-  FiChevronRight,
-  FiCode,
-  FiType,
-  FiCalendar,
-  FiHome,
-  FiCpu
-} from 'react-icons/fi'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
 
-// Test Categories Configuration
-const TEST_CATEGORIES = [
-  {
-    id: 'daily-practice',
-    name: 'Practice',
-    subtitle: 'Chapter-wise mock tests',
-    icon: FiBookOpen,
-    iconColor: 'text-blue-400',
-    accentColor: 'from-blue-600/20 to-blue-800/10',
-    borderColor: 'border-blue-500/20',
-    glowColor: 'hover:shadow-blue-500/10',
-    route: '/daily-practice',
-    subcategories: ['Web Dev', 'Data Science', 'Networking', 'GK', 'Sports', 'Aptitude', 'Reasoning', 'NEET']
-  },
-  {
-    id: 'scheduled-exams',
-    name: 'Scheduled Exams',
-    subtitle: 'Live & upcoming tests',
-    icon: FiCalendar,
-    iconColor: 'text-emerald-400',
-    accentColor: 'from-emerald-600/20 to-emerald-800/10',
-    borderColor: 'border-emerald-500/20',
-    glowColor: 'hover:shadow-emerald-500/10',
-    route: '/exams',
-    badge: 'Live',
-    badgeColor: 'bg-emerald-500/20 text-emerald-400',
-    meta: { label: 'Upcoming exams', value: 'View all' },
-    subcategories: ['Live', 'Upcoming', 'Completed']
-  },
-  {
-    id: 'schools',
-    name: 'Schools & Colleges',
-    subtitle: 'Class 1-12 Exams',
-    icon: FiHome,
-    iconColor: 'text-teal-400',
-    accentColor: 'from-teal-600/20 to-teal-800/10',
-    borderColor: 'border-teal-500/20',
-    glowColor: 'hover:shadow-teal-500/10',
-    route: '/schools',
-    badge: 'New',
-    badgeColor: 'bg-teal-500/20 text-teal-400',
-    subcategories: ['Class 1-5', 'Class 6-8', 'Class 9-10', 'Class 11-12', 'JEE', 'NEET']
-  },
-  {
-    id: 'dsa-coding',
-    name: 'DSA',
-    subtitle: 'Data Structures & Algo',
-    icon: FiCode,
-    iconColor: 'text-violet-400',
-    accentColor: 'from-violet-600/20 to-violet-800/10',
-    borderColor: 'border-violet-500/20',
-    glowColor: 'hover:shadow-violet-500/10',
-    route: '/dsa',
-    progress: { label: 'Solved', value: '142/500', showBar: false },
-    subcategories: ['Arrays', 'Strings', 'Trees', 'Graphs', 'DP']
-  },
-  {
-    id: 'competitive-exams',
-    name: 'Competitive Exams',
-    subtitle: 'Company & Govt Exams',
-    icon: FiTarget,
-    iconColor: 'text-orange-400',
-    accentColor: 'from-orange-600/20 to-orange-800/10',
-    borderColor: 'border-orange-500/20',
-    glowColor: 'hover:shadow-orange-500/10',
-    route: '/competitive-exams',
-    badge: 'New',
-    badgeColor: 'bg-orange-500/20 text-orange-400',
-    subcategories: ['TCS', 'Infosys', 'SSC', 'Banking', 'NIMCET', 'Bihar Police']
-  },
-  {
-    id: 'typing-test',
-    name: 'Typing Speed',
-    subtitle: 'Test your WPM now',
-    icon: FiType,
-    iconColor: 'text-cyan-400',
-    accentColor: 'from-cyan-600/30 to-cyan-800/20',
-    borderColor: 'border-cyan-500/30',
-    glowColor: 'hover:shadow-cyan-500/10',
-    highlighted: true,
-    route: '/typing-test',
-    stats: { best: { label: 'BEST', value: '72', unit: 'WPM' }, avg: { label: 'AVG', value: '65', unit: 'WPM' } },
-    subcategories: ['Text', 'Code', 'JavaScript', 'Python']
-  }
+// Exam category definitions — icons use Material Symbols names
+const EXAM_CATEGORIES = [
+  { id: 'daily-practice', name: 'Practice', subtitle: 'Test your knowledge', icon: 'quiz', iconColor: 'text-blue-400', bgColor: 'bg-blue-500/10 group-hover:bg-blue-500/20', route: '/daily-practice' },
+  { id: 'scheduled-exams', name: 'Scheduled Exams', subtitle: 'Upcoming events', icon: 'event_note', iconColor: 'text-purple-400', bgColor: 'bg-purple-500/10 group-hover:bg-purple-500/20', route: '/exams', badge: 'Live', badgeClass: 'bg-green-500/20 text-green-400' },
+  { id: 'schools', name: 'Schools & Colleges', subtitle: 'Academic exams', icon: 'school', iconColor: 'text-green-400', bgColor: 'bg-green-500/10 group-hover:bg-green-500/20', route: '/schools' },
+  { id: 'dsa-coding', name: 'DSA', subtitle: 'Data structures', icon: 'code', iconColor: 'text-orange-400', bgColor: 'bg-orange-500/10 group-hover:bg-orange-500/20', route: '/dsa' },
+  { id: 'competitive-exams', name: 'Competitive', subtitle: 'Contests & more', icon: 'psychology', iconColor: 'text-pink-400', bgColor: 'bg-pink-500/10 group-hover:bg-pink-500/20', route: '/competitive-exams', badge: 'New', badgeClass: 'bg-pink-500/20 text-pink-400' },
+  { id: 'typing-test', name: 'Typing Speed', subtitle: 'Improve wpm', icon: 'keyboard', iconColor: 'text-cyan-400', bgColor: 'bg-cyan-500/10 group-hover:bg-cyan-500/20', route: '/typing-test' },
+]
+
+// Course cards for "Continue Learning" section — links to our internal courses page
+const FEATURED_COURSES = [
+  { title: 'Python for Beginners', tag: 'Python', duration: '8h 20m', lessons: 32, progress: 45, progressColor: 'from-purple-500 to-purple-400', tagColor: 'bg-black/40', thumb: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=600&q=80', route: '/courses?q=python' },
+  { title: 'SQL Mastery', tag: 'SQL', duration: '6h 15m', lessons: 24, progress: 10, progressColor: 'from-orange-400 to-yellow-400', tagColor: 'bg-black/40', thumb: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&q=80', route: '/courses?q=sql' },
+  { title: 'Web Dev Bootcamp', tag: 'Web Dev', duration: '22h 30m', lessons: 48, progress: 80, progressColor: 'from-green-400 to-emerald-400', tagColor: 'bg-black/40', thumb: 'https://images.unsplash.com/photo-1547658719-da2b51169166?w=600&q=80', route: '/courses?q=web' },
 ]
 
 /**
- * Dashboard Page
- * Main landing page after login showing stats and test selection
+ * Dashboard Page — Glassmorphism redesign
+ * All original functionality preserved: live/upcoming exams, stats, categories
  */
 const Dashboard = () => {
   const { userProfile, currentUser, refreshUserProfile } = useAuth()
@@ -118,14 +32,10 @@ const Dashboard = () => {
   const [liveExams, setLiveExams] = useState([])
   const [upcomingExams, setUpcomingExams] = useState([])
   const [examsLoading, setExamsLoading] = useState(true)
+  const [searchQuery, setSearchQuery] = useState('')
 
-  // Refresh user profile only if not already loaded
   useEffect(() => {
-    const loadProfile = async () => {
-      if (!userProfile) {
-        await refreshUserProfile()
-      }
-    }
+    const loadProfile = async () => { if (!userProfile) await refreshUserProfile() }
     loadProfile()
     fetchExams()
   }, [])
@@ -137,350 +47,278 @@ const Dashboard = () => {
         headers: token ? { 'Authorization': `Bearer ${token}` } : {}
       })
       const data = await response.json()
-
       if (data.success) {
         const now = new Date()
-        const live = []
-        const upcoming = []
-
+        const live = [], upcoming = []
         ;(data.data || []).forEach(exam => {
-          const start = new Date(exam.startTime)
-          const end = new Date(exam.endTime)
-
-          if (now >= start && now <= end) {
-            live.push({ ...exam, status: 'live' })
-          } else if (now < start) {
-            upcoming.push({ ...exam, status: 'upcoming' })
-          }
+          const start = new Date(exam.startTime), end = new Date(exam.endTime)
+          if (now >= start && now <= end) live.push({ ...exam, status: 'live' })
+          else if (now < start) upcoming.push({ ...exam, status: 'upcoming' })
         })
-
-        // Sort upcoming by start time
         upcoming.sort((a, b) => new Date(a.startTime) - new Date(b.startTime))
-
         setLiveExams(live)
-        setUpcomingExams(upcoming.slice(0, 3)) // Show max 3 upcoming
+        setUpcomingExams(upcoming.slice(0, 3))
       }
-    } catch (error) {
-      // Silent fail
-    } finally {
-      setExamsLoading(false)
-    }
+    } catch (e) { /* silent */ } finally { setExamsLoading(false) }
   }
 
   const getTimeUntil = (dateStr) => {
     const diff = new Date(dateStr) - new Date()
     if (diff <= 0) return 'Now'
-    const hours = Math.floor(diff / (1000 * 60 * 60))
-    const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
-    if (hours > 24) return `${Math.floor(hours / 24)}d ${hours % 24}h`
-    if (hours > 0) return `${hours}h ${mins}m`
-    return `${mins}m`
+    const h = Math.floor(diff / (1000 * 60 * 60)), m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+    if (h > 24) return `${Math.floor(h / 24)}d ${h % 24}h`
+    if (h > 0) return `${h}h ${m}m`
+    return `${m}m`
   }
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  }
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
+  const handleSearch = (e) => {
+    e.preventDefault()
+    if (searchQuery.trim()) navigate(`/courses?q=${encodeURIComponent(searchQuery.trim())}`)
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-dark-300">
-      <Navbar />
-      
-      <motion.main
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
-      >
-        {/* Welcome section */}
-        <motion.div variants={itemVariants} className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
-            Welcome back, {userProfile?.name?.split(' ')[0] || 'User'}! 👋
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">
-            {getStreakMessage(userProfile?.streak || 0)}
-          </p>
-        </motion.div>
+    <Layout upcomingExams={upcomingExams}>
+      {/* Main content */}
+      <main className="min-h-screen overflow-x-hidden">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 pt-20 lg:pt-8 flex flex-col gap-10 pb-10">
 
-        {/* Stats Grid */}
-        <motion.div variants={itemVariants} className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <StatCard
-            icon={<FiZap className="w-6 h-6" />}
-            label="Current Streak"
-            value={`${userProfile?.streak || 0} days`}
-            color="orange"
-            delay={0.1}
-          />
-          <StatCard
-            icon={<FiTarget className="w-6 h-6" />}
-            label="Tests Taken"
-            value={userProfile?.testsTaken || 0}
-            color="blue"
-            delay={0.2}
-          />
-          <StatCard
-            icon={<FiTrendingUp className="w-6 h-6" />}
-            label="Avg Score"
-            value={`${userProfile?.avgScore || 0}%`}
-            color="green"
-            delay={0.3}
-          />
-          <StatCard
-            icon={<FiAward className="w-6 h-6" />}
-            label="Total Score"
-            value={userProfile?.totalScore || 0}
-            color="purple"
-            delay={0.4}
-          />
-        </motion.div>
-
-        {/* Live & Upcoming Exams Section */}
-        {!examsLoading && (liveExams.length > 0 || upcomingExams.length > 0) && (
-          <motion.div variants={itemVariants} className="mb-8">
-            <div className="flex items-center justify-between mb-5">
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center">
-                  <FiClock className="w-4 h-4 text-purple-400" />
-                </div>
-                Live & Upcoming Exams
+          {/* ── Header ── */}
+          <header className="flex flex-col md:flex-row md:items-center justify-between gap-5">
+            <div className="flex flex-col gap-1">
+              <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
+                Welcome back, {userProfile?.name?.split(' ')[0] || 'User'}! <span className="inline-block animate-bounce">👋</span>
               </h2>
-              <Link to="/exams" className="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-primary-400 flex items-center gap-1 transition-colors">
-                View All <FiChevronRight className="w-4 h-4" />
+              <p className="text-slate-400 text-sm font-light">Your learning journey continues here.</p>
+            </div>
+            <div className="flex items-center gap-4">
+              {/* Search */}
+              <form onSubmit={handleSearch} className="relative group">
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-500 to-orange-500 rounded-full blur opacity-0 group-focus-within:opacity-30 transition duration-300 pointer-events-none" />
+                <div className="relative flex items-center">
+                  <span className="material-symbols-outlined absolute left-4 text-slate-400 group-focus-within:text-white transition-colors text-[20px]">search</span>
+                  <input
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
+                    className="pl-12 pr-5 py-3 bg-white/5 border border-white/10 rounded-full text-sm text-white w-56 sm:w-72 focus:outline-none focus:ring-1 focus:ring-purple-500/50 placeholder:text-slate-600"
+                    placeholder="Search courses..."
+                    type="text"
+                  />
+                </div>
+              </form>
+              {/* Notifications */}
+              <button className="w-12 h-12 rounded-full dq-glass-card flex items-center justify-center hover:bg-white/10 transition-all relative flex-shrink-0">
+                <span className="material-symbols-outlined text-slate-300 text-[24px]">notifications</span>
+                <span className="absolute top-3 right-3 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[#1e293b] shadow-lg shadow-red-500/50" />
+              </button>
+            </div>
+          </header>
+
+          {/* ── Stats Grid ── */}
+          <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              { label: 'Streak', value: `${userProfile?.streak || 0}`, unit: 'Days', icon: 'local_fire_department', iconBg: 'bg-orange-500/20 border-orange-500/20', iconColor: 'text-orange-400', glow: 'bg-orange-500/10 group-hover:bg-orange-500/20' },
+              { label: 'Tests',  value: `${userProfile?.testsTaken || 0}`, unit: 'Exams', icon: 'assignment_turned_in', iconBg: 'bg-blue-500/20 border-blue-500/20', iconColor: 'text-blue-400', glow: 'bg-blue-500/10 group-hover:bg-blue-500/20' },
+              { label: 'Avg Score', value: `${userProfile?.avgScore || 0}%`, unit: '', icon: 'trending_up', iconBg: 'bg-green-500/20 border-green-500/20', iconColor: 'text-green-400', glow: 'bg-green-500/10 group-hover:bg-green-500/20', badge: '+4.2%', badgeClass: 'text-green-400 bg-green-500/10' },
+              { label: 'Total XP', value: `${userProfile?.totalScore || 0}`, unit: 'Points', icon: 'military_tech', iconBg: 'bg-purple-500/20 border-purple-500/20', iconColor: 'text-purple-400', glow: 'bg-purple-500/10 group-hover:bg-purple-500/20' },
+            ].map((s, i) => (
+              <div key={i} className="dq-glass-card p-5 rounded-2xl flex flex-col gap-4 relative overflow-hidden group">
+                <div className={`absolute -right-6 -top-6 w-24 h-24 ${s.glow} rounded-full blur-2xl transition-all pointer-events-none`} />
+                <div className="flex items-center justify-between relative z-10">
+                  <span className="text-slate-400 text-xs font-medium uppercase tracking-wide">{s.label}</span>
+                  <div className={`p-2 rounded-xl border ${s.iconBg}`}>
+                    <span className={`material-symbols-outlined ${s.iconColor} text-[20px]`}>{s.icon}</span>
+                  </div>
+                </div>
+                <div className="relative z-10 flex items-baseline gap-2">
+                  <span className="text-3xl sm:text-4xl font-bold text-white tracking-tight">{s.value}</span>
+                  {s.unit && <span className="text-slate-500 text-sm">{s.unit}</span>}
+                  {s.badge && <span className={`text-xs font-bold px-1.5 py-0.5 rounded-full ml-1 ${s.badgeClass}`}>{s.badge}</span>}
+                </div>
+              </div>
+            ))}
+          </section>
+
+          {/* ── Live & Upcoming Exams ── */}
+          {!examsLoading && (liveExams.length > 0 || upcomingExams.length > 0) && (
+            <section>
+              <div className="flex items-center justify-between mb-5">
+                <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                  <span className="w-1.5 h-6 bg-orange-500 rounded-full" />
+                  Live & Upcoming Exams
+                </h3>
+                <Link to="/exams" className="text-slate-400 text-sm font-medium hover:text-white transition-colors flex items-center gap-1 group">
+                  View All <span className="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </Link>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {liveExams.map(exam => (
+                  <div
+                    key={exam.id}
+                    onClick={() => navigate(`/exam/${exam.id}/waiting-room`)}
+                    className="dq-glass-card rounded-2xl p-5 cursor-pointer border border-green-500/30 hover:border-green-500/60 hover:shadow-xl hover:shadow-green-500/10 hover:-translate-y-1 transition-all duration-300 overflow-hidden group relative"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-transparent opacity-60 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                    <div className="relative z-10">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center">
+                          <span className="material-symbols-outlined text-green-400 text-[20px]">play_circle</span>
+                        </div>
+                        <span className="px-2.5 py-1 bg-green-500/20 text-green-400 rounded-full text-xs font-semibold flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />LIVE
+                        </span>
+                      </div>
+                      <h4 className="font-bold text-white text-base mb-1">{exam.title}</h4>
+                      <div className="flex items-center gap-3 text-xs text-slate-400 mb-4">
+                        <span>{exam.questionCount} Qs</span>
+                        <span className="w-1 h-1 rounded-full bg-slate-600" />
+                        <span>{exam.durationMinutes} min</span>
+                        {exam.isProctored && <><span className="w-1 h-1 rounded-full bg-slate-600" /><span className="text-yellow-400">Proctored</span></>}
+                      </div>
+                      <button className="w-full py-2.5 bg-green-600 hover:bg-green-500 text-white rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-colors">
+                        <span className="material-symbols-outlined text-[16px]">play_arrow</span> Join Now
+                      </button>
+                    </div>
+                  </div>
+                ))}
+                {upcomingExams.map(exam => (
+                  <div
+                    key={exam.id}
+                    onClick={() => navigate(`/exam/${exam.id}/waiting-room`)}
+                    className="dq-glass-card rounded-2xl p-5 cursor-pointer border border-blue-500/20 hover:border-blue-500/50 hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1 transition-all duration-300 overflow-hidden group relative"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-60 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                    <div className="relative z-10">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
+                          <span className="material-symbols-outlined text-blue-400 text-[20px]">event</span>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-[10px] uppercase tracking-wider text-slate-500 font-medium">Starts in</p>
+                          <p className="text-base font-bold text-white">{getTimeUntil(exam.startTime)}</p>
+                        </div>
+                      </div>
+                      <h4 className="font-bold text-white text-base mb-1">{exam.title}</h4>
+                      <div className="flex items-center gap-3 text-xs text-slate-400 mb-4">
+                        <span>{exam.questionCount} Qs</span>
+                        <span className="w-1 h-1 rounded-full bg-slate-600" />
+                        <span>{exam.durationMinutes} min</span>
+                      </div>
+                      <span className="inline-block px-3 py-1 bg-blue-500/10 text-blue-400 rounded-lg text-xs font-medium uppercase">Upcoming</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* ── Exam Categories ── */}
+          <section className="bg-white/5 rounded-3xl p-6 sm:p-8 border border-white/5 shadow-lg">
+            <div className="flex items-center justify-between mb-7">
+              <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                <span className="w-1.5 h-6 bg-orange-500 rounded-full" />
+                Exam Categories
+              </h3>
+              <Link to="/daily-practice" className="text-slate-400 text-sm font-medium hover:text-white transition-colors flex items-center gap-1 group">
+                View All <span className="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
               </Link>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {/* Live Exams */}
-              {liveExams.map(exam => (
-                <motion.div
-                  key={exam.id}
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => navigate(`/exam/${exam.id}/waiting-room`)}
-                  className="relative bg-[#0f1923] dark:bg-[#0f1923] rounded-2xl p-5 cursor-pointer border border-green-500/30 hover:shadow-xl hover:shadow-green-500/10 transition-all duration-300 overflow-hidden group"
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {EXAM_CATEGORIES.map(cat => (
+                <Link key={cat.id} to={cat.route}
+                  className="flex items-center justify-between p-5 rounded-2xl dq-glass-card hover:bg-white/10 hover:scale-[1.02] hover:-translate-y-0.5 transition-all duration-200 border border-white/10 cursor-pointer group"
                 >
-                  {/* Glowing background accent */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-transparent opacity-60 group-hover:opacity-100 transition-opacity" />
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-green-500/5 rounded-full blur-2xl" />
-                  
-                  <div className="relative z-10">
-                    {/* Header with icon + badge */}
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center">
-                        <FiPlay className="w-5 h-5 text-green-400" />
+                  <div className="flex items-center gap-4">
+                    <div className={`p-3 rounded-xl transition-colors ${cat.bgColor}`}>
+                      <span className={`material-symbols-outlined ${cat.iconColor} text-[24px]`}>{cat.icon}</span>
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h4 className="text-sm font-bold text-slate-200">{cat.name}</h4>
+                        {cat.badge && <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${cat.badgeClass}`}>{cat.badge}</span>}
                       </div>
-                      <span className="px-2.5 py-1 bg-green-500/20 text-green-400 rounded-full text-xs font-semibold flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
-                        LIVE
-                      </span>
+                      <p className="text-xs text-slate-400 mt-0.5">{cat.subtitle}</p>
                     </div>
-                    
-                    {/* Title */}
-                    <h3 className="font-bold text-white text-lg mb-1">{exam.title}</h3>
-                    
-                    {/* Meta info */}
-                    <div className="flex items-center gap-3 text-sm text-gray-400 mb-4">
-                      <span className="flex items-center gap-1">{exam.questionCount} Qs</span>
-                      <span className="w-1 h-1 rounded-full bg-gray-600" />
-                      <span>{exam.durationMinutes} min</span>
-                      {exam.isProctored && (
-                        <>
-                          <span className="w-1 h-1 rounded-full bg-gray-600" />
-                          <span className="text-yellow-400">Proctored</span>
-                        </>
-                      )}
-                    </div>
-                    
-                    {/* Action button */}
-                    <button className="w-full py-2.5 bg-green-600 hover:bg-green-500 text-white rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-colors shadow-lg shadow-green-600/20">
-                      <FiPlay className="w-4 h-4" /> Join Now
-                    </button>
                   </div>
-                </motion.div>
+                  <span className="material-symbols-outlined text-slate-500 group-hover:text-slate-300 text-[16px]">arrow_forward_ios</span>
+                </Link>
               ))}
+            </div>
+          </section>
 
-              {/* Upcoming Exams */}
-              {upcomingExams.map(exam => (
-                <motion.div
-                  key={exam.id}
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => navigate(`/exam/${exam.id}/waiting-room`)}
-                  className="relative bg-[#0f1923] dark:bg-[#0f1923] rounded-2xl p-5 cursor-pointer border border-blue-500/20 hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300 overflow-hidden group"
+          {/* ── Continue Learning ── */}
+          <section>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                <span className="w-1.5 h-6 bg-purple-500 rounded-full" />
+                Continue Learning
+              </h3>
+              <Link to="/courses" className="text-slate-400 text-sm font-medium hover:text-white transition-colors flex items-center gap-1 group">
+                All Courses <span className="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {FEATURED_COURSES.map((course, i) => (
+                <Link key={i} to={course.route}
+                  className="dq-glass-card rounded-3xl overflow-hidden group hover:-translate-y-2 transition-transform duration-300 relative block"
                 >
-                  {/* Glowing background accent */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-60 group-hover:opacity-100 transition-opacity" />
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl" />
-                  
-                  <div className="relative z-10">
-                    {/* Header with icon + badge */}
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
-                        <FiCalendar className="w-5 h-5 text-blue-400" />
-                      </div>
-                      <div className="text-right">
-                        <p className="text-[10px] uppercase tracking-wider text-gray-500 font-medium">Starts in</p>
-                        <p className="text-lg font-bold text-white">{getTimeUntil(exam.startTime)}</p>
-                      </div>
-                    </div>
-                    
-                    {/* Title */}
-                    <h3 className="font-bold text-white text-lg mb-1">{exam.title}</h3>
-                    
-                    {/* Meta info */}
-                    <div className="flex items-center gap-3 text-sm text-gray-400 mb-4">
-                      <span className="flex items-center gap-1">{exam.questionCount} Qs</span>
-                      <span className="w-1 h-1 rounded-full bg-gray-600" />
-                      <span>{exam.durationMinutes} min</span>
-                      {exam.isProctored && (
-                        <>
-                          <span className="w-1 h-1 rounded-full bg-gray-600" />
-                          <span className="text-yellow-400">Proctored</span>
-                        </>
-                      )}
-                    </div>
-                    
-                    {/* Upcoming tag */}
-                    <span className="inline-block px-3 py-1 bg-blue-500/10 text-blue-400 rounded-lg text-xs font-medium">
-                      UPCOMING
+                  {/* Tag & bookmark */}
+                  <div className="absolute top-4 left-4 right-4 z-20 flex justify-between items-start">
+                    <span className={`${course.tagColor} backdrop-blur-md text-white text-[10px] font-bold px-3 py-1.5 rounded-full border border-white/10 uppercase tracking-wider`}>
+                      {course.tag}
+                    </span>
+                    <span className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/10 hover:bg-white/20 transition-colors">
+                      <span className="material-symbols-outlined text-white text-[16px]">bookmark_border</span>
                     </span>
                   </div>
-                </motion.div>
+                  {/* Thumbnail */}
+                  <div className="h-48 w-full relative overflow-hidden">
+                    <img
+                      src={course.thumb}
+                      alt={course.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/60 to-transparent" />
+                    <div className="absolute bottom-4 left-5 right-5 z-10">
+                      <h4 className="text-white font-bold text-lg leading-tight mb-1 drop-shadow-md">{course.title}</h4>
+                      <div className="flex items-center gap-3 text-xs text-slate-300">
+                        <span className="flex items-center gap-1">
+                          <span className="material-symbols-outlined text-[14px]">schedule</span> {course.duration}
+                        </span>
+                        <span className="w-1 h-1 bg-slate-500 rounded-full" />
+                        <span className="flex items-center gap-1">
+                          <span className="material-symbols-outlined text-[14px]">play_circle</span> {course.lessons} Lessons
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Progress */}
+                  <div className="p-5 flex flex-col gap-4">
+                    <div className="flex-1">
+                      <div className="flex justify-between mb-1">
+                        <span className="text-xs font-medium text-slate-400">Progress</span>
+                        <span className={`text-xs font-bold bg-gradient-to-r ${course.progressColor} bg-clip-text text-transparent`}>{course.progress}%</span>
+                      </div>
+                      <div className="h-1.5 w-full bg-slate-700/50 rounded-full overflow-hidden">
+                        <div className={`h-full bg-gradient-to-r ${course.progressColor} rounded-full`} style={{ width: `${course.progress}%` }} />
+                      </div>
+                    </div>
+                    <div className="w-full py-3 rounded-xl relative overflow-hidden group/btn cursor-pointer">
+                      <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-orange-500 opacity-90 group-hover/btn:opacity-100 transition-opacity" />
+                      <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300" />
+                      <span className="relative z-10 text-white font-bold text-sm tracking-wide flex items-center justify-center gap-2">
+                        {course.progress > 0 ? 'Continue Learning' : 'Start Now'}
+                        <span className="material-symbols-outlined text-[18px]">{course.progress > 0 ? 'arrow_forward' : 'play_arrow'}</span>
+                      </span>
+                    </div>
+                  </div>
+                </Link>
               ))}
             </div>
-          </motion.div>
-        )}
+          </section>
 
-        {/* Exam Categories Grid */}
-        <motion.div variants={itemVariants} className="mb-8">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-5 flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-primary-500/20 flex items-center justify-center">
-              <FiCpu className="w-4 h-4 text-primary-400" />
-            </div>
-            Exam Categories
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {TEST_CATEGORIES.map((category, index) => {
-              const IconComponent = category.icon
-              return (
-                <Link key={category.id} to={category.route}>
-                  <motion.div
-                    whileHover={{ scale: 1.02, y: -4 }}
-                    whileTap={{ scale: 0.98 }}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.08, type: 'spring', stiffness: 300, damping: 25 }}
-                    className={`relative bg-[#0f1923] dark:bg-[#0f1923] rounded-2xl p-5 cursor-pointer border ${
-                      category.highlighted ? 'border-cyan-500/40' : category.borderColor
-                    } hover:shadow-2xl ${category.glowColor} transition-all duration-300 overflow-hidden group h-full`}
-                  >
-                    {/* Subtle gradient background */}
-                    <div className={`absolute inset-0 bg-gradient-to-br ${category.accentColor} opacity-60 group-hover:opacity-100 transition-opacity duration-300`} />
-                    {/* Decorative glow orb */}
-                    <div className={`absolute -top-10 -right-10 w-36 h-36 ${category.iconColor.replace('text-', 'bg-').replace('400', '500')}/5 rounded-full blur-3xl group-hover:scale-110 transition-transform duration-500`} />
-
-                    <div className="relative z-10">
-                      {/* Top row: Icon + Badge */}
-                      <div className="flex items-start justify-between mb-4">
-                        <div className={`w-11 h-11 rounded-xl bg-gray-800/80 flex items-center justify-center ${category.iconColor} ring-1 ring-white/5`}>
-                          <IconComponent className="w-5 h-5" />
-                        </div>
-                        {category.badge && (
-                          <span className={`px-2.5 py-1 rounded-full text-[11px] font-semibold ${category.badgeColor || 'bg-white/10 text-gray-300'}`}>
-                            {category.badge}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Title & Subtitle */}
-                      <h3 className="font-bold text-white text-[17px] mb-0.5 tracking-tight">{category.name}</h3>
-                      <p className="text-gray-400 text-sm mb-4 leading-relaxed">{category.subtitle}</p>
-
-                      {/* Bottom section - context-specific content */}
-                      {category.progress && (
-                        <div>
-                          <div className="flex items-center justify-between text-sm mb-1.5">
-                            <span className="text-gray-500 font-medium text-xs">{category.progress.label}</span>
-                            <span className="text-white font-bold text-sm">{category.progress.value}</span>
-                          </div>
-                          {category.progress.showBar && (
-                            <div className="w-full h-1.5 bg-gray-800 rounded-full overflow-hidden">
-                              <motion.div
-                                initial={{ width: 0 }}
-                                animate={{ width: `${category.progress.barPercent}%` }}
-                                transition={{ delay: 0.5 + index * 0.1, duration: 0.8, ease: 'easeOut' }}
-                                className={`h-full ${category.progress.barColor} rounded-full`}
-                              />
-                            </div>
-                          )}
-                        </div>
-                      )}
-
-                      {category.meta && (
-                        <div className="flex items-center justify-between">
-                          <span className="text-gray-500 text-xs">{category.meta.label}</span>
-                          <span className="text-gray-400 text-xs">{category.meta.value}</span>
-                        </div>
-                      )}
-
-                      {category.stats && (
-                        <div className="flex items-center gap-5">
-                          <div>
-                            <span className="text-[10px] uppercase tracking-wider text-gray-500 font-medium block">{category.stats.best.label}</span>
-                            <div className="flex items-baseline gap-1">
-                              <span className="text-2xl font-extrabold text-white">{category.stats.best.value}</span>
-                              <span className="text-xs text-gray-500 font-medium">{category.stats.best.unit}</span>
-                            </div>
-                          </div>
-                          <div className="w-px h-8 bg-gray-700" />
-                          <div>
-                            <span className="text-[10px] uppercase tracking-wider text-gray-500 font-medium block">{category.stats.avg.label}</span>
-                            <div className="flex items-baseline gap-1">
-                              <span className="text-2xl font-extrabold text-white">{category.stats.avg.value}</span>
-                              <span className="text-xs text-gray-500 font-medium">{category.stats.avg.unit}</span>
-                            </div>
-                          </div>
-                          <div className="ml-auto">
-                            <div className="w-10 h-10 rounded-full bg-cyan-500 flex items-center justify-center shadow-lg shadow-cyan-500/30 group-hover:scale-110 transition-transform">
-                              <FiPlay className="w-4 h-4 text-white ml-0.5" />
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      {!category.progress && !category.meta && !category.stats && (
-                        <div className="flex flex-wrap gap-1.5">
-                          {category.subcategories.slice(0, 3).map(sub => (
-                            <span key={sub} className="px-2 py-0.5 bg-white/5 border border-white/10 rounded-md text-[11px] text-gray-400">
-                              {sub}
-                            </span>
-                          ))}
-                          {category.subcategories.length > 3 && (
-                            <span className="px-2 py-0.5 bg-white/5 border border-white/10 rounded-md text-[11px] text-gray-400">
-                              +{category.subcategories.length - 3}
-                            </span>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  </motion.div>
-                </Link>
-              )
-            })}
-          </div>
-        </motion.div>
-      </motion.main>
-    </div>
+        </div>
+      </main>
+    </Layout>
   )
 }
 

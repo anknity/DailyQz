@@ -49,6 +49,11 @@ import SchoolResult from './pages/SchoolResult'
 // Typing Test
 import TypingTest from './pages/TypingTest'
 
+// Courses
+import Courses from './pages/Courses'
+import CourseDetail from './pages/CourseDetail'
+import Suggestions from './pages/Suggestions'
+
 function App() {
   return (
     <BrowserRouter
@@ -60,7 +65,7 @@ function App() {
       <ThemeProvider>
         <AuthProvider>
           <TestProvider>
-            <div className="min-h-screen bg-gray-50 dark:bg-dark-300 transition-colors duration-300">
+            <div className="dq-app-bg min-h-screen transition-colors duration-300">
               <Routes>
                 {/* Public Routes */}
                 <Route path="/login" element={<Login />} />
@@ -224,6 +229,25 @@ function App() {
                 <Route path="/typing-test" element={
                   <ProtectedRoute>
                     <TypingTest />
+                  </ProtectedRoute>
+                } />
+
+                {/* Courses Routes */}
+                <Route path="/courses" element={
+                  <ProtectedRoute>
+                    <Courses />
+                  </ProtectedRoute>
+                } />
+                <Route path="/courses/:courseId" element={
+                  <ProtectedRoute>
+                    <CourseDetail />
+                  </ProtectedRoute>
+                } />
+
+                {/* Suggestions */}
+                <Route path="/suggestions" element={
+                  <ProtectedRoute>
+                    <Suggestions />
                   </ProtectedRoute>
                 } />
                 

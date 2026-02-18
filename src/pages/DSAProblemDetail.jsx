@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { PROGRAMMING_LANGUAGES, DSA_DIFFICULTY } from '../config/categories';
-import Navbar from '../components/Navbar';
+import Layout from '../components/Layout';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
@@ -760,7 +760,8 @@ const DSAProblemDetail = () => {
   }
 
   return (
-    <div className="h-screen bg-[#0a0a0a] flex flex-col overflow-hidden">
+    <Layout fullScreen>
+    <div className="h-full bg-[#0a0a0a] flex flex-col overflow-hidden">
       <style>{`
         .monaco-editor-style {
           font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
@@ -1384,6 +1385,7 @@ const DSAProblemDetail = () => {
         </div>
       </div>
     </div>
+    </Layout>
   );
 };
 

@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { DSA_TOPICS, DSA_CATEGORIES, DSA_DIFFICULTY } from '../config/categories';
-import Navbar from '../components/Navbar';
+import Layout from '../components/Layout';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 // Icons Component
@@ -1116,9 +1116,7 @@ const DSAProblems = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a]">
-      <Navbar />
-      
+    <Layout>
       {/* Hero Section with Gradient */}
       <div className="bg-gradient-to-br from-gray-900 via-[#0a0a0a] to-blue-900/20 border-b border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -1600,7 +1598,7 @@ const DSAProblems = () => {
           }
         `}</style>
       </div>
-    </div>
+    </Layout>
   );
 };
 

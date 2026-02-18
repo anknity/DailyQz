@@ -134,6 +134,30 @@ export const DAILY_TEST_CONFIG = {
       description: 'Biology, Chemistry, Physics',
       questionCount: 20,
       duration: 25
+    },
+    {
+      id: 'python',
+      name: 'Python',
+      icon: '🐍',
+      description: 'Core Python, OOP, Libraries, Data Structures',
+      questionCount: 20,
+      duration: 25
+    },
+    {
+      id: 'java',
+      name: 'Java',
+      icon: '☕',
+      description: 'Core Java, OOP, Collections, Multithreading',
+      questionCount: 20,
+      duration: 25
+    },
+    {
+      id: 'sql',
+      name: 'SQL & Databases',
+      icon: '🗄️',
+      description: 'SQL queries, Joins, Normalization, DBMS concepts',
+      questionCount: 20,
+      duration: 25
     }
   ]
 };

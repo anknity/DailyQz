@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Navbar, LoadingSpinner } from '../components'
+import { Layout, LoadingSpinner } from '../components'
 import { useAuth } from '../context/AuthContext'
 import { TestResultService } from '../services/firestoreService'
 import { getInitials, getAvatarColor, formatDate, getGrade, getStreakMessage } from '../utils/helpers'
@@ -325,9 +325,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#101922]">
-      <Navbar />
-      
+    <Layout>
       <div className="w-full max-w-[1440px] mx-auto p-4 lg:p-8 flex flex-col lg:flex-row gap-6 lg:gap-8">
         
         {/* ==================== LEFT SIDEBAR ==================== */}
@@ -1164,7 +1162,7 @@ const Profile = () => {
           </motion.div>
         </main>
       </div>
-    </div>
+    </Layout>
   )
 }
 

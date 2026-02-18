@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Navbar, LoadingSpinner } from '../components'
+import { Layout, LoadingSpinner } from '../components'
 import { LeaderboardService } from '../services/firestoreService'
 import { useAuth } from '../context/AuthContext'
 import { getInitials, getAvatarColor } from '../utils/helpers'
@@ -426,18 +426,16 @@ const Leaderboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#101922]">
-        <Navbar />
+      <Layout>
         <div className="flex items-center justify-center h-[calc(100vh-80px)]">
           <LoadingSpinner />
         </div>
-      </div>
+      </Layout>
     )
   }
 
   return (
-    <div className="min-h-screen bg-[#101922] pb-32">
-      <Navbar />
+    <Layout>
       
       <main className="flex-1 flex flex-col items-center w-full px-4 sm:px-8 py-8 max-w-[1200px] mx-auto">
         {/* Page Header & Time Period Filters */}
@@ -1056,7 +1054,7 @@ const Leaderboard = () => {
           </div>
         </div>
       )}
-    </div>
+    </Layout>
   )
 }
 
