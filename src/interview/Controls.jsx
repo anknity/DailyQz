@@ -77,11 +77,11 @@ const ControlBar = ({
         </div>
       )}
 
-      <div className="h-20 bg-[#1a1a2e] border-t border-gray-700/50 flex items-center justify-center px-4 gap-3">
+      <div className="h-16 sm:h-20 bg-[#1a1a2e] border-t border-gray-700/50 flex items-center justify-center px-2 sm:px-4 gap-1.5 sm:gap-3" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
         {/* Toggle Mic */}
         <button
           onClick={toggleMute}
-          className={`w-12 h-12 rounded-full flex items-center justify-center transition-all ${
+          className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all ${
             isMuted ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-gray-700/80 hover:bg-gray-600 text-white'
           }`}
           title={isMuted ? 'Unmute' : 'Mute'}
@@ -104,7 +104,7 @@ const ControlBar = ({
         {/* Toggle Camera */}
         <button
           onClick={toggleCamera}
-          className={`w-12 h-12 rounded-full flex items-center justify-center transition-all ${
+          className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all ${
             isCameraOff ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-gray-700/80 hover:bg-gray-600 text-white'
           }`}
           title={isCameraOff ? 'Turn on camera' : 'Turn off camera'}
@@ -123,7 +123,7 @@ const ControlBar = ({
         {/* Screen Share */}
         <button
           onClick={isScreenSharing ? stopScreenShare : startScreenShare}
-          className={`w-12 h-12 rounded-full flex items-center justify-center transition-all ${
+          className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all ${
             isScreenSharing ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-700/80 hover:bg-gray-600 text-white'
           }`}
           title={isScreenSharing ? 'Stop sharing' : 'Share screen'}
@@ -136,18 +136,18 @@ const ControlBar = ({
         {/* Emoji Reaction */}
         <button
           onClick={() => { setShowEmojiPicker(p => !p); setShowFilterPicker(false); }}
-          className={`w-12 h-12 rounded-full flex items-center justify-center transition-all ${
+          className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all ${
             showEmojiPicker ? 'bg-yellow-500/30 text-yellow-300 ring-2 ring-yellow-500/50' : 'bg-gray-700/80 hover:bg-gray-600 text-white'
           }`}
           title="Reactions"
         >
-          <span className="text-xl">😊</span>
+          <span className="text-lg sm:text-xl">😊</span>
         </button>
 
         {/* Background Filter */}
         <button
           onClick={() => { setShowFilterPicker(p => !p); setShowEmojiPicker(false); }}
-          className={`w-12 h-12 rounded-full flex items-center justify-center transition-all ${
+          className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all ${
             videoFilter !== 'none' || showFilterPicker
               ? 'bg-purple-500/30 text-purple-300 ring-2 ring-purple-500/50'
               : 'bg-gray-700/80 hover:bg-gray-600 text-white'
@@ -159,12 +159,12 @@ const ControlBar = ({
           </svg>
         </button>
 
-        <div className="w-px h-10 bg-gray-600 mx-2"></div>
+        <div className="hidden sm:block w-px h-8 bg-gray-600 mx-1"></div>
 
         {/* Chat */}
         <button
           onClick={onToggleChat}
-          className="relative w-12 h-12 rounded-full bg-gray-700/80 hover:bg-gray-600 text-white flex items-center justify-center transition-all"
+          className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-700/80 hover:bg-gray-600 text-white flex items-center justify-center transition-all"
           title="Chat"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -180,7 +180,7 @@ const ControlBar = ({
         {/* Participants */}
         <button
           onClick={onToggleParticipants}
-          className="w-12 h-12 rounded-full bg-gray-700/80 hover:bg-gray-600 text-white flex items-center justify-center transition-all"
+          className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-700/80 hover:bg-gray-600 text-white flex items-center justify-center transition-all"
           title="Participants"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -188,14 +188,14 @@ const ControlBar = ({
           </svg>
         </button>
 
-        <div className="w-px h-10 bg-gray-600 mx-2"></div>
+        <div className="hidden sm:block w-px h-8 bg-gray-600 mx-1"></div>
 
         {/* Leave */}
         <button
           onClick={onLeave}
-          className="h-12 px-6 rounded-full bg-red-600 hover:bg-red-700 text-white font-medium flex items-center gap-2 transition-all"
+          className="h-10 sm:h-12 px-3 sm:px-6 rounded-full bg-red-600 hover:bg-red-700 text-white font-medium flex items-center gap-1.5 sm:gap-2 transition-all text-sm"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+          <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
           </svg>
           Leave

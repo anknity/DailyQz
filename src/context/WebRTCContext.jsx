@@ -35,24 +35,36 @@ export const WebRTCProvider = ({ roomId, children }) => {
   const initLocalStream = useCallback(async ({ video = true, audio = true } = {}) => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: video ? { width: { ideal: 1920, min: 640 }, height: { ideal: 1080, min: 480 }, frameRate: { ideal: 30, min: 15 }, facingMode: 'user' } : false,
+        // 720p works on all mobile cameras; avoid forcing 1080p which can fail
+        video: video ? { width: { ideal: 1280 }, height: { ideal: 720 }, frameRate: { ideal: 30 } } : false,
         audio: audio ? { echoCancellation: true, noiseSuppression: true, autoGainControl: true } : false,
       });
       localStreamRef.current = stream;
       setLocalStream(stream);
       return stream;
     } catch (err) {
-      console.error('Failed to get user media:', err);
-      // Try audio only
+      console.error('Failed to get user media (trying lower quality):', err);
+      // Try with minimal constraints
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: video ? true : false,
+          audio: audio ? { echoCancellation: true, noiseSuppression: true } : false,
+        });
         localStreamRef.current = stream;
         setLocalStream(stream);
-        setIsCameraOff(true);
         return stream;
-      } catch (audioErr) {
-        console.error('Failed to get any media:', audioErr);
-        return null;
+      } catch (lowErr) {
+        console.error('Failed with minimal constraints, trying audio only:', lowErr);
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+          localStreamRef.current = stream;
+          setLocalStream(stream);
+          setIsCameraOff(true);
+          return stream;
+        } catch (audioErr) {
+          console.error('Failed to get any media:', audioErr);
+          return null;
+        }
       }
     }
   }, []);
@@ -84,21 +96,32 @@ export const WebRTCProvider = ({ roomId, children }) => {
       }
     };
 
-    // Handle remote stream
+    // Handle remote tracks.
+    // Always wrap in a NEW MediaStream so React sees a reference change and VideoTile updates.
     pc.ontrack = (event) => {
-      const [remoteStream] = event.streams;
-      if (remoteStream) {
-        setRemoteStreams(prev => {
-          const next = new Map(prev);
-          const existing = next.get(targetSocketId) || {};
-          next.set(targetSocketId, {
-            ...existing,
-            stream: remoteStream,
-            displayName: targetName || existing.displayName || 'Participant',
-          });
-          return next;
+      setRemoteStreams(prev => {
+        const next = new Map(prev);
+        const existing = next.get(targetSocketId) || {};
+
+        // Build full track list: prefer event.streams[0] (gives all tracks already), else accumulate
+        let allTracks;
+        if (event.streams && event.streams.length > 0) {
+          allTracks = event.streams[0].getTracks();
+        } else {
+          // Some browsers (older mobile) only fire event.track, not event.streams
+          const prevTracks = existing.stream ? existing.stream.getTracks() : [];
+          allTracks = [...prevTracks.filter(t => t.id !== event.track.id), event.track];
+        }
+
+        // New MediaStream object forces React to re-render VideoTile and reassign srcObject
+        const newStream = new MediaStream(allTracks);
+        next.set(targetSocketId, {
+          ...existing,
+          stream: newStream,
+          displayName: targetName || existing.displayName || 'Participant',
         });
-      }
+        return next;
+      });
     };
 
     pc.oniceconnectionstatechange = () => {

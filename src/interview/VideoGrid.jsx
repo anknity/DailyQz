@@ -37,17 +37,20 @@ const VideoGrid = ({ videoFilter = 'none', reactions = {} }) => {
     });
   }
 
-  // Dynamic grid layout based on participant count
+  // Dynamic grid layout — stack vertically on mobile for 2 participants
   const getGridClass = (count) => {
     if (count === 1) return 'grid-cols-1';
-    if (count === 2) return 'grid-cols-2';
+    if (count === 2) return 'grid-cols-1 sm:grid-cols-2'; // vertical stack on mobile
     if (count <= 4) return 'grid-cols-2';
-    return 'grid-cols-3'; // 5 participants
+    return 'grid-cols-2 lg:grid-cols-3';
   };
 
   return (
-    <div className="flex-1 p-3 overflow-hidden">
-      <div className={`grid ${getGridClass(participants.length)} gap-3 h-full auto-rows-fr`}>
+    <div className="flex-1 p-2 sm:p-3 overflow-hidden min-h-0">
+      <div
+        className={`grid ${getGridClass(participants.length)} gap-2 sm:gap-3 h-full`}
+        style={{ gridAutoRows: '1fr' }}
+      >
         {participants.map(p => (
           <VideoTile
             key={p.key}

@@ -28,9 +28,16 @@ const VideoTile = memo(({
 }) => {
   const videoRef = useRef(null);
 
+  // Assign srcObject whenever stream reference changes and explicitly start playback.
+  // play() handles the case where autoplay policy blocks the video.
   useEffect(() => {
-    if (videoRef.current && stream) {
-      videoRef.current.srcObject = stream;
+    const video = videoRef.current;
+    if (!video) return;
+    if (stream) {
+      video.srcObject = stream;
+      video.play().catch(() => { /* autoplay policy: will play after user gesture */ });
+    } else {
+      video.srcObject = null;
     }
   }, [stream]);
 
@@ -42,7 +49,8 @@ const VideoTile = memo(({
     .toUpperCase() || '?';
 
   return (
-    <div className={`relative bg-[#1a1a2e] rounded-xl overflow-hidden group ${compact ? 'aspect-video' : 'aspect-video'}`}>
+    // h-full + min-h-0 lets the grid's auto-rows:1fr control height (no aspect-ratio locking)
+    <div className="relative bg-[#1a1a2e] rounded-2xl overflow-hidden group w-full h-full min-h-0">
       {/* Video */}
       {stream && !isCameraOff ? (
         <video
