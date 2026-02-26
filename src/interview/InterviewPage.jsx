@@ -48,15 +48,10 @@ const InterviewRoomInner = () => {
         }
         setRoomData(res.room);
         setStatus('joined');
-
-        // Create offers to existing participants
-        if (res.room?.participants && stream) {
-          res.room.participants.forEach(p => {
-            if (p.userId !== currentUser?.uid && p.socketId) {
-              setTimeout(() => createOffer(p.socketId, p.displayName), 500);
-            }
-          });
-        }
+        // NOTE: Do NOT create offers here.
+        // Existing users will create offers to us via the 'user-joined' event
+        // in WebRTCContext. Creating offers from BOTH sides causes "glare"
+        // (InvalidStateError: Called in wrong state: stable).
       });
     };
 

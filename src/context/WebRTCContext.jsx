@@ -8,6 +8,12 @@ const ICE_SERVERS = {
     { urls: 'stun:stun.l.google.com:19302' },
     { urls: 'stun:stun1.l.google.com:19302' },
     { urls: 'stun:stun2.l.google.com:19302' },
+    { urls: 'stun:stun3.l.google.com:19302' },
+    { urls: 'stun:stun4.l.google.com:19302' },
+    // Free TURN relay — needed when mobile carrier NAT blocks STUN
+    { urls: 'turn:openrelay.metered.ca:80',  username: 'openrelayproject', credential: 'openrelayproject' },
+    { urls: 'turn:openrelay.metered.ca:443', username: 'openrelayproject', credential: 'openrelayproject' },
+    { urls: 'turn:openrelay.metered.ca:443?transport=tcp', username: 'openrelayproject', credential: 'openrelayproject' },
   ],
 };
 
@@ -72,8 +78,15 @@ export const WebRTCProvider = ({ roomId, children }) => {
   // ─────────────── PEER CONNECTION ───────────────
 
   const createPeerConnection = useCallback((targetSocketId, targetName) => {
+    // Re-use existing PC if it's still healthy
     if (peerConnectionsRef.current.has(targetSocketId)) {
-      return peerConnectionsRef.current.get(targetSocketId);
+      const existing = peerConnectionsRef.current.get(targetSocketId);
+      if (existing.connectionState !== 'closed' && existing.connectionState !== 'failed') {
+        return existing;
+      }
+      // Stale PC — tear down and create fresh
+      existing.close();
+      peerConnectionsRef.current.delete(targetSocketId);
     }
 
     const pc = new RTCPeerConnection(ICE_SERVERS);
@@ -125,8 +138,19 @@ export const WebRTCProvider = ({ roomId, children }) => {
     };
 
     pc.oniceconnectionstatechange = () => {
-      if (pc.iceConnectionState === 'failed' || pc.iceConnectionState === 'disconnected') {
-        console.warn(`ICE connection ${pc.iceConnectionState} for ${targetSocketId}`);
+      console.log(`[WebRTC] ICE state → ${pc.iceConnectionState} for ${targetSocketId}`);
+      if (pc.iceConnectionState === 'failed') {
+        console.warn('[WebRTC] ICE failed — attempting ICE restart');
+        pc.restartIce();
+      }
+      if (pc.iceConnectionState === 'disconnected') {
+        // Wait a moment; it often recovers on its own
+        setTimeout(() => {
+          if (pc.iceConnectionState === 'disconnected') {
+            console.warn('[WebRTC] Still disconnected — restarting ICE');
+            pc.restartIce();
+          }
+        }, 3000);
       }
       if (pc.iceConnectionState === 'closed') {
         cleanupPeerConnection(targetSocketId);
@@ -157,10 +181,17 @@ export const WebRTCProvider = ({ roomId, children }) => {
   const createOffer = useCallback(async (targetSocketId, targetName) => {
     const pc = createPeerConnection(targetSocketId, targetName);
     try {
+      // Only create offer if we're in 'stable' state (no pending offer)
+      if (pc.signalingState !== 'stable') {
+        console.warn(`[WebRTC] Skipping createOffer — state is "${pc.signalingState}"`);
+        return;
+      }
       const offer = await pc.createOffer({
         offerToReceiveAudio: true,
         offerToReceiveVideo: true,
       });
+      // Double-check state hasn't changed while awaiting
+      if (pc.signalingState !== 'stable') return;
       await pc.setLocalDescription(offer);
       socket?.emit('offer', { roomId, targetSocketId, offer });
     } catch (err) {
@@ -168,10 +199,17 @@ export const WebRTCProvider = ({ roomId, children }) => {
     }
   }, [createPeerConnection, socket, roomId]);
 
-  // Handle incoming offer
+  // Handle incoming offer (with glare / rollback protection)
   const handleOffer = useCallback(async ({ offer, senderSocketId, senderName }) => {
     const pc = createPeerConnection(senderSocketId, senderName);
     try {
+      // ── Glare: we already sent an offer to this same peer ──
+      // Roll back our local offer so we can accept theirs instead.
+      if (pc.signalingState === 'have-local-offer') {
+        console.warn('[WebRTC] Glare detected — rolling back local offer');
+        await pc.setLocalDescription({ type: 'rollback' });
+      }
+
       await pc.setRemoteDescription(new RTCSessionDescription(offer));
 
       // Flush pending ICE candidates
@@ -189,22 +227,28 @@ export const WebRTCProvider = ({ roomId, children }) => {
     }
   }, [createPeerConnection, socket, roomId]);
 
-  // Handle incoming answer
+  // Handle incoming answer — only valid when we're waiting for one
   const handleAnswer = useCallback(async ({ answer, senderSocketId }) => {
     const pc = peerConnectionsRef.current.get(senderSocketId);
-    if (pc) {
-      try {
-        await pc.setRemoteDescription(new RTCSessionDescription(answer));
+    if (!pc) return;
 
-        // Flush pending ICE candidates
-        const pending = pendingCandidatesRef.current.get(senderSocketId) || [];
-        for (const candidate of pending) {
-          await pc.addIceCandidate(new RTCIceCandidate(candidate));
-        }
-        pendingCandidatesRef.current.delete(senderSocketId);
-      } catch (err) {
-        console.error('Error handling answer:', err);
+    // Guard: only accept an answer when we sent an offer
+    if (pc.signalingState !== 'have-local-offer') {
+      console.warn(`[WebRTC] Ignoring answer — state is "${pc.signalingState}" (expected "have-local-offer")`);
+      return;
+    }
+
+    try {
+      await pc.setRemoteDescription(new RTCSessionDescription(answer));
+
+      // Flush pending ICE candidates
+      const pending = pendingCandidatesRef.current.get(senderSocketId) || [];
+      for (const candidate of pending) {
+        await pc.addIceCandidate(new RTCIceCandidate(candidate));
       }
+      pendingCandidatesRef.current.delete(senderSocketId);
+    } catch (err) {
+      console.error('Error handling answer:', err);
     }
   }, []);
 
