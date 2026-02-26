@@ -1,7 +1,8 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useSocket } from '../context/SocketContext'
 import { getInitials, getAvatarColor } from '../utils/helpers'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 // Admin email
 const ADMIN_EMAIL = 'nityanand666.nk@gmail.com'
@@ -10,6 +11,7 @@ const NAV_LINKS = [
   { path: '/dashboard',   label: 'Dashboard',   icon: 'grid_view' },
   { path: '/leaderboard', label: 'Leaderboard', icon: 'emoji_events' },
   { path: '/courses',     label: 'Courses',     icon: 'menu_book' },
+  { path: '/interview',   label: 'Interview',   icon: 'videocam' },
   { path: '/suggestions', label: 'Suggestions', icon: 'lightbulb' },
   { path: '/profile',     label: 'Profile',     icon: 'person' },
 ]
@@ -23,6 +25,22 @@ const Navbar = ({ upcomingExams = [] }) => {
   const navigate = useNavigate()
   const location = useLocation()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [notifOpen, setNotifOpen] = useState(false)
+  const notifRef = useRef(null)
+
+  const { notifications, clearNotifications } = useSocket()
+  const unreadCount = notifications.filter(n => !n.read).length
+
+  // Close notification panel on outside click
+  useEffect(() => {
+    const handler = (e) => {
+      if (notifRef.current && !notifRef.current.contains(e.target)) {
+        setNotifOpen(false)
+      }
+    }
+    if (notifOpen) document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [notifOpen])
 
   const isAdmin = currentUser?.email === ADMIN_EMAIL
   const links = isAdmin
@@ -47,8 +65,9 @@ const Navbar = ({ upcomingExams = [] }) => {
 
   const sidebarContent = (
     <>
-      {/* Logo */}
+      {/* Logo + Bell */}
       <div className="p-6 pb-4 flex-shrink-0">
+        <div className="flex items-center justify-between">
         <Link to="/dashboard" className="flex items-center gap-3" onClick={() => setMobileOpen(false)}>
           <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-orange-500 flex items-center justify-center shadow-lg shadow-purple-500/30 flex-shrink-0">
             <span className="material-symbols-outlined text-white text-2xl">school</span>
@@ -58,6 +77,44 @@ const Navbar = ({ upcomingExams = [] }) => {
             <p className="text-slate-400 text-[10px] font-medium tracking-widest uppercase">Learning Platform</p>
           </div>
         </Link>
+        {/* Notification bell (desktop sidebar) */}
+        <div className="relative" ref={notifRef}>
+          <button
+            onClick={() => setNotifOpen(o => !o)}
+            className="relative w-9 h-9 rounded-xl flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+            title="Notifications"
+          >
+            <span className="material-symbols-outlined text-[20px]">notifications</span>
+            {unreadCount > 0 && (
+              <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 rounded-full text-[9px] text-white font-bold flex items-center justify-center">
+                {unreadCount > 9 ? '9+' : unreadCount}
+              </span>
+            )}
+          </button>
+          {notifOpen && (
+            <div className="absolute left-0 top-full mt-2 w-80 bg-[#1e1e3a] border border-white/10 rounded-2xl shadow-2xl z-[100] overflow-hidden">
+              <div className="flex items-center justify-between p-4 border-b border-white/10">
+                <span className="text-white font-semibold text-sm">Notifications</span>
+                {notifications.length > 0 && (
+                  <button onClick={clearNotifications} className="text-xs text-slate-400 hover:text-white transition-colors">Clear all</button>
+                )}
+              </div>
+              <div className="max-h-72 overflow-y-auto">
+                {notifications.length === 0 ? (
+                  <div className="p-6 text-center text-slate-500 text-sm">No notifications yet</div>
+                ) : (
+                  notifications.slice().reverse().map((n, i) => (
+                    <div key={i} className="px-4 py-3 border-b border-white/5 hover:bg-white/5 transition-colors">
+                      <p className="text-slate-200 text-xs leading-relaxed">{n.message || JSON.stringify(n)}</p>
+                      <p className="text-slate-500 text-[10px] mt-1">{n.timestamp ? new Date(n.timestamp).toLocaleTimeString() : ''}</p>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+        </div>
       </div>
 
       {/* Nav links */}
@@ -158,6 +215,19 @@ const Navbar = ({ upcomingExams = [] }) => {
               🔥 {userProfile.streak}
             </span>
           )}
+          {/* Notification bell (mobile) */}
+          <button
+            onClick={() => setNotifOpen(o => !o)}
+            className="relative w-10 h-10 rounded-xl dq-glass-card flex items-center justify-center text-slate-300"
+            title="Notifications"
+          >
+            <span className="material-symbols-outlined text-[20px]">notifications</span>
+            {unreadCount > 0 && (
+              <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-red-500 rounded-full text-[9px] text-white font-bold flex items-center justify-center">
+                {unreadCount > 9 ? '9+' : unreadCount}
+              </span>
+            )}
+          </button>
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="w-10 h-10 rounded-xl dq-glass-card flex items-center justify-center text-slate-300"
@@ -166,6 +236,30 @@ const Navbar = ({ upcomingExams = [] }) => {
           </button>
         </div>
       </div>
+
+      {/* Mobile notification dropdown */}
+      {notifOpen && (
+        <div ref={notifRef} className="lg:hidden fixed top-16 right-4 z-[200] w-80 bg-[#1e1e3a] border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
+          <div className="flex items-center justify-between p-4 border-b border-white/10">
+            <span className="text-white font-semibold text-sm">Notifications</span>
+            {notifications.length > 0 && (
+              <button onClick={clearNotifications} className="text-xs text-slate-400 hover:text-white transition-colors">Clear all</button>
+            )}
+          </div>
+          <div className="max-h-72 overflow-y-auto">
+            {notifications.length === 0 ? (
+              <div className="p-6 text-center text-slate-500 text-sm">No notifications yet</div>
+            ) : (
+              notifications.slice().reverse().map((n, i) => (
+                <div key={i} className="px-4 py-3 border-b border-white/5 hover:bg-white/5 transition-colors">
+                  <p className="text-slate-200 text-xs leading-relaxed">{n.message || JSON.stringify(n)}</p>
+                  <p className="text-slate-500 text-[10px] mt-1">{n.timestamp ? new Date(n.timestamp).toLocaleTimeString() : ''}</p>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      )}
 
       {/* ── Mobile Backdrop ── */}
       {mobileOpen && (

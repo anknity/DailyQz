@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { PROGRAMMING_LANGUAGES, DSA_DIFFICULTY } from '../config/categories';
-import Layout from '../components/Layout';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
@@ -760,8 +759,7 @@ const DSAProblemDetail = () => {
   }
 
   return (
-    <Layout fullScreen>
-    <div className="h-full bg-[#0a0a0a] flex flex-col overflow-hidden">
+    <div className="h-screen bg-[#0a0a0a] flex flex-col overflow-hidden">
       <style>{`
         .monaco-editor-style {
           font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
@@ -848,13 +846,24 @@ const DSAProblemDetail = () => {
       <div className="h-12 bg-[#1a1a1a] border-b border-gray-800 flex items-center justify-between px-4 flex-shrink-0">
         <div className="flex items-center gap-3">
           <button 
+            onClick={() => navigate('/dashboard')} 
+            className="text-gray-400 hover:text-white transition-colors p-1.5 rounded hover:bg-gray-800 group flex items-center gap-1.5"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+            <span className="text-xs font-medium">Home</span>
+          </button>
+          <div className="h-6 w-px bg-gray-700"></div>
+          <button 
             onClick={() => navigate('/dsa')} 
             className="text-gray-400 hover:text-white transition-colors p-1 rounded hover:bg-gray-800"
           >
             <Icon name="back" />
           </button>
           <div className="h-6 w-px bg-gray-700"></div>
-          <button className="text-gray-400 hover:text-white transition-colors p-1 rounded hover:bg-gray-800">
+          <button 
+            onClick={() => navigate('/dsa')}
+            className="text-gray-400 hover:text-white transition-colors p-1 rounded hover:bg-gray-800"
+          >
             <Icon name="list" />
           </button>
           <span className="text-gray-300 text-sm font-medium">Problem List</span>
@@ -1385,7 +1394,6 @@ const DSAProblemDetail = () => {
         </div>
       </div>
     </div>
-    </Layout>
   );
 };
 

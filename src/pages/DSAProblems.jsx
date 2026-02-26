@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { DSA_TOPICS, DSA_CATEGORIES, DSA_DIFFICULTY } from '../config/categories';
-import Layout from '../components/Layout';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 // Icons Component
@@ -1116,7 +1115,19 @@ const DSAProblems = () => {
   }
 
   return (
-    <Layout>
+    <div className="min-h-screen bg-[#0a0a0a] text-slate-200">
+      {/* Home Navigation */}
+      <div className="sticky top-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-lg border-b border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center">
+          <Link to="/dashboard" className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors group">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+            <span className="text-sm font-medium group-hover:text-white">Home</span>
+          </Link>
+          <div className="ml-3 h-5 w-px bg-gray-700"></div>
+          <span className="ml-3 text-sm text-gray-500">DSA Problem Set</span>
+        </div>
+      </div>
+
       {/* Hero Section with Gradient */}
       <div className="bg-gradient-to-br from-gray-900 via-[#0a0a0a] to-blue-900/20 border-b border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -1598,7 +1609,7 @@ const DSAProblems = () => {
           }
         `}</style>
       </div>
-    </Layout>
+    </div>
   );
 };
 

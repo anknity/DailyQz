@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import { ThemeProvider } from './context/ThemeContext'
 import { TestProvider } from './context/TestContext'
+import { SocketProvider } from './context/SocketContext'
 import ProtectedRoute from './components/ProtectedRoute'
 
 // Pages
@@ -54,6 +55,10 @@ import Courses from './pages/Courses'
 import CourseDetail from './pages/CourseDetail'
 import Suggestions from './pages/Suggestions'
 
+// Interview Pages
+import InterviewLobby from './interview/InterviewLobby'
+import InterviewPage from './interview/InterviewPage'
+
 function App() {
   return (
     <BrowserRouter
@@ -64,6 +69,7 @@ function App() {
     >
       <ThemeProvider>
         <AuthProvider>
+          <SocketProvider>
           <TestProvider>
             <div className="dq-app-bg min-h-screen transition-colors duration-300">
               <Routes>
@@ -250,12 +256,25 @@ function App() {
                     <Suggestions />
                   </ProtectedRoute>
                 } />
+
+                {/* Interview Routes */}
+                <Route path="/interview" element={
+                  <ProtectedRoute>
+                    <InterviewLobby />
+                  </ProtectedRoute>
+                } />
+                <Route path="/interview/:roomId" element={
+                  <ProtectedRoute>
+                    <InterviewPage />
+                  </ProtectedRoute>
+                } />
                 
                 {/* Catch all - redirect to dashboard */}
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </div>
           </TestProvider>
+          </SocketProvider>
         </AuthProvider>
       </ThemeProvider>
     </BrowserRouter>
