@@ -105,11 +105,7 @@ const Dashboard = () => {
                   />
                 </div>
               </form>
-              {/* Notifications */}
-              <button className="w-12 h-12 rounded-full dq-glass-card flex items-center justify-center hover:bg-white/10 transition-all relative flex-shrink-0">
-                <span className="material-symbols-outlined text-slate-300 text-[24px]">notifications</span>
-                <span className="absolute top-3 right-3 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[#1e293b] shadow-lg shadow-red-500/50" />
-              </button>
+              {/* Notifications bell removed — see Navbar */}
             </div>
           </header>
 

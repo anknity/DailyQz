@@ -26,7 +26,8 @@ const Navbar = ({ upcomingExams = [] }) => {
   const location = useLocation()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [notifOpen, setNotifOpen] = useState(false)
-  const notifRef = useRef(null)
+  const notifRef = useRef(null)      // desktop bell wrapper
+  const mobileNotifRef = useRef(null) // mobile notif dropdown
 
   const { notifications, clearNotifications } = useSocket()
   const unreadCount = notifications.filter(n => !n.read).length
@@ -34,9 +35,9 @@ const Navbar = ({ upcomingExams = [] }) => {
   // Close notification panel on outside click
   useEffect(() => {
     const handler = (e) => {
-      if (notifRef.current && !notifRef.current.contains(e.target)) {
-        setNotifOpen(false)
-      }
+      const inDesktop = notifRef.current?.contains(e.target)
+      const inMobile = mobileNotifRef.current?.contains(e.target)
+      if (!inDesktop && !inMobile) setNotifOpen(false)
     }
     if (notifOpen) document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
@@ -69,16 +70,18 @@ const Navbar = ({ upcomingExams = [] }) => {
       <div className="p-6 pb-4 flex-shrink-0">
         <div className="flex items-center justify-between">
         <Link to="/dashboard" className="flex items-center gap-3" onClick={() => setMobileOpen(false)}>
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-orange-500 flex items-center justify-center shadow-lg shadow-purple-500/30 flex-shrink-0">
-            <span className="material-symbols-outlined text-white text-2xl">school</span>
-          </div>
+          <img
+            src="/DailiQ.png"
+            alt="DailyQ"
+            className="w-12 h-12 rounded-2xl object-cover flex-shrink-0 shadow-lg shadow-purple-500/30"
+          />
           <div className="flex flex-col">
             <h1 className="text-white text-xl font-bold tracking-tight">DailyQ</h1>
             <p className="text-slate-400 text-[10px] font-medium tracking-widest uppercase">Learning Platform</p>
           </div>
         </Link>
-        {/* Notification bell (desktop sidebar) */}
-        <div className="relative" ref={notifRef}>
+        {/* Notification bell — hidden on mobile (mobile top bar has its own bell) */}
+        <div className="relative hidden lg:block" ref={notifRef}>
           <button
             onClick={() => setNotifOpen(o => !o)}
             className="relative w-9 h-9 rounded-xl flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
@@ -92,7 +95,7 @@ const Navbar = ({ upcomingExams = [] }) => {
             )}
           </button>
           {notifOpen && (
-            <div className="absolute left-0 top-full mt-2 w-80 bg-[#1e1e3a] border border-white/10 rounded-2xl shadow-2xl z-[100] overflow-hidden">
+            <div className="fixed top-20 left-4 w-80 bg-[#1e1e3a] border border-white/10 rounded-2xl shadow-2xl z-[200] overflow-hidden">
               <div className="flex items-center justify-between p-4 border-b border-white/10">
                 <span className="text-white font-semibold text-sm">Notifications</span>
                 {notifications.length > 0 && (
@@ -204,9 +207,11 @@ const Navbar = ({ upcomingExams = [] }) => {
       {/* ── Mobile Top Bar ── */}
       <div className="lg:hidden fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-3 dq-glass-panel">
         <Link to="/dashboard" className="flex items-center gap-2">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-500 to-orange-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
-            <span className="material-symbols-outlined text-white text-lg">school</span>
-          </div>
+          <img
+            src="/DailiQ.png"
+            alt="DailyQ"
+            className="w-9 h-9 rounded-xl object-cover shadow-lg shadow-purple-500/20"
+          />
           <span className="text-white font-bold text-base tracking-tight">DailyQ</span>
         </Link>
         <div className="flex items-center gap-2">
@@ -216,6 +221,7 @@ const Navbar = ({ upcomingExams = [] }) => {
             </span>
           )}
           {/* Notification bell (mobile) */}
+          <div ref={mobileNotifRef} className="relative">
           <button
             onClick={() => setNotifOpen(o => !o)}
             className="relative w-10 h-10 rounded-xl dq-glass-card flex items-center justify-center text-slate-300"
@@ -228,6 +234,7 @@ const Navbar = ({ upcomingExams = [] }) => {
               </span>
             )}
           </button>
+          </div>
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="w-10 h-10 rounded-xl dq-glass-card flex items-center justify-center text-slate-300"
@@ -239,7 +246,7 @@ const Navbar = ({ upcomingExams = [] }) => {
 
       {/* Mobile notification dropdown */}
       {notifOpen && (
-        <div ref={notifRef} className="lg:hidden fixed top-16 right-4 z-[200] w-80 bg-[#1e1e3a] border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
+        <div ref={mobileNotifRef} className="lg:hidden fixed top-16 right-4 z-[200] w-80 bg-[#1e1e3a] border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
           <div className="flex items-center justify-between p-4 border-b border-white/10">
             <span className="text-white font-semibold text-sm">Notifications</span>
             {notifications.length > 0 && (
