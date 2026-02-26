@@ -13,7 +13,14 @@ const getIO = async () => {
   return io;
 };
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
+// Resolve socket server URL — trim whitespace to prevent the wss://%20https bug
+const _rawSocketUrl =
+  import.meta.env.VITE_SOCKET_URL ||
+  (import.meta.env.VITE_API_URL?.replace(/\/api\/?$/, '')) ||
+  'http://localhost:5000';
+
+const SOCKET_URL = _rawSocketUrl.trim();
+console.log('[SocketContext] Connecting to:', SOCKET_URL);
 
 export const SocketProvider = ({ children }) => {
   const { currentUser, userProfile } = useAuth();
@@ -33,12 +40,14 @@ export const SocketProvider = ({ children }) => {
       const ioClient = await getIO();
       
       const newSocket = ioClient(SOCKET_URL, {
-        transports: ['websocket', 'polling'],
+        transports: ['polling', 'websocket'], // polling first — more reliable on Render/Vercel proxies
+        upgrade: true,                        // upgrade to WS after successful poll handshake
         reconnection: true,
         reconnectionAttempts: 10,
         reconnectionDelay: 1000,
         reconnectionDelayMax: 5000,
         timeout: 20000,
+        withCredentials: true,
       });
 
       newSocket.on('connect', () => {
