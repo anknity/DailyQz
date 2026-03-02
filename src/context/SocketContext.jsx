@@ -43,7 +43,7 @@ export const SocketProvider = ({ children }) => {
         transports: ['polling', 'websocket'], // polling first — more reliable on Render/Vercel proxies
         upgrade: true,                        // upgrade to WS after successful poll handshake
         reconnection: true,
-        reconnectionAttempts: 10,
+        reconnectionAttempts: Infinity,
         reconnectionDelay: 1000,
         reconnectionDelayMax: 5000,
         timeout: 20000,

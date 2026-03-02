@@ -18,7 +18,7 @@ const ICE_SERVERS = {
 };
 
 export const WebRTCProvider = ({ roomId, children }) => {
-  const { socket } = useSocket();
+  const { socket, isConnected } = useSocket();
 
   // Local media
   const [localStream, setLocalStream] = useState(null);
@@ -26,6 +26,8 @@ export const WebRTCProvider = ({ roomId, children }) => {
   const [isMuted, setIsMuted] = useState(false);
   const [isCameraOff, setIsCameraOff] = useState(false);
   const [isScreenSharing, setIsScreenSharing] = useState(false);
+  const [isDeafened, setIsDeafened] = useState(false);
+  const [facingMode, setFacingMode] = useState('user');
 
   // Remote streams: Map<socketId, { stream, displayName, isMuted, isCameraOff, isScreenSharing }>
   const [remoteStreams, setRemoteStreams] = useState(new Map());
@@ -35,14 +37,21 @@ export const WebRTCProvider = ({ roomId, children }) => {
   const screenStreamRef = useRef(null);
   const peerConnectionsRef = useRef(new Map()); // Map<socketId, RTCPeerConnection>
   const pendingCandidatesRef = useRef(new Map()); // Buffer ICE candidates before remote desc
+  const facingModeRef = useRef('user');
+  const wasConnectedRef = useRef(false); // Track if we were previously connected (for reconnection)
+  const roomIdRef = useRef(roomId);
+  const isDeafenedRef = useRef(false);
+
+  // Keep refs in sync
+  useEffect(() => { roomIdRef.current = roomId; }, [roomId]);
+  useEffect(() => { isDeafenedRef.current = isDeafened; }, [isDeafened]);
 
   // ─────────────── GET USER MEDIA ───────────────
 
   const initLocalStream = useCallback(async ({ video = true, audio = true } = {}) => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        // 720p works on all mobile cameras; avoid forcing 1080p which can fail
-        video: video ? { width: { ideal: 1280 }, height: { ideal: 720 }, frameRate: { ideal: 30 } } : false,
+        video: video ? { width: { ideal: 1280 }, height: { ideal: 720 }, frameRate: { ideal: 30 }, facingMode: facingModeRef.current } : false,
         audio: audio ? { echoCancellation: true, noiseSuppression: true, autoGainControl: true } : false,
       });
       localStreamRef.current = stream;
@@ -50,10 +59,9 @@ export const WebRTCProvider = ({ roomId, children }) => {
       return stream;
     } catch (err) {
       console.error('Failed to get user media (trying lower quality):', err);
-      // Try with minimal constraints
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: video ? true : false,
+          video: video ? { facingMode: facingModeRef.current } : false,
           audio: audio ? { echoCancellation: true, noiseSuppression: true } : false,
         });
         localStreamRef.current = stream;
@@ -84,7 +92,6 @@ export const WebRTCProvider = ({ roomId, children }) => {
       if (existing.connectionState !== 'closed' && existing.connectionState !== 'failed') {
         return existing;
       }
-      // Stale PC — tear down and create fresh
       existing.close();
       peerConnectionsRef.current.delete(targetSocketId);
     }
@@ -102,32 +109,34 @@ export const WebRTCProvider = ({ roomId, children }) => {
     pc.onicecandidate = (event) => {
       if (event.candidate && socket) {
         socket.emit('ice-candidate', {
-          roomId,
+          roomId: roomIdRef.current,
           targetSocketId,
           candidate: event.candidate,
         });
       }
     };
 
-    // Handle remote tracks.
-    // Always wrap in a NEW MediaStream so React sees a reference change and VideoTile updates.
+    // Handle remote tracks
     pc.ontrack = (event) => {
       setRemoteStreams(prev => {
         const next = new Map(prev);
         const existing = next.get(targetSocketId) || {};
 
-        // Build full track list: prefer event.streams[0] (gives all tracks already), else accumulate
         let allTracks;
         if (event.streams && event.streams.length > 0) {
           allTracks = event.streams[0].getTracks();
         } else {
-          // Some browsers (older mobile) only fire event.track, not event.streams
           const prevTracks = existing.stream ? existing.stream.getTracks() : [];
           allTracks = [...prevTracks.filter(t => t.id !== event.track.id), event.track];
         }
 
-        // New MediaStream object forces React to re-render VideoTile and reassign srcObject
         const newStream = new MediaStream(allTracks);
+
+        // If user is deafened, mute incoming audio tracks
+        if (isDeafenedRef.current) {
+          newStream.getAudioTracks().forEach(t => { t.enabled = false; });
+        }
+
         next.set(targetSocketId, {
           ...existing,
           stream: newStream,
@@ -144,7 +153,6 @@ export const WebRTCProvider = ({ roomId, children }) => {
         pc.restartIce();
       }
       if (pc.iceConnectionState === 'disconnected') {
-        // Wait a moment; it often recovers on its own
         setTimeout(() => {
           if (pc.iceConnectionState === 'disconnected') {
             console.warn('[WebRTC] Still disconnected — restarting ICE');
@@ -177,11 +185,9 @@ export const WebRTCProvider = ({ roomId, children }) => {
 
   // ─────────────── SIGNALING ───────────────
 
-  // Create offer and send to target
   const createOffer = useCallback(async (targetSocketId, targetName) => {
     const pc = createPeerConnection(targetSocketId, targetName);
     try {
-      // Only create offer if we're in 'stable' state (no pending offer)
       if (pc.signalingState !== 'stable') {
         console.warn(`[WebRTC] Skipping createOffer — state is "${pc.signalingState}"`);
         return;
@@ -190,21 +196,17 @@ export const WebRTCProvider = ({ roomId, children }) => {
         offerToReceiveAudio: true,
         offerToReceiveVideo: true,
       });
-      // Double-check state hasn't changed while awaiting
       if (pc.signalingState !== 'stable') return;
       await pc.setLocalDescription(offer);
-      socket?.emit('offer', { roomId, targetSocketId, offer });
+      socket?.emit('offer', { roomId: roomIdRef.current, targetSocketId, offer });
     } catch (err) {
       console.error('Error creating offer:', err);
     }
   }, [createPeerConnection, socket, roomId]);
 
-  // Handle incoming offer (with glare / rollback protection)
   const handleOffer = useCallback(async ({ offer, senderSocketId, senderName }) => {
     const pc = createPeerConnection(senderSocketId, senderName);
     try {
-      // ── Glare: we already sent an offer to this same peer ──
-      // Roll back our local offer so we can accept theirs instead.
       if (pc.signalingState === 'have-local-offer') {
         console.warn('[WebRTC] Glare detected — rolling back local offer');
         await pc.setLocalDescription({ type: 'rollback' });
@@ -212,7 +214,6 @@ export const WebRTCProvider = ({ roomId, children }) => {
 
       await pc.setRemoteDescription(new RTCSessionDescription(offer));
 
-      // Flush pending ICE candidates
       const pending = pendingCandidatesRef.current.get(senderSocketId) || [];
       for (const candidate of pending) {
         await pc.addIceCandidate(new RTCIceCandidate(candidate));
@@ -221,18 +222,16 @@ export const WebRTCProvider = ({ roomId, children }) => {
 
       const answer = await pc.createAnswer();
       await pc.setLocalDescription(answer);
-      socket?.emit('answer', { roomId, targetSocketId: senderSocketId, answer });
+      socket?.emit('answer', { roomId: roomIdRef.current, targetSocketId: senderSocketId, answer });
     } catch (err) {
       console.error('Error handling offer:', err);
     }
   }, [createPeerConnection, socket, roomId]);
 
-  // Handle incoming answer — only valid when we're waiting for one
   const handleAnswer = useCallback(async ({ answer, senderSocketId }) => {
     const pc = peerConnectionsRef.current.get(senderSocketId);
     if (!pc) return;
 
-    // Guard: only accept an answer when we sent an offer
     if (pc.signalingState !== 'have-local-offer') {
       console.warn(`[WebRTC] Ignoring answer — state is "${pc.signalingState}" (expected "have-local-offer")`);
       return;
@@ -241,7 +240,6 @@ export const WebRTCProvider = ({ roomId, children }) => {
     try {
       await pc.setRemoteDescription(new RTCSessionDescription(answer));
 
-      // Flush pending ICE candidates
       const pending = pendingCandidatesRef.current.get(senderSocketId) || [];
       for (const candidate of pending) {
         await pc.addIceCandidate(new RTCIceCandidate(candidate));
@@ -252,7 +250,6 @@ export const WebRTCProvider = ({ roomId, children }) => {
     }
   }, []);
 
-  // Handle incoming ICE candidate
   const handleIceCandidate = useCallback(async ({ candidate, senderSocketId }) => {
     const pc = peerConnectionsRef.current.get(senderSocketId);
     if (pc && pc.remoteDescription) {
@@ -262,7 +259,6 @@ export const WebRTCProvider = ({ roomId, children }) => {
         console.error('Error adding ICE candidate:', err);
       }
     } else {
-      // Buffer until remote description is set
       if (!pendingCandidatesRef.current.has(senderSocketId)) {
         pendingCandidatesRef.current.set(senderSocketId, []);
       }
@@ -279,26 +275,136 @@ export const WebRTCProvider = ({ roomId, children }) => {
         audioTrack.enabled = !audioTrack.enabled;
         setIsMuted(!audioTrack.enabled);
         socket?.emit('media-state-change', {
-          roomId,
+          roomId: roomIdRef.current,
           isMuted: !audioTrack.enabled,
         });
       }
     }
-  }, [socket, roomId]);
+  }, [socket]);
 
-  const toggleCamera = useCallback(() => {
-    if (localStreamRef.current) {
-      const videoTrack = localStreamRef.current.getVideoTracks()[0];
-      if (videoTrack) {
-        videoTrack.enabled = !videoTrack.enabled;
-        setIsCameraOff(!videoTrack.enabled);
-        socket?.emit('media-state-change', {
-          roomId,
-          isCameraOff: !videoTrack.enabled,
+  // ─── Camera toggle — re-acquire fresh track to fix blank screen bug ───
+  const toggleCamera = useCallback(async () => {
+    if (!localStreamRef.current) return;
+
+    const currentVideoTrack = localStreamRef.current.getVideoTracks()[0];
+
+    if (currentVideoTrack && currentVideoTrack.enabled) {
+      // Turning camera OFF — stop the track entirely to release hardware
+      currentVideoTrack.enabled = false;
+      currentVideoTrack.stop();
+      localStreamRef.current.removeTrack(currentVideoTrack);
+      setIsCameraOff(true);
+      socket?.emit('media-state-change', { roomId: roomIdRef.current, isCameraOff: true });
+    } else {
+      // Turning camera ON — get a fresh video track
+      try {
+        const newVideoStream = await navigator.mediaDevices.getUserMedia({
+          video: { width: { ideal: 1280 }, height: { ideal: 720 }, frameRate: { ideal: 30 }, facingMode: facingModeRef.current },
+          audio: false,
         });
+        const newVideoTrack = newVideoStream.getVideoTracks()[0];
+
+        // Add new track to local stream
+        localStreamRef.current.addTrack(newVideoTrack);
+
+        // Replace track on all peer connections so remotes get the new feed
+        for (const [, pc] of peerConnectionsRef.current) {
+          const sender = pc.getSenders().find(s => s.track === null || s.track?.kind === 'video');
+          if (sender) {
+            await sender.replaceTrack(newVideoTrack);
+          } else {
+            // If no video sender exists, add one
+            pc.addTrack(newVideoTrack, localStreamRef.current);
+          }
+        }
+
+        // Force React to see the new stream reference
+        setLocalStream(new MediaStream(localStreamRef.current.getTracks()));
+        localStreamRef.current = new MediaStream(localStreamRef.current.getTracks());
+
+        setIsCameraOff(false);
+        socket?.emit('media-state-change', { roomId: roomIdRef.current, isCameraOff: false });
+      } catch (err) {
+        console.error('Failed to re-acquire camera:', err);
       }
     }
-  }, [socket, roomId]);
+  }, [socket]);
+
+  // ─── Deafen: mute all incoming audio for yourself ───
+  const toggleDeafen = useCallback(() => {
+    setIsDeafened(prev => {
+      const newVal = !prev;
+      isDeafenedRef.current = newVal;
+      // Toggle all remote audio tracks
+      for (const [, remote] of remoteStreams) {
+        if (remote.stream) {
+          remote.stream.getAudioTracks().forEach(t => { t.enabled = !newVal; });
+        }
+      }
+      return newVal;
+    });
+  }, [remoteStreams]);
+
+  // ─── Flip camera (front/back) for mobile ───
+  const flipCamera = useCallback(async () => {
+    const newMode = facingModeRef.current === 'user' ? 'environment' : 'user';
+    facingModeRef.current = newMode;
+    setFacingMode(newMode);
+
+    try {
+      // Stop current video tracks
+      const currentVideoTrack = localStreamRef.current?.getVideoTracks()[0];
+      if (currentVideoTrack) {
+        currentVideoTrack.stop();
+        localStreamRef.current.removeTrack(currentVideoTrack);
+      }
+
+      // Get new stream with flipped camera
+      const newVideoStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { exact: newMode }, width: { ideal: 1280 }, height: { ideal: 720 } },
+        audio: false,
+      });
+      const newVideoTrack = newVideoStream.getVideoTracks()[0];
+
+      // Add to local stream
+      localStreamRef.current.addTrack(newVideoTrack);
+
+      // Replace on all peer connections
+      for (const [, pc] of peerConnectionsRef.current) {
+        const sender = pc.getSenders().find(s => s.track === null || s.track?.kind === 'video');
+        if (sender) {
+          await sender.replaceTrack(newVideoTrack);
+        }
+      }
+
+      // Force React re-render
+      const updatedStream = new MediaStream(localStreamRef.current.getTracks());
+      localStreamRef.current = updatedStream;
+      setLocalStream(updatedStream);
+      setIsCameraOff(false);
+    } catch (err) {
+      console.error('Failed to flip camera:', err);
+      // Fallback without exact constraint
+      try {
+        const newVideoStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: newMode },
+          audio: false,
+        });
+        const newVideoTrack = newVideoStream.getVideoTracks()[0];
+        localStreamRef.current.addTrack(newVideoTrack);
+        for (const [, pc] of peerConnectionsRef.current) {
+          const sender = pc.getSenders().find(s => s.track === null || s.track?.kind === 'video');
+          if (sender) await sender.replaceTrack(newVideoTrack);
+        }
+        const updatedStream = new MediaStream(localStreamRef.current.getTracks());
+        localStreamRef.current = updatedStream;
+        setLocalStream(updatedStream);
+        setIsCameraOff(false);
+      } catch (fallbackErr) {
+        console.error('Camera flip fallback failed:', fallbackErr);
+      }
+    }
+  }, []);
 
   const startScreenShare = useCallback(async () => {
     try {
@@ -310,7 +416,6 @@ export const WebRTCProvider = ({ roomId, children }) => {
       setScreenStream(stream);
       setIsScreenSharing(true);
 
-      // Replace video track in all peer connections
       const videoTrack = stream.getVideoTracks()[0];
       for (const [, pc] of peerConnectionsRef.current) {
         const sender = pc.getSenders().find(s => s.track?.kind === 'video');
@@ -319,9 +424,8 @@ export const WebRTCProvider = ({ roomId, children }) => {
         }
       }
 
-      socket?.emit('media-state-change', { roomId, isScreenSharing: true });
+      socket?.emit('media-state-change', { roomId: roomIdRef.current, isScreenSharing: true });
 
-      // Handle user stopping screen share via browser UI
       videoTrack.onended = () => {
         stopScreenShare();
       };
@@ -353,9 +457,41 @@ export const WebRTCProvider = ({ roomId, children }) => {
         }
       }
 
-      socket?.emit('media-state-change', { roomId, isScreenSharing: false });
+      socket?.emit('media-state-change', { roomId: roomIdRef.current, isScreenSharing: false });
     }
   }, [socket, roomId]);
+
+  // ─────────────── SOCKET RECONNECTION HANDLER ───────────────
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleReconnect = () => {
+      console.log('[WebRTC] Socket reconnected — re-joining room');
+      if (roomIdRef.current) {
+        // Re-join the room via socket
+        socket.emit('join-room', { roomId: roomIdRef.current }, (res) => {
+          if (res?.error) {
+            console.error('Re-join room error:', res.error);
+            return;
+          }
+          console.log('[WebRTC] Re-joined room after reconnect');
+          // Clean up stale peer connections and re-establish
+          for (const [id] of peerConnectionsRef.current) {
+            cleanupPeerConnection(id);
+          }
+        });
+      }
+    };
+
+    // 'connect' fires on initial connect AND on reconnect
+    // Track if we were previously connected to differentiate
+    if (isConnected && wasConnectedRef.current) {
+      handleReconnect();
+    }
+    wasConnectedRef.current = isConnected;
+
+  }, [socket, isConnected, cleanupPeerConnection]);
 
   // ─────────────── SOCKET EVENT LISTENERS ───────────────
 
@@ -369,7 +505,6 @@ export const WebRTCProvider = ({ roomId, children }) => {
     // When a new user joins, create offer to them
     socket.on('user-joined', ({ participant }) => {
       if (participant?.socketId && localStreamRef.current) {
-        // Small delay to allow the new peer to set up
         setTimeout(() => {
           createOffer(participant.socketId, participant.displayName);
         }, 500);
@@ -403,10 +538,48 @@ export const WebRTCProvider = ({ roomId, children }) => {
     };
   }, [socket, handleOffer, handleAnswer, handleIceCandidate, createOffer, cleanupPeerConnection]);
 
+  // ─────────────── BANDWIDTH / QUALITY OPTIMIZATION ───────────────
+
+  useEffect(() => {
+    // Apply bandwidth constraints after peer connections are established
+    const applyBandwidthConstraints = () => {
+      for (const [, pc] of peerConnectionsRef.current) {
+        const senders = pc.getSenders();
+        for (const sender of senders) {
+          if (sender.track?.kind === 'video') {
+            try {
+              const params = sender.getParameters();
+              if (!params.encodings || params.encodings.length === 0) {
+                params.encodings = [{}];
+              }
+              // Cap at 1.5 Mbps for video — good quality without overloading mobile
+              params.encodings[0].maxBitrate = 1500000;
+              params.encodings[0].scaleResolutionDownBy = 1;
+              sender.setParameters(params).catch(() => {});
+            } catch (e) { /* browser may not support */ }
+          }
+          if (sender.track?.kind === 'audio') {
+            try {
+              const params = sender.getParameters();
+              if (!params.encodings || params.encodings.length === 0) {
+                params.encodings = [{}];
+              }
+              params.encodings[0].maxBitrate = 128000;
+              sender.setParameters(params).catch(() => {});
+            } catch (e) { /* browser may not support */ }
+          }
+        }
+      }
+    };
+
+    // Apply after a short delay to let connections establish
+    const timer = setTimeout(applyBandwidthConstraints, 3000);
+    return () => clearTimeout(timer);
+  }, [remoteStreams]); // Re-apply when new peers connect
+
   // ─────────────── CLEANUP ───────────────
 
   const cleanup = useCallback(() => {
-    // Stop all local tracks
     if (localStreamRef.current) {
       localStreamRef.current.getTracks().forEach(t => t.stop());
       localStreamRef.current = null;
@@ -417,7 +590,6 @@ export const WebRTCProvider = ({ roomId, children }) => {
       screenStreamRef.current = null;
       setScreenStream(null);
     }
-    // Close all peer connections
     for (const [id] of peerConnectionsRef.current) {
       cleanupPeerConnection(id);
     }
@@ -425,6 +597,8 @@ export const WebRTCProvider = ({ roomId, children }) => {
     setIsMuted(false);
     setIsCameraOff(false);
     setIsScreenSharing(false);
+    setIsDeafened(false);
+    isDeafenedRef.current = false;
   }, [cleanupPeerConnection]);
 
   // Cleanup on unmount
@@ -440,11 +614,15 @@ export const WebRTCProvider = ({ roomId, children }) => {
     isMuted,
     isCameraOff,
     isScreenSharing,
+    isDeafened,
+    facingMode,
 
     // Actions
     initLocalStream,
     toggleMute,
     toggleCamera,
+    toggleDeafen,
+    flipCamera,
     startScreenShare,
     stopScreenShare,
     createOffer,
